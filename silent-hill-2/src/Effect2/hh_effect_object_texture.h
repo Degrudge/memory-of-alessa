@@ -10,22 +10,17 @@
 
 #include "common.h"
 
-// typedef struct sh2gfw_TexMAN;
-// typedef struct sh2gfw_Effect_Man;
-// typedef struct sh2gfw_TEX_HEAD;
-// typedef struct sh2gfw_CLUTS_HEAD;
-// typedef struct HH_Local_TextureInfomeation;
-// typedef struct HH_Local_TextureContext;
-
-typedef struct HH_Local_TextureInfomeation {
+typedef struct HH_Local_TextureInfomeation
+{
     u_int Register_Texture_ID;
     void* pFileID;
     u_int Entry_Level;
     u_int Transport_Priority;
     u_int LinkList_Max;
     int* pLinkList;
-    int (*pException_Judge)();
-} HH_Local_TextureInfomeation;
+    int(*pException_Judge)();
+
+}__attribute__((aligned(16))) HH_Local_TextureInfomeation;
 
 typedef struct HH_Local_TextureContext {
     u_int Enable;

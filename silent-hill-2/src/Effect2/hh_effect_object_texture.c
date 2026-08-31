@@ -302,4 +302,17 @@ u_int HH_Effect_Object_Texture_DesignateEntryLevel_Discard(u_int Entry_Level) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_object_texture", HH_Effect_Object_Texture_AlwaysTexture_Initialize);
+// thanks: piccio, bloodangel, dezgeg
+u_int HH_Effect_Object_Texture_AlwaysTexture_Initialize() {
+    HH_Local_TextureInfomeation* pTex_Info;
+    u_int i;
+
+    for (i = 0; i < 21; i++) {
+        pTex_Info = &_TextureInfomeation_Table[i];
+        if (pTex_Info->Register_Texture_ID == 1) {
+            AlwaysTexture_Initialize(pTex_Info);
+            break;
+        }
+    }
+    return 1;
+}
