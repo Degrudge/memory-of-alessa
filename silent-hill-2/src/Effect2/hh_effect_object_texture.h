@@ -10,6 +10,13 @@
 
 #include "common.h"
 
+#define ASSERT_TEXTURE(cond) \
+do { \
+        printf("Texture Context Already Regist: Multiple Regist!!\n"); \
+        printf(__FILE__ ":" ASSTR(__LINE__) "> assert:(%s)\n", #cond); \
+        do {} while (1); \
+} while (0);
+
 typedef struct HH_Local_TextureInfomeation
 {
     u_int Register_Texture_ID;

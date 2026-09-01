@@ -106,7 +106,30 @@ u_int AlwaysTexture_Context_Entry(HH_Local_TextureInfomeation* pTex_Info, HH_Loc
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_object_texture", TextureBinary_DesignateTexture_Load_toAlwaysBuffer);
+u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeation* pTex_Info) {
+    u_int pTex_ID, result = 0;
+    void* pBuffer;
+    int fid;
+    HH_Local_TextureContext* pContext;
+
+    pTex_ID  = pTex_Info->Register_Texture_ID;
+    pContext = &_TextureContext_Table[pTex_ID];
+
+    if (!pContext->Enable) {
+        pBuffer = HH_MemoryManager_AllocateMemoryBlock_Get(3);
+        fid     = FcRead(pTex_Info->pFileID, pBuffer);
+        if (fid != -1) {
+            do {
+            } while (fsSync(0, fid) < 0);
+
+            AlwaysTexture_Context_Entry(pTex_Info, pContext, pBuffer);
+            result = 1;
+        }
+    } else {
+        ASSERT_TEXTURE(!pContext->Enable);
+    }
+    return result;
+}
 
 u_int TextureContext_DesignateEntryLevel_Entry(u_int Entry_Level) {
     sh2gfw_CLUTS_HEAD* pCluts_Header;
