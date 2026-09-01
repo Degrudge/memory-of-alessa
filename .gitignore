@@ -21,6 +21,7 @@ tools/mwccgap.version
 .venv
 **/.vscode/*
 !.vscode/c_cpp_properties.json
+*.kate-swp
 .splache
 __pycache__
 *decorated.s

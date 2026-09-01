@@ -5,15 +5,15 @@
 // from shared/lens/kari_lf_draw.h
 #define EFF_VALID_ID 0xEF04
 
-HH_Local_TextureContext _TextureContext_Table[21];
-int* _TextureHeader_Table[21];
-HH_Local_TextureInfomeation _TextureInfomeation_Table[21];
+static int* _TextureHeader_Table[21];
+static HH_Local_TextureInfomeation _TextureInfomeation_Table[21];
 u_int _texture_buffer_enable[5];
+HH_Local_TextureContext _TextureContext_Table[21];
 
-extern u_int _Transport_Current_Priority;
-extern u_int _send_count;
-extern u_int _sync_count;
-extern u_int _finish_count;
+static u_int _send_count;
+static u_int _sync_count;
+static u_int _finish_count;
+u_int _Transport_Current_Priority;
 
 void LocalWrapper_TextureTransport_Entry(sh2gfw_Effect_Man* pEffectTexture_Management, sh2gfw_TEX_HEAD* pTexture_Header, sh2gfw_CLUTS_HEAD* pCluts_Header, u_int Texture_ID) {
     memset(pEffectTexture_Management, 0, 64);
@@ -134,10 +134,9 @@ u_int TextureContext_DesignateEntryLevel_AllClear(u_int Entry_Level) {
         pContext = &_TextureContext_Table[i];
         if ((pContext->Enable != 0) && (pContext->Entry_Level == Entry_Level)) {
             _TextureHeader_Table[i] = NULL;
-            if (pContext->Buffer_Index >= 5U) {
-                printf("hh_effect_object_texture.c:482> assert:(%s)\n", "Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX");
-                for (;;);
-            }
+
+            ASSERT(pContext->Buffer_Index < 5U);
+
             _texture_buffer_enable[pContext->Buffer_Index] = 0;
             LocalWrapper_TextureTransport_Entry_Delete(&pContext->EffectTexture_Management);
             memset(pContext, 0, 0x50);
@@ -175,10 +174,9 @@ void Object_SPK_Texture_Post() {
         pContext = &_TextureContext_Table[i];
         if ((pContext->Enable != 0) && (pContext->pTexture_Infomeation->Transport_Priority == 1)) {
             pTex_Manage = &pContext->EffectTexture_Management;
-            if (pContext->EffectTexture_Management.valid_id != EFF_VALID_ID) {
-                printf("hh_effect_object_texture.c:1017> assert:(%s)\n", "pTex_Manage->valid_id == EFF_VALID_ID", pTex_Manage);
-                for (;;);
-            }
+
+            ASSERT(pTex_Manage->valid_id == EFF_VALID_ID);
+
             sh2gfw_EnQue_spkTexture(pTex_Manage->pTexMAN, &pTex_Manage->thr_cid, &pTex_Manage->thr_sid);
         }
     }
@@ -195,10 +193,9 @@ void Object_Texture_Send() {
         pContext = &_TextureContext_Table[i];
         if ((pContext->Enable != 0) && (pContext->pTexture_Infomeation->Transport_Priority == priority)) {
             pTex_Manage = &pContext->EffectTexture_Management;
-            if (pContext->EffectTexture_Management.valid_id != EFF_VALID_ID) {
-                printf("hh_effect_object_texture.c:1047> assert:(%s)\n", "pTex_Manage->valid_id == EFF_VALID_ID");
-                for (;;);
-            }
+
+            ASSERT(pContext->EffectTexture_Management.valid_id == EFF_VALID_ID);
+
             sh2gfw_Thr_d2TextureSend(pTex_Manage->pTexMAN, 0, &pTex_Manage->thr_cid, &pTex_Manage->thr_sid);
             _send_count += 1;
         }
@@ -243,10 +240,7 @@ u_long Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clut_ID) {
 
     pContext = &_TextureContext_Table[Texture_ID];
     tex0     = 0;
-    if (Clut_ID >= 16) {
-        printf("hh_effect_object_texture.c:1127> assert:(%s)\n", "Clut_ID < 16");
-        for (;;);
-    }
+    ASSERT(Clut_ID < 16);
     if (pContext->Enable != 0) {
         tex0 = *(u_long*) sh2gfw_Get_RegTEX0(pContext->EffectTexture_Management.pTexMAN, Clut_ID, 1);
     }
