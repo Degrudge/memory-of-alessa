@@ -440,7 +440,7 @@ segments:
       - { start: 0x00132c90,    type: c,          name: Effect/ef_sparks                                 }
       - { start: 0x00133550,    type: c,          name: DS_Pad/ds_sequencer                              }
       - { start: 0x00134ec0,    type: asm,        name: DS_Pad/dss_wrapper                               }
-      - { start: 0x00135050,    type: asm,        name: DBG/dbsw_all                                     }
+      - { start: 0x00135050,    type: c,          name: DBG/dbsw_all                                     }
       - { start: 0x001354a0,    type: asm,        name: DBG/dbsw_sys                                     }
       - { start: 0x00136350,    type: c,          name: Event/chara_data_load                            }
       - { start: 0x001395d0,    type: c,          name: Chacter/m3_arm                                   }
@@ -965,7 +965,7 @@ segments:
       - { start: 0x00298da0,    type: .rodata,    name: Event/memo                                       }
       - { start: 0x00298e00,    type: .rodata,    name: Effect/ef_sparks                                 }
       - { start: 0x00298e30,    type: .rodata,    name: DS_Pad/ds_sequencer                              }
-      - { start: 0x00298ee0,    type: rodata,     name: DBG/dbsw_all                                     }
+      - { start: 0x00298ee0,    type: .rodata,     name: DBG/dbsw_all                                     }
       - { start: 0x00299210,    type: rodata,     name: DBG/dbsw_sys                                     }
       - { start: 0x00299560,    type: .rodata,    name: Event/chara_data_load                            }
       - { start: 0x00299780,    type: .rodata,    name: Chacter/m3_arm                                   }
