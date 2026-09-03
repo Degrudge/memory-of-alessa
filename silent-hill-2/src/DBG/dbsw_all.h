@@ -4,6 +4,7 @@
 #include "SH2_common/pad.h"
 #include "DBG/dbsw_sys.h"
 #include "DBG/dbswitch.h"
+#include "DBG/dbsw_map.h"
 
 void dbSwitchAllInit(signed int enable /* r16 */);
 
