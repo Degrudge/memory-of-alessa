@@ -11,7 +11,53 @@ Object_Group_Infomeation _Object_Group_Info[1];
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllRelease);
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_Inspect_And_Allocate);
+u_int MemoryPool_Inspect_and_Allocate(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
+    u_int i, j;
+    u_int result = 0;
+    MemoryPool_AssociationInfomeation* pAssoci_Info;
+    Object_DataPool_Infomeation* pPool_Info;
+    u_int Base; // r30
+    u_int End; // r2
+    int room_name;
+    void* pAddress;
+
+
+    pAddress = HH_MemoryManager_AllocateMemoryBlock_Get(1);
+    Base = (u_int)pAddress;
+
+    for (i = 0; i < Class_Kind_Max; i++) {
+        pAssoci_Info = &pAssoci_Info_Table[i];
+        pPool_Info = &pPool_Info_Table[i];
+
+        if (pAssoci_Info->Existent)
+            switch (pAssoci_Info->Existent) {                          /* irregular */
+                case 1:
+                    *pPool_Info = pAssoci_Info->DataPool_Info;
+                    if (pPool_Info->pBlock_Table == NULL) {
+                        pPool_Info->pBlock_Table = pAddress;
+                        pAddress = HH_MemoryManager_DesignateSize_Alignment16Address_Calculator(pAddress, pPool_Info->Block_Size, pPool_Info->Block_Index_Max);
+                    }
+                    result = 1;
+                    break;
+                case 2:
+                    room_name = RoomNameJms();
+                    for (j = 0; j < pAssoci_Info->LinkList_Max; j++) {
+                        if (room_name == pAssoci_Info->pLinkList[j]) {
+                            *pPool_Info = pAssoci_Info->DataPool_Info;
+                            pPool_Info->pBlock_Table = pAddress;
+                            pAddress = HH_MemoryManager_DesignateSize_Alignment16Address_Calculator(pAddress, pPool_Info->Block_Size, pPool_Info->Block_Index_Max);
+
+                            result = 1;
+                            break;
+                        }
+                    }
+            }
+    }
+    End = (u_int)pAddress;
+    printf("Object Work Allocate Size = %d kB\n", (End - Base) >> 10);
+    return result;
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllClear);
 
