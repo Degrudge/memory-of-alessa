@@ -1,0 +1,91 @@
+#include "Effect2/hh_effect_object_def.h"
+
+static MemoryPool_AssociationInfomeation _MemoryPool_AssociationInfo_Table[48];
+static u_int _Object_Class_Priority_List[49];
+static int _AutoPost_Association_List[2][18];
+Object_Instance* _pHierarchyTable[48];
+Object_Instance _Object_instance_table[600];
+Object_DataPool_Infomeation _Object_Data_Table[48];
+ImpactQueue_Element _Queue[500];
+Object_Group_Infomeation _Object_Group_Info[1];
+
+INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllRelease);
+
+INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_Inspect_And_Allocate);
+
+INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllClear);
+
+u_int MemoryPool_Controller(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
+    u32 result;
+
+    result = 0;
+    if (HH_MemoryManager_AllocateMemoryBlock_Check(1) != 0) {
+        result = 1;
+        result *= MemoryPool_AllRelease(pPool_Info_Table, pAssoci_Info_Table, Class_Kind_Max);
+        result *= MemoryPool_Inspect_and_Allocate(pPool_Info_Table, pAssoci_Info_Table, Class_Kind_Max);
+        result *= MemoryPool_AllClear(pPool_Info_Table, pAssoci_Info_Table, Class_Kind_Max);
+    }
+    return result;
+}
+
+static void Effect_Object_Initialize() {
+    Object_Group_Infomeation* pInfo;
+
+    pInfo = HH_Effect_Object_Infomeation_Get();
+    Object_Group_Infomeation_Set(pInfo);
+    Object_Group_QueueInfomeation_Set(pInfo, &_Queue, 500);
+    Object_Group_ClassAssociationInfomeation_Set(pInfo, &_pObject_Class_List, &_Object_Data_Table, &_Object_Class_Priority_List, CLASS_DESCRIPTOR_MAX);
+    Object_Group_InstanceTableInfomeation_Set(pInfo, &_Object_instance_table, &_pHierarchyTable, 600);
+    Object_Group_All_Initialize(pInfo);
+}
+
+void HH_Effect_Object_Impact_Post(ImpactQueue_Element* pElement) {
+    ImpactDescriptor_Post(HH_Effect_Object_Infomeation_Get(), pElement);
+}
+
+void HH_Effect_Object_DesignateClassInstance_Clear(u_int Class_Descriptor) {
+    Object_Group_InstanceTable_DesignateClassDescriptorAttach_Initialize(HH_Effect_Object_Infomeation_Get(), Class_Descriptor);
+}
+
+void HH_Effect_Object_DesignateHandleInstance_Clear(u_int hInstance) {
+    Object_Group_InstanceTable_DesignateInstanceHandleAttach_Initialize(HH_Effect_Object_Infomeation_Get(), hInstance);
+}
+
+Object_Group_Infomeation* HH_Effect_Object_Infomeation_Get() {
+    return &_Object_Group_Info;
+}
+
+void HH_Effect_Object_Manager() {
+    Object_Group_Manager(HH_Effect_Object_Infomeation_Get());
+    shPadTrigger(0, PAD_KEY_CROSS);
+    shPadTrigger(0, PAD_KEY_R2);
+}
+
+u_int HH_Effect_Object_MemoryBlock_Allocate(void) {
+    u_int ret;
+
+    ret = 0;
+    if (MemoryPool_Controller(&_Object_Data_Table, &_MemoryPool_AssociationInfo_Table, 48)) {
+        Effect_Object_Initialize();
+        ret = 1;
+    }
+    return ret;
+}
+
+// thanks: MrCoolTheCucumber
+void HH_Effect_Object_AutoPost() {
+    ImpactQueue_Element descriptor;
+    u_int i;
+    int room_name;
+
+    room_name = RoomNameJms();
+
+    for (i = 0; i < 18; i++) {
+        if (_AutoPost_Association_List[0][i * 2] == room_name) {
+            descriptor.Class_Descriptor = _AutoPost_Association_List[0][i * 2 + 1];
+            descriptor.hInstance = 0;
+            descriptor.pResultHandle_Address = 0;
+            ImpactDescriptor_Post(&_Object_Group_Info, &descriptor);
+        }
+    }
+}
