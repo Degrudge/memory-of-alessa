@@ -43,6 +43,7 @@ int SeCall(float, float, int);
 int func_0016CB70(void);
 int func_0016C1C0(int);
 extern u_int D_01D31640;
+extern u_int D_1D31704;
 
 int GetActionLevel(void);
 extern int D_01F727B0_mall_b_01;
