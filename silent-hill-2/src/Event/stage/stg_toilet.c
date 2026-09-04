@@ -103,7 +103,6 @@ int stg_toilet_Kari_hisyakai(int KeyAlpha) {
     return ivt[2] >> 4;
 
 }
-#undef qwd
 
 /* static */ float stg_toilet_LinearTrim(float Yen, float Yst, float Xen, float Xst, float Parm) {
     return Yst + (((Yen - Yst) * (Parm - Xst)) / (Xen - Xst));
