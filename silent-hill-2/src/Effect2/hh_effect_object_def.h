@@ -6,7 +6,7 @@
 #include "Effect2/hh_memory_manage.h"
 #include "SH2_common/pad.h"
 
-// // total size: 0x30
+// total size: 0x30
 typedef struct MemoryPool_AssociationInfomeation {
     // Members
     u_int Existent; // offset 0x0, size 0x4

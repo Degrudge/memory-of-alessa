@@ -1,5 +1,6 @@
 #include "Effect2/hh_effect_object_def.h"
 
+static Object_Class _pObject_Class_List[48];
 static MemoryPool_AssociationInfomeation _MemoryPool_AssociationInfo_Table[48];
 static u_int _Object_Class_Priority_List[49];
 static int _AutoPost_Association_List[2][18];
@@ -9,7 +10,18 @@ Object_DataPool_Infomeation _Object_Data_Table[48];
 ImpactQueue_Element _Queue[500];
 Object_Group_Infomeation _Object_Group_Info[1];
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllRelease);
+u_int MemoryPool_AllRelease(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
+    u_int i, result;
+    Object_DataPool_Infomeation *pPool_Info;
+    Object_DataPool_Infomeation DataInfo_NULL;
+
+    memset(&DataInfo_NULL, 0, sizeof(Object_DataPool_Infomeation));
+    for(i = 0; i < Class_Kind_Max; i++) {
+        pPool_Info = pPool_Info_Table + i;
+        *pPool_Info = DataInfo_NULL;
+    }
+    return 1;
+}
 
 u_int MemoryPool_Inspect_and_Allocate(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
     u_int i, j;
@@ -54,12 +66,27 @@ u_int MemoryPool_Inspect_and_Allocate(Object_DataPool_Infomeation* pPool_Info_Ta
             }
     }
     End = (u_int)pAddress;
-    printf("Object Work Allocate Size = %d kB\n", (End - Base) >> 10);
+    printf("Object Work Allocate Size = %d kB\n\0", (End - Base) >> 10);
     return result;
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_effect_object_def", MemoryPool_AllClear);
+u_int MemoryPool_AllClear(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
+    Object_DataPool_Infomeation* pPool_Info;
+    u_int i, result;
+
+    result = 0;
+    for(i = 0; i < Class_Kind_Max; ++i) {
+        pPool_Info = pPool_Info_Table + i;
+        if (pPool_Info->pBlock_Table != NULL) {
+            memset(pPool_Info_Table[i].pBlock_Table,
+                   0,
+                   pPool_Info_Table[i].Block_Size * pPool_Info_Table[i].Block_Index_Max);
+            result = 1;
+        }
+    }
+    return result;
+}
 
 u_int MemoryPool_Controller(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
     u32 result;
