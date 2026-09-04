@@ -2,6 +2,7 @@
 #define MALL_B_01
 
 #include "common.h"
+#include "sce/libvu0.h"
 
 typedef struct unk_struct01F6E180 {
     u_char pad[0xB0];
@@ -45,5 +46,29 @@ extern u_int D_01D31640;
 
 int GetActionLevel(void);
 extern int D_01F727B0_mall_b_01;
+
+void func_001E0130(float*, float*, float*, int);
+
+extern int D_01F719C0_mall_b_01;
+extern int D_01F728C0_mall_b_01;
+extern int D_01F728C8_mall_b_01;
+
+int func_0016D240(float, float, int, float (*)[4], int, int);
+int RoomName(void);
+void func_0016CC50(int, int, sceVu0FMATRIX*, sceVu0FVECTOR*);
+void func_0016CBD0(sceVu0FMATRIX*[], sceVu0FMATRIX*[], int);
+void func_00196770();
+void func_00300E70();
+void func_003010F0();
+void func_00311410();
+extern int D_01F72890_mall_b_01;
+extern sceVu0FVECTOR D_01F728E0_mall_b_01;
+extern int D_01F728F0_mall_b_01;
+
+extern float D_01F72880_mall_b_01;
+extern float D_01F72888_mall_b_01;
+extern int D_01F728A8_mall_b_01;
+extern int D_01F728B8_mall_b_01;
+extern int D_01F728D8_mall_b_01;
 
 #endif
