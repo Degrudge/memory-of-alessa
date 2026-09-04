@@ -101,7 +101,7 @@ u_int MemoryPool_Controller(Object_DataPool_Infomeation* pPool_Info_Table, Memor
     return result;
 }
 
-static void Effect_Object_Initialize() {
+static void Effect_Object_Initialize(void) {
     Object_Group_Infomeation* pInfo;
 
     pInfo = HH_Effect_Object_Infomeation_Get();
@@ -124,11 +124,11 @@ void HH_Effect_Object_DesignateHandleInstance_Clear(u_int hInstance) {
     Object_Group_InstanceTable_DesignateInstanceHandleAttach_Initialize(HH_Effect_Object_Infomeation_Get(), hInstance);
 }
 
-Object_Group_Infomeation* HH_Effect_Object_Infomeation_Get() {
+Object_Group_Infomeation* HH_Effect_Object_Infomeation_Get(void) {
     return &_Object_Group_Info;
 }
 
-void HH_Effect_Object_Manager() {
+void HH_Effect_Object_Manager(void) {
     Object_Group_Manager(HH_Effect_Object_Infomeation_Get());
     shPadTrigger(0, PAD_KEY_CROSS);
     shPadTrigger(0, PAD_KEY_R2);
@@ -146,7 +146,7 @@ u_int HH_Effect_Object_MemoryBlock_Allocate(void) {
 }
 
 // thanks: MrCoolTheCucumber
-void HH_Effect_Object_AutoPost() {
+void HH_Effect_Object_AutoPost(void) {
     ImpactQueue_Element descriptor;
     u_int i;
     int room_name;

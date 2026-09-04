@@ -23,7 +23,7 @@ static u_int MemoryPool_AllClear(Object_DataPool_Infomeation* pPool_Info_Table, 
 
 static u_int MemoryPool_Controller(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max);
 
-static void Effect_Object_Initialize();
+static void Effect_Object_Initialize(void);
 
 void HH_Effect_Object_Impact_Post(ImpactQueue_Element* pElement);
 
@@ -31,12 +31,12 @@ void HH_Effect_Object_DesignateClassInstance_Clear(u_int Class_Descriptor);
 
 void HH_Effect_Object_DesignateHandleInstance_Clear(u_int hInstance);
 
-Object_Group_Infomeation* HH_Effect_Object_Infomeation_Get();
+Object_Group_Infomeation* HH_Effect_Object_Infomeation_Get(void);
 
-void HH_Effect_Object_Manager();
+void HH_Effect_Object_Manager(void);
 
-u_int HH_Effect_Object_MemoryBlock_Allocate();
+u_int HH_Effect_Object_MemoryBlock_Allocate(void);
 
-void HH_Effect_Object_AutoPost();
+void HH_Effect_Object_AutoPost(void);
 
 #endif // HH_EFFECT_OBJECT_DEF_H
