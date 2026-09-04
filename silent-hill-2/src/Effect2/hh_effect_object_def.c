@@ -1,14 +1,14 @@
 #include "Effect2/hh_effect_object_def.h"
 
-static Object_Class _pObject_Class_List[48];
-static MemoryPool_AssociationInfomeation _MemoryPool_AssociationInfo_Table[48];
-static u_int _Object_Class_Priority_List[49];
-static int _AutoPost_Association_List[2][18];
-Object_Instance* _pHierarchyTable[48];
-Object_Instance _Object_instance_table[600];
-Object_DataPool_Infomeation _Object_Data_Table[48];
-ImpactQueue_Element _Queue[500];
-Object_Group_Infomeation _Object_Group_Info[1];
+extern /* static */ Object_Class _pObject_Class_List[48];
+extern /* static */ MemoryPool_AssociationInfomeation _MemoryPool_AssociationInfo_Table[48];
+extern /* static */ u_int _Object_Class_Priority_List[49];
+extern /* static */ int _AutoPost_Association_List[2][18];
+extern Object_Instance* _pHierarchyTable[48];
+extern Object_Instance _Object_instance_table[600];
+extern Object_DataPool_Infomeation _Object_Data_Table[48];
+extern ImpactQueue_Element _Queue[500];
+extern Object_Group_Infomeation _Object_Group_Info[1];
 
 u_int MemoryPool_AllRelease(Object_DataPool_Infomeation* pPool_Info_Table, MemoryPool_AssociationInfomeation* pAssoci_Info_Table, u_int Class_Kind_Max) {
     u_int i, result;
