@@ -233,7 +233,7 @@ MWCC by changing _other_ code in the translation unit. It seems to be affected
 by some cursed set of unknown variables such as how many floats are in the
 function above it.
 
-Here is an example: https://decomp.me/scratch/Lm1hV
+Here is an example: https://decomp.me/scratch/fCkzx
 
 This scratch linked above doesn't match, though the resulting assembly has
 equivalent behavior. However, when added to the repo, it may magically match.
@@ -253,7 +253,7 @@ If this behavior is encountered while working in the project, please feel free t
 #ifdef HOLY_CANDLE
 /* ... code here ... */
 #else
-INCLUDE_ASM("asm/nonmatchings/Font/font", fontPushButton);
+INCLUDE_ASM("asm/nonmatchings/Font/font", fontSelectUp);
 #endif
 ```
 
