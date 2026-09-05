@@ -96,7 +96,7 @@ static inline void get_disabled_texture_buffer(int* dst) {
     *dst = -1;
 
     for (Buffer_Index = 0; Buffer_Index < 4u; Buffer_Index++) {
-        ASSERT(Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX);
+        ASSERT_ON_LINE(Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX, 470);
         if (_texture_buffer_enable[Buffer_Index] == 0) {
             *dst = Buffer_Index;
             return;
@@ -183,7 +183,7 @@ u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeati
             result = 1;
         }
     } else {
-        ASSERT_TEXTURE(!pContext->Enable, 1127);
+        ASSERT_TEXTURE(!pContext->Enable, 851);
     }
     return result;
 }
@@ -255,7 +255,7 @@ void Object_SPK_Texture_Post(void) {
 
     for (i = 0; i < 21; i++) {
         pContext = &_TextureContext_Table[i];
-        if ((pContext->Enable != 0) && (pContext->pTexture_Infomeation->Transport_Priority == 1)) {
+        if (pContext->Enable && pContext->pTexture_Infomeation->Transport_Priority == 1) {
             pTex_Manage = &pContext->EffectTexture_Management;
 
             ASSERT_ON_LINE(pTex_Manage->valid_id == EFF_VALID_ID, 1017);
@@ -324,7 +324,7 @@ u_long Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clut_ID) {
     pContext = &_TextureContext_Table[Texture_ID];
     tex0     = 0;
     ASSERT(Clut_ID < 16);
-    if (pContext->Enable != 0) {
+    if (pContext->Enable) {
         tex0 = *(u_long*) sh2gfw_Get_RegTEX0(pContext->EffectTexture_Management.pTexMAN, Clut_ID, 1);
     }
     return tex0;
