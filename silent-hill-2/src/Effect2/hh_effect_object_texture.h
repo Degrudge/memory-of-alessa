@@ -10,24 +10,23 @@
 
 #include "common.h"
 
-#define ASSERT_TEXTURE(cond) \
+#define ASSERT_TEXTURE(cond, line) \
 do { \
         printf("Texture Context Already Regist: Multiple Regist!!\n"); \
-        printf(__FILE__ ":" ASSTR(__LINE__) "> assert:(%s)\n", #cond); \
+        printf(__FILE__ ":" #line "> assert:(%s)\n", #cond); \
         do {} while (1); \
 } while (0);
 
-typedef struct HH_Local_TextureInfomeation
-{
+typedef struct HH_Local_TextureInfomeation {
     u_int Register_Texture_ID;
     void* pFileID;
     u_int Entry_Level;
     u_int Transport_Priority;
     u_int LinkList_Max;
     int* pLinkList;
-    int(*pException_Judge)();
+    int (*pException_Judge)();
 
-}__attribute__((aligned(16))) HH_Local_TextureInfomeation;
+} __attribute__((aligned(16))) HH_Local_TextureInfomeation;
 
 typedef struct HH_Local_TextureContext {
     u_int Enable;
@@ -36,7 +35,6 @@ typedef struct HH_Local_TextureContext {
     HH_Local_TextureInfomeation* pTexture_Infomeation;
     sh2gfw_Effect_Man EffectTexture_Management;
 } HH_Local_TextureContext;
-
 
 void LocalWrapper_TextureTransport_Entry(sh2gfw_Effect_Man* pEffectTexture_Management, sh2gfw_TEX_HEAD* pTexture_Header, sh2gfw_CLUTS_HEAD* pCluts_Header, u_int Texture_ID);
 
@@ -58,25 +56,25 @@ u_int TextureContext_DesignateEntryLevelUnder_AllClear(u_int Entry_Level);
 
 u_int AlwaysTexture_Initialize(HH_Local_TextureInfomeation* pTex_Info);
 
-void Object_SPK_Texture_Post();
+void Object_SPK_Texture_Post(void);
 
-void Object_Texture_Send();
+void Object_Texture_Send(void);
 
-void Object_Texture_Sync();
+void Object_Texture_Sync(void);
 
-void Object_Texture_Finish();
+void Object_Texture_Finish(void);
 
 u_long Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clut_ID);
 
-void HH_Effect_Object_Texture_TransportPriority_Initialize();
+void HH_Effect_Object_Texture_TransportPriority_Initialize(void);
 
-void HH_Effect_Object_SPK_Texture_Post();
+void HH_Effect_Object_SPK_Texture_Post(void);
 
-void HH_Effect_Object_Texture_Send();
+void HH_Effect_Object_Texture_Send(void);
 
-void HH_Effect_Object_Texture_Sync();
+void HH_Effect_Object_Texture_Sync(void);
 
-void HH_Effect_Object_Texture_Finish();
+void HH_Effect_Object_Texture_Finish(void);
 
 u_long HH_Effect_Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clut_ID);
 
@@ -84,6 +82,6 @@ u_int HH_Effect_Object_Texture_DesignateEntryLevel_Initialize(u_int Entry_Level 
 
 u_int HH_Effect_Object_Texture_DesignateEntryLevel_Discard(u_int Entry_Level /* r2 */);
 
-u_int HH_Effect_Object_Texture_AlwaysTexture_Initialize();
+u_int HH_Effect_Object_Texture_AlwaysTexture_Initialize(void);
 
 #endif
