@@ -30,7 +30,7 @@ MWLD_OVERLAY_FLAGS := \
 	-overlaygroup main,0x1F01E00 \
 	$(foreach overlay,$(OVERLAYS),-overlay $(overlay))
 MWLD_FLAGS := \
-	-main "entry" -map -sym on,elf -v \
+	-main "entry" -map -sym on,elf \
 	-noinhibit-exec $(MWLD_OVERLAY_FLAGS)
 
 BSS_ALIGNMENT := 8

@@ -70,7 +70,7 @@ typedef union Q_WORDDATA {
     s_char sc8[16];  // offset 0x0, size 0x10
     u_long ul64[2];  // offset 0x0, size 0x8
     u_long128 ul128; // offset 0x0, size 0x10
-} Q_WORDDATA;
+} Q_WORDDATA __attribute__((aligned(16)));
 
 typedef struct {
     float x;
@@ -93,6 +93,19 @@ typedef struct {
 
 static inline u_int reinterpret_as_u_int(float v) {
     return *(u_int*) &v;
+}
+
+static inline int float_floor(float x) {
+    int out;
+    asm("mfc1 %1, %0;\
+          addi t7, zero, 1\n\
+          slt %1, %1, zero\n\
+          cvt.w.s %0, %0;\
+          movz t7, zero, %1;\
+          mfc1 %1, %0;\
+          sub %1, %1, t7"
+        : "+f"(x), "+r"(out)::"t7");
+    return out;
 }
 
 #endif

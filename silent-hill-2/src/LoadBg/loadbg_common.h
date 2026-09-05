@@ -1,6 +1,7 @@
 #ifndef LOADBG_COMMON_H
 #define LOADBG_COMMON_H
 
+#include "sh2_common.h"
 #include "types.h"
 #include "data/fs_structs.h"
 

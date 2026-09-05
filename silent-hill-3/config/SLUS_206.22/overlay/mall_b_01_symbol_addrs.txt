@@ -44,3 +44,5 @@ D_01F727A0_mall_b_01 = 0x1F727A0;
 D_01F727B0_mall_b_01 = 0x1F727B0;
 jtbl_01F72800_mall_b_01 = 0x1F72800;
 jtbl_01F72820_mall_b_01 = 0x1F72820;
+
+D_01F728E0_mall_b_01 = 0x1F728E0; // size:0x10 type:f32
