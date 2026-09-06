@@ -115,13 +115,13 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
 
 
     for (i = 0; i < 21; i++) {
-        pTex_Info = _TextureInfomeation_Table + i;
+        pTex_Info = &_TextureInfomeation_Table[i];
         if (TextureContext_DesignateEntryLevel_EntryCheck(Entry_Level, pTex_Info)) {
             get_disabled_texture_buffer(&Buffer_Index);
 
             if (Buffer_Index != -1) {
 
-                pContext = _TextureContext_Table + pTex_Info->Register_Texture_ID;
+                pContext = &_TextureContext_Table[pTex_Info->Register_Texture_ID];
                 if (!pContext->Enable) {
 
                     pBuffer = HH_MemoryManager_AllocateMemoryBlock_Get(2);
@@ -129,7 +129,7 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
                     fid = FcRead(pTex_Info->pFileID, pBuffer);
 
                     if (fid != -1) {
-                        do {} while( fsSync(0, fid) < 0 );
+                        BLOCK_WHILE(fsSync(0, fid) < 0);
 
                         result = 1;
                         pContext->Enable = 1;
