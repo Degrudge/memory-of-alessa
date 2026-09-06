@@ -108,7 +108,7 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
     u_int result  = 0; // r16
     u_int i; // r17
     int fid; // r18
-    int buffer_index; // r2
+    int Buffer_Index; // r2 //@note: original not capitalized, required for string dedupe
     void * pBuffer; // r19
     HH_Local_TextureInfomeation * pTex_Info; // r2
     HH_Local_TextureContext * pContext; // r2
@@ -117,15 +117,15 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
     for (i = 0; i < 21; i++) {
         pTex_Info = _TextureInfomeation_Table + i;
         if (TextureContext_DesignateEntryLevel_EntryCheck(Entry_Level, pTex_Info)) {
-            get_disabled_texture_buffer(&buffer_index);
+            get_disabled_texture_buffer(&Buffer_Index);
 
-            if (buffer_index != -1) {
+            if (Buffer_Index != -1) {
 
                 pContext = _TextureContext_Table + pTex_Info->Register_Texture_ID;
                 if (!pContext->Enable) {
 
                     pBuffer = HH_MemoryManager_AllocateMemoryBlock_Get(2);
-                    pBuffer = HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(pBuffer, 0x44800, buffer_index);
+                    pBuffer = HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(pBuffer, 0x44800, Buffer_Index);
                     fid = FcRead(pTex_Info->pFileID, pBuffer);
 
                     if (fid != -1) {
@@ -133,18 +133,18 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
 
                         result = 1;
                         pContext->Enable = 1;
-                        pContext->Buffer_Index = buffer_index;
+                        pContext->Buffer_Index = Buffer_Index;
                         pContext->Entry_Level = Entry_Level;
                         pContext->pTexture_Infomeation = pTex_Info;
 
-                        ASSERT_ON_LINE(buffer_index < TEXTURE_BUFFER_BLOCK_MAX, 476);
+                        ASSERT_ON_LINE(Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX, 476);
 
-                        _texture_buffer_enable[buffer_index] = 1;
+                        _texture_buffer_enable[Buffer_Index] = 1;
                         _TextureHeader_Table[pTex_Info->Register_Texture_ID] = (int *)pBuffer;
                     }
                     continue;
                 } else {
-                    printf("Texture Context Already Regist: Multiple Regist!!\n\0");
+                    printf("Texture Context Already Regist: Multiple Regist!!\n");
                     ASSERT_ON_LINE(0, 770);
                 }
             }
@@ -183,7 +183,7 @@ u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeati
             result = 1;
         }
     } else {
-        printf("Texture Context Already Regist: Multiple Regist!!\n\0");
+        printf("Texture Context Already Regist: Multiple Regist!!\n");
         ASSERT_ON_LINE(0, 851);
     }
     return result;
@@ -214,13 +214,14 @@ u_int TextureContext_DesignateEntryLevel_AllClear(u_int Entry_Level) {
     u_int i;
     u_int result = 0;
     HH_Local_TextureContext* pContext;
+    int Buffer_Index; //@note: not in dwarf. required for string dedupe
 
     for (i = 0; i < 21; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->Entry_Level == Entry_Level) {
             _TextureHeader_Table[i] = NULL;
-
-            ASSERT_ON_LINE(pContext->Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX, 482);
+            Buffer_Index = pContext->Buffer_Index;
+            ASSERT_ON_LINE(Buffer_Index < TEXTURE_BUFFER_BLOCK_MAX, 482);
 
             _texture_buffer_enable[pContext->Buffer_Index] = 0;
             LocalWrapper_TextureTransport_Entry_Delete(&pContext->EffectTexture_Management);
