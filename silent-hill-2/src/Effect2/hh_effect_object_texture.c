@@ -104,44 +104,6 @@ static inline void get_disabled_texture_buffer(int* dst) {
     }
 }
 
-HH_Local_TextureContext _TextureContext_Table[21];
-int* _TextureHeader_Table[21];
-u_int _texture_buffer_enable[5];
-HH_Local_TextureInfomeation _TextureInfomeation_Table[21];
-
-extern void *HH_MemoryManager_AllocateMemoryBlock_Get(s32);
-extern void *HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(void*, u32, u32);
-
-#define ASSERT_TEXTURE(cond) \
-do { \
-    printf("Texture Context Already Regist: Multiple Regist!!\n"); \
-    printf(__FILE__ ":" ASSTR(__LINE__) "> assert:(%s)\n", #cond); \
-    do {} while (1); \
-} while (0);
-
-#define ASSERT_ON_LINE(cond, line) \
-do { \
-    if (!(cond)) { \
-        printf(__FILE__ ":" #line "> assert:(%s)\n", #cond); \
-        do {} while (1); \
-    } \
-} while (0)
-
-
-
-static inline void get_disabled_texture_buffer(int *buffer_index) {
-    u_int i;
-    *buffer_index = -1;
-
-    for (i = 0; i < 4u; i++) {
-        ASSERT(i < 5u);
-        if (_texture_buffer_enable[i] == 0) {
-            *buffer_index = i;
-            return;
-        }
-    }
-}
-
 u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
     u_int result  = 0; // r16
     u_int i; // r17
@@ -175,25 +137,18 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
                         pContext->Entry_Level = Entry_Level;
                         pContext->pTexture_Infomeation = pTex_Info;
 
-                        ASSERT(buffer_index < 5u);
+                        ASSERT_ON_LINE(buffer_index < TEXTURE_BUFFER_BLOCK_MAX, 476);
 
                         _texture_buffer_enable[buffer_index] = 1;
                         _TextureHeader_Table[pTex_Info->Register_Texture_ID] = (int *)pBuffer;
                     }
                     continue;
                 } else {
-                    ASSERT_TEXTURE(!pContext->Enable);
+                    printf("Texture Context Already Regist: Multiple Regist!!\n\0");
+                    ASSERT_ON_LINE(0, 770);
                 }
-
             }
-
-            printf("hh_effect_object_texture.c:774> assert:(%s)\n", "!pContext->Enable");
-            for(;;);
-            // ASSERT_TEXTURE(!pContext->Enable);
-            // ASSERT(!pContext->Enable);
-
-
-
+            ASSERT_ON_LINE(0, 774);
         }
     }
     return result;
@@ -228,7 +183,8 @@ u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeati
             result = 1;
         }
     } else {
-        ASSERT_TEXTURE(!pContext->Enable, 851);
+        printf("Texture Context Already Regist: Multiple Regist!!\n\0");
+        ASSERT_ON_LINE(0, 851);
     }
     return result;
 }
@@ -368,7 +324,7 @@ u_long Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clut_ID) {
 
     pContext = &_TextureContext_Table[Texture_ID];
     tex0     = 0;
-    ASSERT(Clut_ID < 16);
+    ASSERT_ON_LINE(Clut_ID < 16, 1127);
     if (pContext->Enable) {
         tex0 = *(u_long*) sh2gfw_Get_RegTEX0(pContext->EffectTexture_Management.pTexMAN, Clut_ID, 1);
     }
