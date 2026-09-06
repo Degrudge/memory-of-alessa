@@ -3,13 +3,15 @@
 #include "common.h"
 
 #define TEXTURE_BUFFER_BLOCK_MAX 5U
-// from shared/lens/kari_lf_draw.h
+#define TEXTURE_HEADER_MAX       21U
+
+// @todo: deduplicate with shared/lens/kari_lf_draw.h
 #define EFF_VALID_ID 0xEF04
 
-extern /* static */ int* _TextureHeader_Table[21];
-extern /* static */ HH_Local_TextureInfomeation _TextureInfomeation_Table[21];
-extern u_int _texture_buffer_enable[5];
-extern HH_Local_TextureContext _TextureContext_Table[21];
+extern /* static */ int* _TextureHeader_Table[TEXTURE_HEADER_MAX];
+extern /* static */ HH_Local_TextureInfomeation _TextureInfomeation_Table[TEXTURE_HEADER_MAX];
+extern u_int _texture_buffer_enable[TEXTURE_BUFFER_BLOCK_MAX];
+extern HH_Local_TextureContext _TextureContext_Table[TEXTURE_HEADER_MAX];
 
 extern /* static */ u_int _send_count;
 extern /* static */ u_int _sync_count;
@@ -17,18 +19,18 @@ extern /* static */ u_int _finish_count;
 extern u_int _Transport_Current_Priority;
 
 void LocalWrapper_TextureTransport_Entry(sh2gfw_Effect_Man* pEffectTexture_Management, sh2gfw_TEX_HEAD* pTexture_Header, sh2gfw_CLUTS_HEAD* pCluts_Header, u_int Texture_ID) {
-    memset(pEffectTexture_Management, 0, 64);
+    memset(pEffectTexture_Management, 0, sizeof(sh2gfw_Effect_Man));
     pEffectTexture_Management->pTexHead = pTexture_Header;
     pEffectTexture_Management->pTexMAN  = sh2gfw_set_TexToTrasMan(&AllTexSync_Man, pTexture_Header, pCluts_Header, pEffectTexture_Management, Texture_ID | 0xE000);
     pEffectTexture_Management->valid_id = EFF_VALID_ID;
 }
 
 u_int LocalWrapper_TextureTransport_Entry_Delete(sh2gfw_Effect_Man* pEffectTexture_Management) {
-    u_int result = 0;
+    u_int result = false;
     void* temp   = pEffectTexture_Management->pTexMAN;
 
     if (sh2gfw_del_TexMAN(&AllTexSync_Man, temp)) {
-        result = 1;
+        result = true;
     }
     return result;
 }
@@ -39,7 +41,7 @@ u_int TextureContext_DesignateEntryLevel_EntryCheck(u_int Entry_Level, HH_Local_
     u_int i;
     u_int result;
     u_int result_inner;
-    result = 0;
+    result = false;
     // @ note: only "result" is in dwarf
     switch (Entry_Level) {
         case 2:
@@ -48,10 +50,10 @@ u_int TextureContext_DesignateEntryLevel_EntryCheck(u_int Entry_Level, HH_Local_
                 case 4:
                     if (pTexture_Infomeation->pException_Judge) {
                         if (pTexture_Infomeation->pException_Judge()) {
-                            result = 1;
+                            result = true;
                         }
                     } else {
-                        result = 1;
+                        result = true;
                     }
                     break;
                 case 0:
@@ -76,7 +78,7 @@ u_int TextureContext_DesignateEntryLevel_EntryCheck(u_int Entry_Level, HH_Local_
                         }
                     }
                     if (result_inner) {
-                        result = 1;
+                        result = true;
                     }
                     break;
                 case 0:
@@ -114,7 +116,7 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
     HH_Local_TextureContext * pContext; // r2
 
 
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pTex_Info = &_TextureInfomeation_Table[i];
         if (TextureContext_DesignateEntryLevel_EntryCheck(Entry_Level, pTex_Info)) {
             get_disabled_texture_buffer(&Buffer_Index);
@@ -131,7 +133,7 @@ u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
                     if (fid != -1) {
                         BLOCK_WHILE(fsSync(0, fid) < 0);
 
-                        result = 1;
+                        result = true;
                         pContext->Enable = 1;
                         pContext->Buffer_Index = Buffer_Index;
                         pContext->Entry_Level = Entry_Level;
@@ -165,7 +167,7 @@ u_int AlwaysTexture_Context_Entry(HH_Local_TextureInfomeation* pTex_Info, HH_Loc
 }
 
 u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeation* pTex_Info) {
-    u_int pTex_ID, result = 0;
+    u_int pTex_ID, result = false;
     void* pBuffer;
     int fid;
     HH_Local_TextureContext* pContext;
@@ -180,7 +182,7 @@ u32 TextureBinary_DesignateTexture_Load_toAlwaysBuffer(HH_Local_TextureInfomeati
             BLOCK_WHILE(fsSync(0, fid) < 0);
 
             AlwaysTexture_Context_Entry(pTex_Info, pContext, pBuffer);
-            result = 1;
+            result = true;
         }
     } else {
         printf("Texture Context Already Regist: Multiple Regist!!\n");
@@ -193,9 +195,9 @@ u_int TextureContext_DesignateEntryLevel_Entry(u_int Entry_Level) {
     sh2gfw_CLUTS_HEAD* pCluts_Header;
     sh2gfw_TEX_HEAD* pTex_Header;
     HH_Local_TextureContext* pContext;
-    u_int i, result = 0;
+    u_int i, result = false;
 
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->Entry_Level == Entry_Level) {
             pTex_Header = _TextureHeader_Table[i];
@@ -204,7 +206,7 @@ u_int TextureContext_DesignateEntryLevel_Entry(u_int Entry_Level) {
                 pTex_Header,
                 (sh2gfw_CLUTS_HEAD*) ((char*) pTex_Header + pTex_Header->allsize),
                 pContext->pTexture_Infomeation->Register_Texture_ID);
-            result = 1;
+            result = true;
         }
     }
     return result;
@@ -212,11 +214,11 @@ u_int TextureContext_DesignateEntryLevel_Entry(u_int Entry_Level) {
 
 u_int TextureContext_DesignateEntryLevel_AllClear(u_int Entry_Level) {
     u_int i;
-    u_int result = 0;
+    u_int result = false;
     HH_Local_TextureContext* pContext;
     int Buffer_Index; //@note: not in dwarf. required for string dedupe
 
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->Entry_Level == Entry_Level) {
             _TextureHeader_Table[i] = NULL;
@@ -225,8 +227,8 @@ u_int TextureContext_DesignateEntryLevel_AllClear(u_int Entry_Level) {
 
             _texture_buffer_enable[pContext->Buffer_Index] = 0;
             LocalWrapper_TextureTransport_Entry_Delete(&pContext->EffectTexture_Management);
-            memset(pContext, 0, 80);
-            result = 1;
+            memset(pContext, 0, sizeof(HH_Local_TextureContext));
+            result = true;
         }
     }
     return result;
@@ -234,11 +236,11 @@ u_int TextureContext_DesignateEntryLevel_AllClear(u_int Entry_Level) {
 
 u_int TextureContext_DesignateEntryLevelUnder_AllClear(u_int Entry_Level) {
     u_int i;
-    u_int result = 0;
+    u_int result = false;
 
     for (i = Entry_Level; 3u >= i; i++) { //@note: comparison using $at register.
         TextureContext_DesignateEntryLevel_AllClear(i);
-        result = 1;
+        result = true;
     }
     return result;
 }
@@ -255,7 +257,7 @@ void Object_SPK_Texture_Post(void) {
     HH_Local_TextureContext* pContext;
     u_int i;
 
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->pTexture_Infomeation->Transport_Priority == 1) {
             pTex_Manage = &pContext->EffectTexture_Management;
@@ -274,7 +276,7 @@ void Object_Texture_Send(void) {
     u_int priority;
 
     priority = _Transport_Current_Priority;
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->pTexture_Infomeation->Transport_Priority == priority) {
             pTex_Manage = &pContext->EffectTexture_Management;
@@ -293,7 +295,7 @@ void Object_Texture_Sync(void) {
     u_int priority;
 
     priority = _Transport_Current_Priority;
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = _TextureContext_Table + i;
         if (pContext->Enable && pContext->pTexture_Infomeation->Transport_Priority == priority) {
             d1tscSync(pContext->EffectTexture_Management.thr_cid);
@@ -309,7 +311,7 @@ void Object_Texture_Finish(void) {
     u_int priority;
 
     priority = _Transport_Current_Priority;
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pContext = &_TextureContext_Table[i];
         if (pContext->Enable && pContext->pTexture_Infomeation->Transport_Priority == priority) {
             d1tscFinishToUseSlot(pContext->EffectTexture_Management.thr_sid);
@@ -360,13 +362,13 @@ u_long HH_Effect_Object_Texture_GS_Register_Tex0_Get(u_int Texture_ID, u_int Clu
 }
 
 u_int HH_Effect_Object_Texture_DesignateEntryLevel_Initialize(u_int Entry_Level) {
-    u_int result = 0;
+    u_int result = false;
 
     if (HH_MemoryManager_AllocateMemoryBlock_Check(MEMORY_BLOCK_TEXTURE_BUFFER)) {
         TextureContext_DesignateEntryLevelUnder_AllClear(Entry_Level);
         TextureBinary_DesignateEntryLevel_Load(Entry_Level);
         TextureContext_DesignateEntryLevel_Entry(Entry_Level);
-        result = 1;
+        result = true;
     } else if (HH_MemoryManager_MemoryBlock_All_Allocate()) {
         TextureBinary_DesignateEntryLevel_Load(2);
         TextureContext_DesignateEntryLevel_Entry(2);
@@ -386,7 +388,7 @@ u_int HH_Effect_Object_Texture_AlwaysTexture_Initialize(void) {
     HH_Local_TextureInfomeation* pTex_Info;
     u_int i;
 
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < TEXTURE_HEADER_MAX; i++) {
         pTex_Info = &_TextureInfomeation_Table[i];
         if (pTex_Info->Register_Texture_ID == 1) {
             AlwaysTexture_Initialize(pTex_Info);
