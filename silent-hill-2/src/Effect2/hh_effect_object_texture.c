@@ -104,51 +104,96 @@ static inline void get_disabled_texture_buffer(int* dst) {
     }
 }
 
+HH_Local_TextureContext _TextureContext_Table[21];
+int* _TextureHeader_Table[21];
+u_int _texture_buffer_enable[5];
+HH_Local_TextureInfomeation _TextureInfomeation_Table[21];
+
+extern void *HH_MemoryManager_AllocateMemoryBlock_Get(s32);
+extern void *HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(void*, u32, u32);
+
+#define ASSERT_TEXTURE(cond) \
+do { \
+    printf("Texture Context Already Regist: Multiple Regist!!\n"); \
+    printf(__FILE__ ":" ASSTR(__LINE__) "> assert:(%s)\n", #cond); \
+    do {} while (1); \
+} while (0);
+
+#define ASSERT_ON_LINE(cond, line) \
+do { \
+    if (!(cond)) { \
+        printf(__FILE__ ":" #line "> assert:(%s)\n", #cond); \
+        do {} while (1); \
+    } \
+} while (0)
+
+
+
+static inline void get_disabled_texture_buffer(int *buffer_index) {
+    u_int i;
+    *buffer_index = -1;
+
+    for (i = 0; i < 4u; i++) {
+        ASSERT(i < 5u);
+        if (_texture_buffer_enable[i] == 0) {
+            *buffer_index = i;
+            return;
+        }
+    }
+}
+
 u_int TextureBinary_DesignateEntryLevel_Load(u_int Entry_Level) {
-    u_int result = 0;                       // r16
-    u_int i;                                // r17
-    int fid;                                // r18
-    int buffer_index;                       // r2
-    void* pBuffer;                          // r19
-    HH_Local_TextureInfomeation* pTex_Info; // r2
-    HH_Local_TextureContext* pContext;      // r2
+    u_int result  = 0; // r16
+    u_int i; // r17
+    int fid; // r18
+    int buffer_index; // r2
+    void * pBuffer; // r19
+    HH_Local_TextureInfomeation * pTex_Info; // r2
+    HH_Local_TextureContext * pContext; // r2
+
 
     for (i = 0; i < 21; i++) {
-        pTex_Info = &_TextureInfomeation_Table[i];
+        pTex_Info = _TextureInfomeation_Table + i;
         if (TextureContext_DesignateEntryLevel_EntryCheck(Entry_Level, pTex_Info)) {
             get_disabled_texture_buffer(&buffer_index);
 
-            if (buffer_index == -1)
-                goto hand_rolled_assert;
+            if (buffer_index != -1) {
 
-            pContext = &_TextureContext_Table[pTex_Info->Register_Texture_ID];
-            if (!pContext->Enable) {
+                pContext = _TextureContext_Table + pTex_Info->Register_Texture_ID;
+                if (!pContext->Enable) {
 
-                pBuffer = HH_MemoryManager_AllocateMemoryBlock_Get(2);
-                pBuffer = HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(pBuffer, 0x44800, buffer_index);
-                fid     = FcRead(pTex_Info->pFileID, pBuffer);
+                    pBuffer = HH_MemoryManager_AllocateMemoryBlock_Get(2);
+                    pBuffer = HH_MemoryManager_DesignateSize_Alignment64Address_Calculator(pBuffer, 0x44800, buffer_index);
+                    fid = FcRead(pTex_Info->pFileID, pBuffer);
 
-                if (fid != -1) {
-                    BLOCK_WHILE(fsSync(0, fid) < 0);
+                    if (fid != -1) {
+                        do {} while( fsSync(0, fid) < 0 );
 
-                    result                         = 1;
-                    pContext->Enable               = 1;
-                    pContext->Buffer_Index         = buffer_index;
-                    pContext->Entry_Level          = Entry_Level;
-                    pContext->pTexture_Infomeation = pTex_Info;
+                        result = 1;
+                        pContext->Enable = 1;
+                        pContext->Buffer_Index = buffer_index;
+                        pContext->Entry_Level = Entry_Level;
+                        pContext->pTexture_Infomeation = pTex_Info;
 
-                    ASSERT_ON_LINE(buffer_index < TEXTURE_BUFFER_BLOCK_MAX, 476);
+                        ASSERT(buffer_index < 5u);
 
-                    _texture_buffer_enable[buffer_index]                 = 1;
-                    _TextureHeader_Table[pTex_Info->Register_Texture_ID] = (int*) pBuffer;
+                        _texture_buffer_enable[buffer_index] = 1;
+                        _TextureHeader_Table[pTex_Info->Register_Texture_ID] = (int *)pBuffer;
+                    }
+                    continue;
+                } else {
+                    ASSERT_TEXTURE(!pContext->Enable);
                 }
-                continue;
-            } else {
-                ASSERT_TEXTURE(!pContext->Enable, 770);
+
             }
-        hand_rolled_assert:
+
             printf("hh_effect_object_texture.c:774> assert:(%s)\n", "!pContext->Enable");
-            for (;;);
+            for(;;);
+            // ASSERT_TEXTURE(!pContext->Enable);
+            // ASSERT(!pContext->Enable);
+
+
+
         }
     }
     return result;
