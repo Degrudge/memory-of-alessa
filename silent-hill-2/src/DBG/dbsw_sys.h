@@ -1,18 +1,23 @@
 #ifndef DBSW_SYS_H
 #define DBSW_SYS_H
 
+#include "common.h"
+#include "SH2_common/pad.h"
+#include "DBG/dbswitch.h"
+#include "Multi_thr/loadinit/loadinit.h"
+
 // total size: 0x14
-typedef struct CmdServStat {
-    // Members
-     int qsize; // offset 0x0, size 0x4
-     int qlen; // offset 0x4, size 0x4
-     int id; // offset 0x8, size 0x4
-     int last_id; // offset 0xC, size 0x4
-     int clen; // offset 0x10, size 0x4
-} CmdServStat;
+// typedef struct CmdServStat {
+//     // Members
+//      int qsize; // offset 0x0, size 0x4
+//      int qlen; // offset 0x4, size 0x4
+//      int id; // offset 0x8, size 0x4
+//      int last_id; // offset 0xC, size 0x4
+//      int clen; // offset 0x10, size 0x4
+// } CmdServStat;
 
 // total size: 0x8
-typedef struct timeDate/* @anon0 */ {
+typedef struct dateTime /* @anon0 */ {
     // Members
     u_char stat; // offset 0x0, size 0x1
     u_char second; // offset 0x1, size 0x1
@@ -22,7 +27,7 @@ typedef struct timeDate/* @anon0 */ {
     u_char day; // offset 0x5, size 0x1
     u_char month; // offset 0x6, size 0x1
     u_char year; // offset 0x7, size 0x1
-} timeDate;
+} dateTime;
 
 typedef union shGameKeyData {
     u_long bit; // offset 0x0, size 0x4
