@@ -426,13 +426,6 @@ static void TiniEnv(sceVif1Packet* pk /* r2 */) {
     sceVif1PkRef(pk, (u_long128*) &packet, sizeof(Packet) / sizeof(Q), 0, SCE_VIF1_SET_DIRECT(3, 0), 0);
 }
 
-/*
-    Compile unit: E:\work\sh2(CVS全取得)\src\Chacter_Draw\model3_vu1_n.c
-    Producer: MW MIPS C Compiler
-    Language: C
-    Code range: 0x0012C780 -> 0x0012C968
-*/
-// Range: 0x12C780 -> 0x12C968
 #line 733
 static void MakeVu1PartTransferPacket(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
     
