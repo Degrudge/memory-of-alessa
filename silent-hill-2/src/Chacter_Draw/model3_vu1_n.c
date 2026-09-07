@@ -263,7 +263,154 @@ static void InitData1(void) {
     } while (*D9_CHCR & 0x100);
 }
 
+#ifdef NON_MATCHING
+static void MakeData1(void) {
+    u_int fogcol = model3_junk.fogcol;
+    
+    InitData1();
+
+    
+    all_data = &all_data_db[all_data_page ^= 1];
+
+    /* parallel lights */
+    {
+        int n_parallels = LightNValidParallelMatrices();
+        int i;
+        for (i = 0; i < n_parallels; i++) {
+            PLightData* data =
+                UNCACHED_POINTER(&all_data->plight[i]);
+
+
+            LightGetNthViewNLM(data->nlm, i);
+
+            LightGetNthLCM(data->lcm, i);
+        }
+    }
+
+    /* extra lights */
+    {
+        int n_extras = LightNValidExtras();
+        int i;
+        for (i = 0; i < n_extras; i++) {
+            Light* light = LightNthValidExtra(i);
+            ELightData* eldata =
+                UNCACHED_POINTER(&all_data->elight[i]);
+
+
+            /* position & direction */
+            sceVu0CopyVector(eldata->pos, light->vpos);
+            sceVu0CopyVector(eldata->dir, light->vdir);
+            /* color */
+            sceVu0CopyVector(eldata->col, light->color);
+            eldata->param[0] = light->f_ra;
+            eldata->param[1] = light->f_rb;
+            eldata->param[2] = light->s_a;
+            eldata->param[3] = light->s_b;
+        }
+    }
+
+    /* lambertian */
+    {
+        LambertData* data = UNCACHED_POINTER(&all_data->lambert);
+    
+
+        
+        LightGetNthViewNLM(data->nlm, 0);
+        
+        LightGetNthLCM(data->lcm, 0);
+        
+        
+        
+        sceVu0CopyVector(data->global_ambient, model3_junk.global_ambient);
+    }
+
+
+
+    /* environment map */
+    {
+        extern /* static */ float mag_954[4]; // = {0.125, 0.125, 0.125, 0.125}; // @ 0x002A9760
+        extern /* static */ float offset_955[4]; // = {0.0, 0.5, 0.25, 0.75}; // @ 0x002A9770
+        EMapData* data = UNCACHED_POINTER(&all_data->emap);    
+        sceVu0CopyMatrix(data->vwm, model3_junk.vwm);
+        sceVu0CopyVector(data->mag, mag_954);
+        sceVu0CopyVector(data->offset, offset_955);
+    }
+
+    
+    /* shadow map */
+    {
+        SMapData* smap = UNCACHED_POINTER(&all_data->smap);
+    
+    
+        
+        
+        
+        LightGetNthViewNHM(smap->nhm, 0);
+    }
+
+
+
+    /* setup */
+    {
+        DSetupData* data = UNCACHED_POINTER(&all_data->dsetup);
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        sceVu0CopyVector(data->vsp[0], model_common_work->vsp[0]);
+        sceVu0CopyVector(data->vsp[1], model_common_work->vsp[1]);
+        sceVu0CopyVector(data->vcp[0], model_common_work->vcp_gs[0]);
+        sceVu0CopyVector(data->vcp[1], model_common_work->vcp_gs[1]);
+    }
+
+
+    
+    /* environment draw */
+    {
+        EDrawData* edraw = UNCACHED_POINTER(&all_data->edraw);
+        u_long tex0 = model_common_work->latitude_mapping_tex0;
+    
+        edraw->tex0.u64[0] = tex0;
+        edraw->fogcol.u64[0] = fogcol;
+    }
+
+    
+    /* specular + specular base draw */
+    {
+        SDrawData* sdraw = UNCACHED_POINTER(&all_data->sdraw);
+        SDrawData* bdraw = UNCACHED_POINTER(&all_data->bdraw);
+        u_long tex0 = model_common_work->specular_mapping_tex0;
+        Q c;
+    
+        LightGetReflectionColor(c.fv);
+        sdraw->tex0.u64[0] = tex0;
+        sdraw->reflection_color.u128 = c.u128;
+        bdraw->tex0.u64[0] = tex0;
+        bdraw->reflection_color.u128 = c.u128;
+        bdraw->fogcol.u64[0] = fogcol;
+        
+        
+        
+        
+        spr_data->ndraw[0].fogcol.u64[0] = fogcol;
+        spr_data->ndraw[1].fogcol.u64[0] = fogcol;
+        spr_data->odraw[0].fogcol.u64[0] = fogcol;
+        spr_data->odraw[1].fogcol.u64[0] = fogcol;
+    }
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeData1);
+#endif
+
 
 #define packet4main packet4main_1018
 extern /* static */ Init_Gs_Packet packet4main; // @ 0x002A9780
@@ -279,7 +426,69 @@ static void TiniEnv(sceVif1Packet* pk /* r2 */) {
     sceVif1PkRef(pk, (u_long128*) &packet, sizeof(Packet) / sizeof(Q), 0, SCE_VIF1_SET_DIRECT(3, 0), 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeVu1PartTransferPacket);
+/*
+    Compile unit: E:\work\sh2(CVS全取得)\src\Chacter_Draw\model3_vu1_n.c
+    Producer: MW MIPS C Compiler
+    Language: C
+    Code range: 0x0012C780 -> 0x0012C968
+*/
+// Range: 0x12C780 -> 0x12C968
+#line 733
+static void MakeVu1PartTransferPacket(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
+    
+    sceVif1PkRef(pk, (u_char*) part + part->packet_offset, part->packet_qwc, 0, 0, 0);
+
+    
+    {
+        int n_cluster_data = part->n_cluster_data; // r18
+        ClusterData* cluster_data_top = (u_char*) part + part->cluster_data_offset; // r19
+        sceVu0FVECTOR* cluster_nodes = model3_junk.cluster_nodes; // r20
+        int i; // r21
+        for (i = 0; i < n_cluster_data; i++) {
+            ClusterData* cluster_data = &cluster_data_top[i]; // r4
+            u_int src = cluster_data->src; // r2
+            u_int dst = cluster_data->dst; // r2
+            u_int n = cluster_data->n; // r2
+            sceVif1PkRef(pk, (u_long128*) cluster_nodes[src], n,
+                         SCE_VIF1_SET_STCYCL(1, 4, 0), 
+                         SCE_VIF1_SET_UNPACK(dst, n, SCE_VIF_UPK_V4_32, 0), 0);
+        }
+    }
+
+    
+    {
+        sceVu0FMATRIX* matrices = model_common_work->skeleton_matrices;
+        int n_skeletons = part->n_skeletons;
+        u_short* skeletons = (u_char*) part + part->skeletons_offset;
+        int dst_top = part->data_skeletons_offset;
+        int i;
+        for (i = 0; i < n_skeletons; i++) {
+            int skeleton_no = skeletons[i];
+            sceVu0FMATRIX* src = matrices[skeleton_no];
+        
+            sceVif1PkRef(pk, src, 4, SCE_VIF1_SET_STCYCL(1, 1, 0), SCE_VIF1_SET_UNPACK((int*) dst_top + i, 4, SCE_VIF_UPK_V4_32, 0), 0);
+        
+        
+        }
+    }
+
+    
+    {
+        sceVu0FMATRIX* envelope_matrices = model_common_work->envelope_matrices;
+        int n_skeleton_pairs = part->n_skeleton_pairs;
+        u_short* pairs = (u_char*) part + part->skeleton_pairs_offset;
+        int dst_top = part->data_skeleton_pairs_offset;
+        int i;
+        for (i = 0; i < n_skeleton_pairs; i++) {
+            int pair_no = pairs[i]; // r2
+            sceVu0FVECTOR* src = envelope_matrices[pair_no]; // r2
+            
+            sceVif1PkRef(pk, src, 4,
+                         SCE_VIF1_SET_STCYCL(1, 1, 0),
+                         SCE_VIF1_SET_UNPACK((int*) dst_top + i, 4, SCE_VIF_UPK_V4_32, 0), 0);
+        }
+    }
+}
 
 static void MakeLambertShadingPacket(Part* part /* r20 */, sceVif1Packet* pk /* r19 */) {
     int n_parallels = LightNValidParallelMatrices(); // r16
