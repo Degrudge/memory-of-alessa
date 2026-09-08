@@ -103,10 +103,10 @@ static void printR_cmdserv(CmdServStat * stat /* r18 */, char * prefix /* r17 */
     stat->qlen % stat->clen,
     stat->qsize % stat->clen);
 }
-
+//thanks: Sassy Gaur (Anon)
 static void printR_fileserv(void) {
     CmdServStat stat[1]; // r29+0x10
-    int exec[1]; // @ 0x0034DB98 // >:\
+    static int exec[1]; // @ 0x0034DB98 // >:\
 
     fsGetStat(stat);
     printR_cmdserv(stat, "fs", exec);
@@ -114,7 +114,7 @@ static void printR_fileserv(void) {
 
 static void printR_loadinit(void) {
     CmdServStat stat[1]; // r29+0x10
-    int exec[1]; // @ 0x0034DB98 // >:\
+    static int exec[1]; // @ 0x0034DB98 // >:\
 
     lisGetStat(stat);
     printR_cmdserv(stat, "lis", exec);
