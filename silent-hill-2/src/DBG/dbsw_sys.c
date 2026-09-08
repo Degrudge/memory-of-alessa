@@ -1,7 +1,7 @@
 #include "DBG/dbsw_sys.h"
 #include "dbsw_sys.h"
 
-extern u_short libShPadStep[2][4]; // size: 0x10, address: 0x2B64D0
+#pragma divbyzerocheck off
 
 char* dbSwitchSysHelp(int Y /* r2 */) {
     char* help;
@@ -70,7 +70,7 @@ static void dbSwitchSetSys(int Y /* r2 */, int on /* r2 */) {
 static void printR_date(void) {
     int var;
     char * str; // r16
-    dateTime rtc[1];
+    Old_Rtc rtc[1];
     char strbuf[32]; // r29+0x20
 
     shCdReadClock(&rtc);
@@ -165,7 +165,7 @@ static void printR_keydata(shGameKeyData * key /* r16 */) {
 
 static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_normalize /* r20 */, int pad_adjust /* r19 */, int dispstep /* r18 */, int disppad /* r17 */, int dispkey /* r16 */) {
     shGameKeyData key[1]; // r29+0xA8
-    char paddata[32]; // r29+0x80
+    u_char paddata[32]; // r29+0x80
 
     if (disppad || dispkey) {
         libShPadRead(port, slot, paddata);
@@ -183,7 +183,7 @@ static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_norma
         printR_paddata(paddata);
     }
     if (dispkey) {
-        shGameKeyConvert(key, paddata);
+        shGameKeyConvert(key, (u_char *)paddata);
         printR_keydata(key);
     }
 }

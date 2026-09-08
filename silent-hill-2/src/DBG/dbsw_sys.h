@@ -5,64 +5,10 @@
 #include "SH2_common/pad.h"
 #include "DBG/dbswitch.h"
 #include "Multi_thr/loadinit/loadinit.h"
-
-// total size: 0x14
-// typedef struct CmdServStat {
-//     // Members
-//      int qsize; // offset 0x0, size 0x4
-//      int qlen; // offset 0x4, size 0x4
-//      int id; // offset 0x8, size 0x4
-//      int last_id; // offset 0xC, size 0x4
-//      int clen; // offset 0x10, size 0x4
-// } CmdServStat;
-
-// total size: 0x8
-typedef struct dateTime /* @anon0 */ {
-    // Members
-    u_char stat; // offset 0x0, size 0x1
-    u_char second; // offset 0x1, size 0x1
-    u_char minute; // offset 0x2, size 0x1
-    u_char hour; // offset 0x3, size 0x1
-    u_char pad; // offset 0x4, size 0x1
-    u_char day; // offset 0x5, size 0x1
-    u_char month; // offset 0x6, size 0x1
-    u_char year; // offset 0x7, size 0x1
-} dateTime;
-
-typedef union shGameKeyData {
-    u_long bit; // offset 0x0, size 0x4
-    // total size: 0x8
-    struct /* @anon1 */ {
-        // Members
-        u_long type : 1; // offset 0x0, size 0x4
-        u_long DRINK : 1; // offset 0x0, size 0x4
-        u_long RADIO : 1; // offset 0x0, size 0x4
-        u_long LIGHT : 1; // offset 0x0, size 0x4
-        u_long ITEM : 1; // offset 0x0, size 0x4
-        u_long MAP : 1; // offset 0x0, size 0x4
-        u_long DECIDE : 1; // offset 0x0, size 0x4
-        u_long CANCEL : 1; // offset 0x0, size 0x4
-        u_long SKIP : 1; // offset 0x0, size 0x4
-        u_long PAUSE : 1; // offset 0x0, size 0x4
-        u_long ACTION : 2; // offset 0x0, size 0x4
-        u_long DASH : 2; // offset 0x0, size 0x4
-        u_long LSLIDE : 2; // offset 0x0, size 0x4
-        u_long RSLIDE : 2; // offset 0x0, size 0x4
-        u_long READY : 2; // offset 0x0, size 0x4
-        u_long VIEW : 2; // offset 0x0, size 0x4
-        u_long frame_m1 : 2; // offset 0x0, size 0x4
-        long AX : 4; // offset 0x0, size 0x4
-        long AY : 4; // offset 0x0, size 0x4
-        long BX : 2; // offset 0x0, size 0x4
-        long BY : 2; // offset 0x0, size 0x4
-        long CX : 4; // offset 0x0, size 0x4
-        long CY : 4; // offset 0x0, size 0x4
-        u_long reserve : 2; // offset 0x0, size 0x4
-        u_long trg : 1; // offset 0x0, size 0x4
-        u_long rpt : 1; // offset 0x0, size 0x4
-        u_long len : 16; // offset 0x0, size 0x4
-    } f; // offset 0x0, size 0x8
-} shGameKeyData;
+#include "Multi_thr/pad/keydata.h"
+#include "Multi_thr/pad/th_pad.h"
+//@note: for RTC struct. Probably not a very appropriate include
+#include "Multi_thr/filesys/sh_cdvd.h"
 
 char * dbSwitchSysHelp(int Y /* r2 */);
 
