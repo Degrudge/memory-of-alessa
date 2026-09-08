@@ -52,9 +52,9 @@ char* dbSwitchSysHelp(int Y /* r2 */) {
             return "debug menu from soft reset.";
         case 31:
             help = "movie dummy step.";
-            /* fallthrough */
-            default:
-                return help;
+        /* fallthrough */
+        default:
+            return help;
     }
 }
 
@@ -66,10 +66,10 @@ static void dbSwitchSetSys(int Y /* r2 */, int on /* r2 */) {
     dbSwitchSet(0, Y, on);
 }
 
-//thanks: Bl00D4NGEL
+// thanks: Bl00D4NGEL
 static void printR_date(void) {
     int var;
-    char * str; // r16
+    char* str; // r16
     Old_Rtc rtc[1];
     char strbuf[32]; // r29+0x20
 
@@ -81,7 +81,7 @@ static void printR_date(void) {
     dbfntprintfR("%s\n", strbuf);
 }
 
-static void printR_cmdserv(CmdServStat * stat /* r18 */, char * prefix /* r17 */, signed int * exec /* r2 */) {
+static void printR_cmdserv(CmdServStat* stat /* r18 */, char* prefix /* r17 */, signed int* exec /* r2 */) {
     char sym, syms[4] = {'|', '/', '-', '\\'};
     sym = ' ';
     if (exec != NULL) {
@@ -92,21 +92,21 @@ static void printR_cmdserv(CmdServStat * stat /* r18 */, char * prefix /* r17 */
         }
     }
     dbfntprintfR(
-    dbSwitchSys(7)
-    ? "%s: %3d%1c(%03d-%03d) (%3d/%3d)\n"
-    : "%s: %3d%1c\n",
-    prefix,
-    stat->clen % 1000,
-    sym,
-    stat->id % stat->clen,
-    stat->last_id % stat->clen,
-    stat->qlen % stat->clen,
-    stat->qsize % stat->clen);
+        dbSwitchSys(7)
+            ? "%s: %3d%1c(%03d-%03d) (%3d/%3d)\n"
+            : "%s: %3d%1c\n",
+        prefix,
+        stat->clen % 1000,
+        sym,
+        stat->id % stat->clen,
+        stat->last_id % stat->clen,
+        stat->qlen % stat->clen,
+        stat->qsize % stat->clen);
 }
-//thanks: Sassy Gaur (Anon)
+// thanks: Sassy Gaur (Anon)
 static void printR_fileserv(void) {
     CmdServStat stat[1]; // r29+0x10
-    static int exec[1]; // @ 0x0034DB98 // >:\
+    static int exec[1];  // @ 0x0034DB98 // >:\
 
     fsGetStat(stat);
     printR_cmdserv(stat, "fs", exec);
@@ -114,7 +114,7 @@ static void printR_fileserv(void) {
 
 static void printR_loadinit(void) {
     CmdServStat stat[1]; // r29+0x10
-    static int exec[1]; // @ 0x0034DB98 // >:\
+    static int exec[1];  // @ 0x0034DB98 // >:\
 
     lisGetStat(stat);
     printR_cmdserv(stat, "lis", exec);
@@ -125,13 +125,12 @@ static void printR_test(void) {
 }
 
 static void printR_padstep(int port /* r8 */, int slot /* r2 */) {
-    dbfntprintfR("pad(%d,%d) trans step: %04x\n",port,slot,libShPadStep[port][slot]);
+    dbfntprintfR("pad(%d,%d) trans step: %04x\n", port, slot, libShPadStep[port][slot]);
 }
 INCLUDE_ASM("asm/nonmatchings/DBG/dbsw_sys", printR_paddata);
 
-static void printR_keydata(shGameKeyData * key /* r16 */) {
+static void printR_keydata(shGameKeyData* key /* r16 */) {
 
-    // temp_v1 = arg0->unk0;
     dbfntprintfR("type:%1d  DRINK:%1d\nRADIO:%1d  LIGHT:%1d\nITEM:%1d    MAP:%1d\nDECIDE:%1d CANCEL:%1d\n",
                  key->f.type,
                  key->f.DRINK,
@@ -140,18 +139,16 @@ static void printR_keydata(shGameKeyData * key /* r16 */) {
                  key->f.ITEM,
                  key->f.MAP,
                  key->f.DECIDE,
-                 key->f.CANCEL
-    );
+                 key->f.CANCEL);
     dbfntprintfR("SKIP:%1d  PAUSE:%1d\nACTION:%1d   DASH:%1d\nLSLIDE:%1d RSLIDE:%1d\nREADY:%1d   VIEW:%1d\n",
                  key->f.SKIP,
-                 key->f.PAUSE,
+                 key->f.CANCEL,
                  key->f.ACTION,
                  key->f.DASH,
                  key->f.LSLIDE,
                  key->f.RSLIDE,
                  key->f.READY,
-                 key->f.VIEW
-    );
+                 key->f.VIEW);
     dbfntprintfR("A(X,Y):(%+1d,%+1d)\nB(X,Y):(%+1d,%+1d)\nC(X,Y):(%+1d,%+1d)\nlen:%5d\n",
                  key->f.AX,
                  key->f.AY,
@@ -159,13 +156,12 @@ static void printR_keydata(shGameKeyData * key /* r16 */) {
                  key->f.BY,
                  key->f.CX,
                  key->f.CY,
-                 key->f.len
-    );
+                 key->f.len);
 }
 
 static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_normalize /* r20 */, int pad_adjust /* r19 */, int dispstep /* r18 */, int disppad /* r17 */, int dispkey /* r16 */) {
     shGameKeyData key[1]; // r29+0xA8
-    u_char paddata[32]; // r29+0x80
+    u_char paddata[32];   // r29+0x80
 
     if (disppad || dispkey) {
         libShPadRead(port, slot, paddata);
@@ -183,14 +179,14 @@ static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_norma
         printR_paddata(paddata);
     }
     if (dispkey) {
-        shGameKeyConvert(key, (u_char *)paddata);
+        shGameKeyConvert(key, (u_char*) paddata);
         printR_keydata(key);
     }
 }
 
 void printR_pad00(void) {
 
-    if (dbSwitchSys(9) && !dbSwitchSys(0xA)  &&  !dbSwitchSys(0xB) && !dbSwitchSys(0xC)) {
+    if (dbSwitchSys(9) && !dbSwitchSys(0xA) && !dbSwitchSys(0xB) && !dbSwitchSys(0xC)) {
         dbSwitchSet(0, 0xA, 1);
         dbSwitchSet(0, 0xB, 1);
         dbSwitchSet(0, 0xC, 1);
@@ -248,7 +244,7 @@ void dbSwitchSysPrint(void) {
     int Y = 0;
 
     for (Y = 0; Y < 32; Y++)
-        switch (Y) {                               /* irregular */
+        switch (Y) { /* irregular */
             case 4:
                 if (dbSwitchSys(Y) != 0) {
                     printR_date();
@@ -307,11 +303,11 @@ int dbSwitchSysPrintNotOnlyPort1(void) {
 }
 
 void dbSwitchSysInit(void) {
-    dbSwitchSetSys(1,1);
-    dbSwitchSetSys(2,1);
-    dbSwitchSetSys(3,1);
-    dbSwitchSetSys(5,1);
-    dbSwitchSetSys(6,1);
-    dbSwitchSetSys(30,1);
-    dbSwitchSetSys(31,1);
+    dbSwitchSetSys(1, 1);
+    dbSwitchSetSys(2, 1);
+    dbSwitchSetSys(3, 1);
+    dbSwitchSetSys(5, 1);
+    dbSwitchSetSys(6, 1);
+    dbSwitchSetSys(30, 1);
+    dbSwitchSetSys(31, 1);
 }
