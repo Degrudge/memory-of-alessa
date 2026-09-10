@@ -6,7 +6,7 @@
 #include "DBG/dbswitch.h"
 #include "Multi_thr/loadinit/loadinit.h"
 #include "Multi_thr/pad/keydata.h"
-#include "Multi_thr/pad/th_pad.h"
+#include "shPad/lib_sh_pad.h"
 //@note: for RTC struct. Probably not a very appropriate include
 #include "Multi_thr/filesys/sh_cdvd.h"
 
