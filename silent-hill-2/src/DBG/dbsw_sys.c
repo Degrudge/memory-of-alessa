@@ -1,4 +1,4 @@
-#include "DBG/dbsw_sys.h"
+// #include "DBG/dbsw_sys.h"
 #include "dbsw_sys.h"
 
 #pragma divbyzerocheck off
@@ -127,7 +127,22 @@ static void printR_test(void) {
 static void printR_padstep(int port /* r8 */, int slot /* r2 */) {
     dbfntprintfR("pad(%d,%d) trans step: %04x\n", port, slot, libShPadStep[port][slot]);
 }
-INCLUDE_ASM("asm/nonmatchings/DBG/dbsw_sys", printR_paddata);
+
+//thanks: Piccio23, dreamingmoths
+static void printR_paddata(char* paddata /* r2 */) {
+    int idx; // r2
+    int ofs; // r5
+    u_int padp[8] = {0}; // r29+0x20
+
+
+    for (idx = 31; idx >= 0; idx--) {
+        ofs = idx / 4;
+        padp[ofs] = (padp[ofs] << 8);
+        padp[ofs] |= (u_char)paddata[idx];
+    }
+    dbfntprintfR("%08x %08x\n%08x %08x\n%08x %08x\n%08x %08x\n", padp[1], padp[0], padp[3], padp[2], padp[5], padp[4], padp[7], padp[6]);
+}
+
 
 static void printR_keydata(shGameKeyData* key /* r16 */) {
 
