@@ -1,61 +1,79 @@
-// #include "DBG/dbsw_sys.h"
 #include "dbsw_sys.h"
 
 #pragma divbyzerocheck off
 
 char* dbSwitchSysHelp(int Y /* r2 */) {
-    char* help;
-
-    help = NULL;
+    char* help = NULL;
     switch (Y) {
         case 0:
-            return "display this help";
+            help = "display this help";
+            break;
         case 1:
-            return "enable pad port for debug";
+            help = "enable pad port for debug";
+            break;
         case 2:
-            return "display switch indicator not-only port 1";
+            help = "display switch indicator not-only port 1";
+            break;
         case 3:
-            return "display all switch pages";
+            help = "display all switch pages";
+            break;
         case 4:
-            return "display RTC";
+            help = "display RTC";
+            break;
         case 5:
-            return "display File Server status";
+            help = "display File Server status";
+            break;
         case 6:
-            return "display Load and Init command Server Status";
+            help = "display Load and Init command Server Status";
+            break;
         case 7:
-            return "verbose at command server status";
+            help = "verbose at command server status";
+            break;
         case 8:
-            return "display default language by ps2 system configuration";
+            help = "display default language by ps2 system configuration";
+            break;
         case 19:
-            return "display special characters(0x20-0x9F)";
+            help = "display special characters(0x20-0x9F)";
+            break;
         case 9:
-            return "display allinfo at pad(0,0)";
+            help = "display allinfo at pad(0,0)";
+            break;
         case 10:
-            return "display pad step at pad(0,0)";
+            help = "display pad step at pad(0,0)";
+            break;
         case 11:
-            return "display paddata at pad(0,0)";
+            help = "display paddata at pad(0,0)";
+            break;
         case 12:
-            return "display keydata at pad(0,0)";
+            help = "display keydata at pad(0,0)";
+            break;
         case 13:
-            return "display allinfo at pad(1,0)";
+            help = "display allinfo at pad(1,0)";
+            break;
         case 14:
-            return "display pad step at pad(1,0)";
+            help = "display pad step at pad(1,0)";
+            break;
         case 15:
-            return "display paddata at pad(1,0)";
+            help = "display paddata at pad(1,0)";
+            break;
         case 16:
-            return "display keydata at pad(1,0)";
+            help = "display keydata at pad(1,0)";
+            break;
         case 17:
-            return "semaphore param.";
+            help = "semaphore param.";
+            break;
         case 18:
-            return "thread param.";
+            help = "thread param.";
+            break;
         case 30:
-            return "debug menu from soft reset.";
+            help = "debug menu from soft reset.";
+            break;
         case 31:
             help = "movie dummy step.";
-        /* fallthrough */
         default:
-            return help;
+            break;
     }
+    return help;
 }
 
 static int dbSwitchSys(int Y /* r2 */) {
@@ -81,32 +99,32 @@ static void printR_date(void) {
     dbfntprintfR("%s\n", strbuf);
 }
 
-static void printR_cmdserv(CmdServStat* stat /* r18 */, char* prefix /* r17 */, signed int* exec /* r2 */) {
-    char sym, syms[4] = {'|', '/', '-', '\\'};
-    sym = ' ';
-    if (exec != NULL) {
-        if (stat->clen != 0) {
-            sym = syms[(++*exec) % 4];
+static void printR_cmdserv(CmdServStat* stat /* r18 */, char* prefix /* r17 */, int* exec /* r2 */) {
+    char syms[4] = {'|', '/', '-', '\\'};
+    char sym = ' ';
+    if (exec) {
+        if (stat->clen) {
+            sym = syms[(*exec)++ % 4];
         } else {
             *exec = 0;
         }
     }
     dbfntprintfR(
-        dbSwitchSys(7)
-            ? "%s: %3d%1c(%03d-%03d) (%3d/%3d)\n"
-            : "%s: %3d%1c\n",
-        prefix,
-        stat->clen % 1000,
-        sym,
-        stat->id % stat->clen,
-        stat->last_id % stat->clen,
-        stat->qlen % stat->clen,
-        stat->qsize % stat->clen);
+    dbSwitchSys(7)
+    ? "%s: %3d%1c(%03d-%03d) (%3d/%3d)\n"
+    : "%s: %3d%1c\n",
+    prefix,
+    stat->clen % 1000,
+    sym,
+    stat->id % 1000,
+    stat->last_id % 1000,
+    stat->qlen % 1000,
+    stat->qsize % 1000);
 }
 // thanks: Sassy Gaur (Anon)
 static void printR_fileserv(void) {
     CmdServStat stat[1]; // r29+0x10
-    static int exec[1];  // @ 0x0034DB98 // >:\
+    static int exec[1];  // @ 0x0034DB98
 
     fsGetStat(stat);
     printR_cmdserv(stat, "fs", exec);
@@ -114,7 +132,7 @@ static void printR_fileserv(void) {
 
 static void printR_loadinit(void) {
     CmdServStat stat[1]; // r29+0x10
-    static int exec[1];  // @ 0x0034DB98 // >:\
+    static int exec[1];  // @ 0x0034DB98
 
     lisGetStat(stat);
     printR_cmdserv(stat, "lis", exec);
