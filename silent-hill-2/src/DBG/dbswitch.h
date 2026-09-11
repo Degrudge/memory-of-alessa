@@ -9,6 +9,6 @@ typedef enum DBSW_ID {
 
 int dbSwitchSet(DBSW_ID _X /* r2 */, int Y /* r2 */, int set /* r2 */);
 
-int dbSwitch(enum DBSW_ID _X /* r2 */, int Y /* r2 */);
+int dbSwitch(DBSW_ID _X /* r2 */, int Y /* r2 */);
 
 #endif // DBSWITCH_H
