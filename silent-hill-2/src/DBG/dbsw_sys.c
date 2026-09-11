@@ -192,18 +192,14 @@ static void printR_keydata(shGameKeyData* key /* r16 */) {
                  key->f.len);
 }
 
-static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_normalize /* r20 */, int pad_adjust /* r19 */, int dispstep /* r18 */, int disppad /* r17 */, int dispkey /* r16 */) {
+static void printR_padport(signed int port /* r22 */, signed int slot /* r21 */, signed int pad_normalize /* r20 */, signed int pad_adjust /* r19 */, signed int dispstep /* r18 */, signed int disppad /* r17 */, signed int dispkey /* r16 */) {
+    u_char paddata[32]; // r29+0x80
     shGameKeyData key[1]; // r29+0xA8
-    u_char paddata[32];   // r29+0x80
 
     if (disppad || dispkey) {
         libShPadRead(port, slot, paddata);
-        if (pad_normalize) {
-            shSysKeyNormalize(paddata);
-        }
-        if (pad_adjust) {
-            shSysKeyAdjust(paddata);
-        }
+        if (pad_normalize) shSysKeyNormalize(paddata);
+        if (pad_adjust) shSysKeyAdjust(paddata);
     }
     if (dispstep) {
         printR_padstep(port, slot);
@@ -212,7 +208,7 @@ static void printR_padport(int port /* r22 */, int slot /* r21 */, int pad_norma
         printR_paddata(paddata);
     }
     if (dispkey) {
-        shGameKeyConvert(key, (u_char*) paddata);
+        shGameKeyConvert(key, (u_char *)paddata);
         printR_keydata(key);
     }
 }
@@ -249,72 +245,31 @@ void printR_pad10(void) {
 
 void printR_lang(void) {
     char* str;
-
     switch (sh2ScfGetDefaultLanguage() & 0xFF) {
-        case 0:
-            str = "JPN";
-            break;
-        case 1:
-            str = "ENG";
-            break;
-        case 2:
-            str = "FRN";
-            break;
-        case 3:
-            str = "GER";
-            break;
-        case 4:
-            str = "ITA";
-            break;
-        case 5:
-            str = "SPN";
-            break;
+        case 0: str = "JPN"; break;
+        case 1: str = "ENG"; break;
+        case 2: str = "FRN"; break;
+        case 3: str = "GER"; break;
+        case 4: str = "ITA"; break;
+        case 5: str = "SPN"; break;
     }
     dbfntprintfR("lang:%s\n", str);
 }
 
 void dbSwitchSysPrint(void) {
-    int Y = 0;
-
+    int Y;
     for (Y = 0; Y < 32; Y++)
-        switch (Y) { /* irregular */
-            case 4:
-                if (dbSwitchSys(Y) != 0) {
-                    printR_date();
-                }
-                break;
-            case 5:
-                if (dbSwitchSys(Y) != 0) {
-                    printR_fileserv();
-                }
-                break;
-            case 6:
-                if (dbSwitchSys(Y) != 0) {
-                    printR_loadinit();
-                }
-                break;
-            case 19:
-                if (dbSwitchSys(Y) != 0) {
-                    printR_test();
-                }
-                break;
-            case 9:
-                printR_pad00();
-                break;
-            case 13:
-                printR_pad10();
-                break;
-            case 8:
-                if (dbSwitchSys(Y) != 0) {
-                    printR_lang();
-                }
-                break;
-            case 17:
-                break;
-            case 18:
-                if (dbSwitchSys(Y) != 0) {
-                    dbScrPrintThreAll();
-                }
+        switch (Y) {                               /* irregular */
+            case 4: if (dbSwitchSys(Y) != 0) printR_date(); break;
+            case 5: if (dbSwitchSys(Y) != 0) printR_fileserv(); break;
+            case 6: if (dbSwitchSys(Y) != 0) printR_loadinit(); break;
+            case 19:if (dbSwitchSys(Y) != 0) printR_test(); break;
+            case 9: printR_pad00(); break;
+            case 13: printR_pad10(); break;
+            case 8: if (dbSwitchSys(Y) != 0) printR_lang(); break;
+            case 17: break;
+            case 18:if (dbSwitchSys(Y) != 0) dbScrPrintThreAll();
+            default:
                 break;
         }
 }
