@@ -24,7 +24,7 @@ char* dbSwitchSysHelp(int Y /* r2 */) {
             help = "display File Server status";
             break;
         case 6:
-            help = "display Load and Init command Server Status";
+            help = "display Load and Init command Server status";
             break;
         case 7:
             help = "verbose at command server status";
@@ -33,31 +33,31 @@ char* dbSwitchSysHelp(int Y /* r2 */) {
             help = "display default language by ps2 system configuration";
             break;
         case 19:
-            help = "display special characters(0x20-0x9F)";
+            help = "diaplay special characters(0x20-0x9F)";
             break;
         case 9:
-            help = "display allinfo at pad(0,0)";
+            help = "display allinfo at pad(0,0).";
             break;
         case 10:
-            help = "display pad step at pad(0,0)";
+            help = "display pad step at pad(0,0).";
             break;
         case 11:
-            help = "display paddata at pad(0,0)";
+            help = "display paddata at pad(0,0).";
             break;
         case 12:
-            help = "display keydata at pad(0,0)";
+            help = "display keydata at pad(0,0).";
             break;
         case 13:
-            help = "display allinfo at pad(1,0)";
+            help = "display allinfo at pad(1,0).";
             break;
         case 14:
-            help = "display pad step at pad(1,0)";
+            help = "display pad step at pad(1,0).";
             break;
         case 15:
-            help = "display paddata at pad(1,0)";
+            help = "display paddata at pad(1,0).";
             break;
         case 16:
-            help = "display keydata at pad(1,0)";
+            help = "display keydata at pad(1,0).";
             break;
         case 17:
             help = "semaphore param.";
