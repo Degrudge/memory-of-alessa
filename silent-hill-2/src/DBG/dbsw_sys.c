@@ -260,15 +260,15 @@ void dbSwitchSysPrint(void) {
     int Y;
     for (Y = 0; Y < 32; Y++)
         switch (Y) {                               /* irregular */
-            case 4: if (dbSwitchSys(Y) != 0) printR_date(); break;
-            case 5: if (dbSwitchSys(Y) != 0) printR_fileserv(); break;
-            case 6: if (dbSwitchSys(Y) != 0) printR_loadinit(); break;
-            case 19:if (dbSwitchSys(Y) != 0) printR_test(); break;
-            case 9: printR_pad00(); break;
-            case 13: printR_pad10(); break;
-            case 8: if (dbSwitchSys(Y) != 0) printR_lang(); break;
-            case 17: break;
-            case 18:if (dbSwitchSys(Y) != 0) dbScrPrintThreAll();
+            case 4:  if (dbSwitchSys(Y)) printR_date();     break;
+            case 5:  if (dbSwitchSys(Y)) printR_fileserv(); break;
+            case 6:  if (dbSwitchSys(Y)) printR_loadinit(); break;
+            case 19: if (dbSwitchSys(Y)) printR_test();     break;
+            case 9:                      printR_pad00();    break;
+            case 13:                     printR_pad10();    break;
+            case 8:  if (dbSwitchSys(Y)) printR_lang();     break;
+            case 17:                                        break;
+            case 18: if (dbSwitchSys(Y)) dbScrPrintThreAll();
             default:
                 break;
         }
