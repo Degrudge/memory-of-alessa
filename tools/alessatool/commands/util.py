@@ -53,6 +53,10 @@ def configure_util_parser(util_parser: ArgumentParser):
         type=Path,
         default=None
     )
+    format_symbol_addrs_parser.add_argument(
+        "--shiftable",
+        action="store_true"
+    )
     format_symbol_addrs_parser.set_defaults(func=format_symbol_addrs)
 
 @dataclass
@@ -117,6 +121,7 @@ def format_chara_kinds(args: FormatCharaKindsArgs):
 class FormatSymbolAddrsArgs:
     file_path: Path
     elf_path: Path
+    shiftable: bool
 
 def format_symbol_addrs(args: FormatSymbolAddrsArgs):
     atlas = parse_symbol_addrs(args.file_path, parse_attributes=True)
@@ -126,5 +131,5 @@ def format_symbol_addrs(args: FormatSymbolAddrsArgs):
         atlas_diff(parse_symtab_as_atlas(symtab_str), atlas)
 
     with open(args.file_path, "w") as output_file:
-        output_file.write(write_symbol_addrs(atlas))
+        output_file.write(write_symbol_addrs(atlas, no_splat_relocs=args.shiftable))
 

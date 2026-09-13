@@ -157,11 +157,11 @@ key_weights = dict(
 get_key_weight = lambda key : key in key_weights and key_weights[key] or key_weights["default"]
 
 def _filter_and_sort_items(items):
-    items = filter(lambda item : item[0] and item[1], items)
+    items = filter(lambda item : item[0] is not None and item[1] is not None, items)
     items = sorted(items, key=lambda item : get_key_weight(item[0]))
     return items
 
-def write_symbol_addrs(atlas: SplatSymbolAddrsAtlas, justify=64, align=True):
+def write_symbol_addrs(atlas: SplatSymbolAddrsAtlas, justify=64, align=True, no_splat_relocs=False):
     symbol_addrs_lines = []
 
     for symbol in atlas.syms:
@@ -171,6 +171,8 @@ def write_symbol_addrs(atlas: SplatSymbolAddrsAtlas, justify=64, align=True):
             attributes["allow_duplicated"] = True
         else:
             attributes["allow_duplicated"] = None
+        if no_splat_relocs:
+            attributes["can_reference"] = False
 
         if align and (not "type" in attributes or attributes["type"] != "func"):
             if   symbol.addr & 0x7F == 0:
