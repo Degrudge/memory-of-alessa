@@ -44,6 +44,7 @@ class ExecutableInfo:
 @dataclass
 class MismatchingFileEntry:
     cmp_output: str
+    cmp_error: str
     base_path: Path
     target_path: Path
     exe_info: ExecutableInfo
@@ -210,14 +211,17 @@ def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name:
             base_path   = Path(base_path.as_posix() + ".rom")
 
         result = run(["cmp", "-l", target_path, base_path], capture_output=True)
+        output = result.stdout.decode().strip()
+        error = result.stderr.decode().strip()
 
-        if result.returncode:
+        if output or error:
             mismatching_files.append(
                 MismatchingFileEntry(
                     exe_info=exe_info,
                     target_path=target_path,
                     base_path=base_path,
-                    cmp_output=result.stdout.decode().strip()
+                    cmp_output=output,
+                    cmp_error=error
                 )
             )
 
@@ -234,7 +238,10 @@ def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name:
         for mismatching_entry in mismatching_files:
             info = mismatching_entry.exe_info
             cmp_output = mismatching_entry.cmp_output
+            cmp_error = mismatching_entry.cmp_error or "unknown cmp error"
+
             if not cmp_output:
+                print(f"🔴 {info.name} :: {mismatching_entry.base_path.as_posix()} :: {cmp_error}")
                 continue
 
             maybe_offset = findall(r"(\d+)", cmp_output)
