@@ -1,4 +1,4 @@
-from mw_overlay_header import MwOverlayHeader
+from kaitai.mw_overlay_header import MwOverlayHeader
 from utils import hex_format
 
 def parse_overlay_header(overlay):

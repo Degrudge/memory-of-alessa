@@ -29,8 +29,8 @@ from dataclasses import dataclass
 from collections.abc import Callable
 
 from utils import ensure_path_and_write, hex_format
-from mw_overlay_header import MwOverlayHeader
-from mw_overlay import parse_overlay_header, pretty_print_overlay_header
+from kaitai.mw_overlay_header import MwOverlayHeader
+from kaitai.mw_overlay import parse_overlay_header, pretty_print_overlay_header
 
 @dataclass
 class CreationArgs:
