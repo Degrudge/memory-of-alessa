@@ -701,6 +701,8 @@ segments:
       - { start: 0x0024cd90,    type: data,       name: data_0x24cd90                                    }
       - { start: 0x0024cff8,    type: .data,      name: Multi_thr/scf/ps2_scf                            }
       - { start: 0x0024d010,    type: data,       name: data_0x24d010                                    }
+      - { start: 0x0024e28c,    type: .data,      name: DBG/dbsw_sys                                     }
+      - { start: 0x0024e2a8,    type: data,       name: data_0x24e2a8                                    }
       - { start: 0x0024f000,    type: .data,      name: Chacter/m3_arm                                   }
       - { start: 0x0024f010,    type: data,       name: data_0x24f010                                    }
       - { start: 0x0026e560,    type: .data,      name: Effect2/hh_class_blood_01                        }
@@ -1150,6 +1152,8 @@ segments:
       - { vram:  0x011d2270,    type: bss,        name: bss_0x11d2270                                    }
       - { vram:  0x011e7080,    type: .bss,       name: DS_Pad/ds_sequencer                              }
       - { vram:  0x011e7850,    type: bss,        name: bss_0x11e7850                                    }
+      - { vram:  0x011e7860,    type: .bss,       name: DBG/dbsw_sys                                     }
+      - { vram:  0x011e7880,    type: bss,        name: bss_0x11e7880                                    }
       - { vram:  0x011eb550,    type: .bss,       name: Effect2/hh_class_water_01                        }
       - { vram:  0x011eb570,    type: .bss,       name: Effect2/hh_class_water_02                        }
       - { vram:  0x011eb5f0,    type: .bss,       name: Effect2/hh_class_water_10                        }
