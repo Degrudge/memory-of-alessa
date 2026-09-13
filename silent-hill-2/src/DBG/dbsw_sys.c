@@ -36,7 +36,7 @@ char* dbSwitchSysHelp(int Y /* r2 */) {
             help = "diaplay special characters(0x20-0x9F)";
             break;
         case 9:
-            help = "display allinfo at pad(0,0).";
+            help = "display allinfo at pad(0,0)";
             break;
         case 10:
             help = "display pad step at pad(0,0).";
@@ -100,7 +100,7 @@ static void printR_date(void) {
 }
 
 static void printR_cmdserv(CmdServStat* stat /* r18 */, char* prefix /* r17 */, int* exec /* r2 */) {
-    char syms[4] = {'|', '/', '-', '\\'};
+    char syms[4] = {'|', '/', '-', '\x81'};
     char sym = ' ';
     if (exec) {
         if (stat->clen) {
