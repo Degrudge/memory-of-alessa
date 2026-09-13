@@ -36,6 +36,7 @@ GENERATE_REPORT ?= 0
 
 VERBOSE ?= 0
 TQDM_DISABLE ?= 1
+CI ?= 0
 
 NPROC ?= $(call get_nproc)
 MAKE_OPTIONS ?= -j$(NPROC)
@@ -67,7 +68,7 @@ ifeq ($(VERBOSE),1)
 	Q :=
 endif
 
-MAKE += MAKE_OPTIONS=""
+MAKE += MAKE_OPTIONS="--no-print-directory"
 MAKEFLAGS += $(MAKE_OPTIONS)
 
 include $(PROJECT)/Makefile
@@ -183,8 +184,11 @@ GENERATE_EXPECTED := $(GENERATE) --no-lcf --make-full-disasm-for-code
 CHECK_MATCH_PERCENT :=
 ifneq ($(NON_MATCHING),1)
 ifneq ($(LINK),0)
-	CHECK_MATCH_PERCENT = @$(TOOLS)/scripts/diff.sh $(SERIAL) $(CONFIG) $(BUILD) $(OBJCOPY) \
+	CHECK_MATCH_PERCENT := @$(TOOLS)/scripts/diff.sh $(SERIAL) $(CONFIG) $(BUILD) $(OBJCOPY) \
 		|| $(ALESSATOOL) debug --project=$(PROJECT)
+ifneq ($(CI),1)
+	CHECK_MATCH_PERCENT := $(CHECK_MATCH_PERCENT) || true
+endif
 endif
 endif
 
@@ -224,6 +228,12 @@ sh3-build:
 
 sh2-build:
 	@$(MAKE) PROJECT="silent-hill-2" build
+
+sh3-ci:
+	@$(MAKE) PROJECT="silent-hill-3" CI=1
+
+sh2-ci:
+	@$(MAKE) PROJECT="silent-hill-2" CI=1
 
 sh3-report:
 	@$(MAKE) PROJECT="silent-hill-3" report

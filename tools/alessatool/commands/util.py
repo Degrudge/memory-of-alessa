@@ -9,6 +9,9 @@ from pathlib import Path
 from dataclasses import dataclass
 from argparse import ArgumentParser
 
+from constants import READELF_PATH
+from utils import atlas_diff, parse_symbol_addrs, parse_symtab_as_atlas, read_symtab, write_symbol_addrs
+
 def configure_util_parser(util_parser: ArgumentParser):
     subparsers = util_parser.add_subparsers(dest="subcommand")
 
@@ -36,6 +39,21 @@ def configure_util_parser(util_parser: ArgumentParser):
         default="silent-hill-3/src/Chacter/chara_list.h"
     )
     format_chara_kinds_parser.set_defaults(func=format_chara_kinds)
+
+    format_symbol_addrs_parser = subparsers.add_parser(
+        "symbols",
+        help="format symbol_addrs"
+    )
+    format_symbol_addrs_parser.add_argument(
+        "--file-path",
+        type=Path
+    )
+    format_symbol_addrs_parser.add_argument(
+        "--elf-path",
+        type=Path,
+        default=None
+    )
+    format_symbol_addrs_parser.set_defaults(func=format_symbol_addrs)
 
 @dataclass
 class LowercaseArgs:
@@ -95,4 +113,18 @@ def format_chara_kinds(args: FormatCharaKindsArgs):
     with open(args.file_path, "w") as out_file:
         out_file.write(contents)
 
+@dataclass
+class FormatSymbolAddrsArgs:
+    file_path: Path
+    elf_path: Path
+
+def format_symbol_addrs(args: FormatSymbolAddrsArgs):
+    atlas = parse_symbol_addrs(args.file_path, parse_attributes=True)
+
+    if args.elf_path:
+        symtab_str = read_symtab(args.elf_path, READELF_PATH)
+        atlas_diff(parse_symtab_as_atlas(symtab_str), atlas)
+
+    with open(args.file_path, "w") as output_file:
+        output_file.write(write_symbol_addrs(atlas))
 
