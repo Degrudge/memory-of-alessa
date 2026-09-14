@@ -63,7 +63,7 @@ void dbSwitchAllPrint() {
     }
     if (shPadPress(1, PAD_KEY_L1)) {
         if (shPadPress(1, PAD_KEY_SQUARE)   && shPadTrigger(1, PAD_KEY_TRIANGLE)
-        || (shPadPress(1, PAD_KEY_TRIANGLE) && shPadTrigger(1, PAD_KEY_SQUARE))) {
+        ||  shPadPress(1, PAD_KEY_TRIANGLE) && shPadTrigger(1, PAD_KEY_SQUARE)) {
             dbSwitchAllInit(!dbSwitchDispEnable(-1));
             } else {
                 if (shPadTrigger(1, PAD_KEY_TRIANGLE)) {
@@ -81,7 +81,7 @@ void dbSwitchAllPrint() {
         }
 
         for (loop = 0; loop < 2; loop++) {
-            if ((loop == X) || (dbSwitchSysPrintAllPages())) {
+            if ((loop == X) || dbSwitchSysPrintAllPages()) {
                 switch (loop) {                   /* irregular */
                     case 0: dbSwitchSysPrint(); break;
                     case 1: dbSwitchMapPrint(); break;
