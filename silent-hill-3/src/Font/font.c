@@ -413,18 +413,19 @@ void func_0015CF10(u_short *dest, u_short *src) {
     } while (n != 0xFFFF);
 }
 
-void fontPushButton()
-{
+void fontPushButton(void) {
     if (font.wait_type == 4) {
         font.st_num = 0;
         font.wait_type = 5;
-        SeCall(1.0f, 0.0f, 0x2712);
+        SeCall(10002, 1.0f, 0.0f);
         return;
     }
-    if (((font.wait_type & 7u) != 2) && !(font.flag & 0x10)) {
+
+    if ((font.wait_type & 7) != 2 && !(font.flag & (1 << 4))) {
         font.wait_count = 0;
     }
 }
+
 
 void fontPushButton2()
 {
@@ -450,7 +451,7 @@ void fontSelectUp()
                 font.sel_now = font.sel_max - 1;
             }
         }
-        SeCall(1.0f, 0.0f, 10000);
+        SeCall(10000, 0.0f, 1.0f);
     }
 }
 
@@ -468,7 +469,7 @@ void fontSelectDown()
         {
             font.sel_now = 0;
         }
-        SeCall(1.0f, 0.0f, 10000);
+        SeCall(10000, 0.0f, 1.0f);
     }
 }
 #else

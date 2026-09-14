@@ -201,13 +201,6 @@ typedef struct AllData_Vu0 {
     PersData pers __attribute__((aligned(64))); // offset 0x580, size 0x70
 } AllData_Vu0;
 
-typedef struct ClusterData {
-    // total size: 0x6
-    unsigned short src; // offset 0x0, size 0x2
-    unsigned short dst; // offset 0x2, size 0x2
-    unsigned short n;   // offset 0x4, size 0x2
-} ClusterData;
-
 static void FlipXMTOP(void);
 void KickCalcPartPacket(void);
 void TransferToSPR(void);

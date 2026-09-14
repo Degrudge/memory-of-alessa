@@ -51,7 +51,7 @@ jobs:
         run: cp -r /home/* .
 
       - name: build matching executable
-        run: make ${{ matrix.TARGET.ALIAS }}
+        run: make ${{ matrix.TARGET.ALIAS }}-ci
       
       - name: clean build files
         run: make ${{ matrix.TARGET.ALIAS }}-clean

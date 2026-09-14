@@ -87,4 +87,6 @@ void Make_Filter_Packet(void* pb);
 
 extern FilterWork shGsFilterWork;
 
+extern FilterWork shGsFilterWork;
+
 #endif // SH2GFW_2D_FILTERS_H

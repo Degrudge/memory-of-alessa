@@ -95,4 +95,17 @@ static inline u_int reinterpret_as_u_int(float v) {
     return *(u_int*) &v;
 }
 
+static inline int float_floor(float x) {
+    int out;
+    asm("mfc1 %1, %0;\
+          addi t7, zero, 1\n\
+          slt %1, %1, zero\n\
+          cvt.w.s %0, %0;\
+          movz t7, zero, %1;\
+          mfc1 %1, %0;\
+          sub %1, %1, t7"
+        : "+f"(x), "+r"(out)::"t7");
+    return out;
+}
+
 #endif

@@ -21,19 +21,22 @@
 #include "Chacter_Draw/model3_structs.h"
 #include "Chacter_Draw/vifot/sh_kt_vif1pkbuf.h"
 
-extern SprData spr_data_mem; // size: 0x200, address: 0x41ACC0
-extern AllData all_data_db[2]; // size: 0x1000, address: 0x41AF00
-extern SprData* spr_data;
-extern u_int xitop_0x0041BF08;
-extern u_int prev_xtop;
-extern u_int muga;
-
-#define xitop xitop_0x0041BF08
-
 #define SHADING_TYPE_1            1
 #define SHADING_TYPE_LAMBERTIAN_2 2
 #define SHADING_TYPE_LAMBERTIAN_3 3
 #define SHADING_TYPE_LAMBERTIAN_4 4
+
+/* bss */
+static u_int muga = 0;
+static u_int xitop;
+static u_int prev_xtop;
+static AllData all_data_db[2];
+static int all_data_page;
+static AllData* all_data;
+static SprData spr_data_mem;
+
+/* @todo migrate data */
+extern SprData* spr_data;
 
 static void InitAllDataOne(AllData* p);
 static void InitSprData(SprData* p);
@@ -42,7 +45,7 @@ static void MakeData1(void);
 static void InitEnv1(sceVif1Packet* pk, int unused);
 static void TiniEnv(sceVif1Packet* pk);
 static void MakeVu1PartTransferPacket(Part* part, sceVif1Packet* pk);
-static void MakeLambertShadingPacket_VU1(Part* part, sceVif1Packet* pk);
+static void MakeLambertShadingPacket(Part* part, sceVif1Packet* pk);
 static void MakeNormalPacket(Part* part, sceVif1Packet* pk);
 static void MakeEnvironPacket(Part* part, sceVif1Packet* pk);
 static void MakeSpecularPacket(Part* part, sceVif1Packet* pk);
@@ -52,15 +55,14 @@ static void MakeDrawPacket(Part* part, sceVif1Packet* pk);
 static void DrawPart1(Part* part, sceVif1Packet* pk);
 static void DrawParts1(sh_Model* model, ModelWork* work);
 
-#ifdef NON_MATCHING
 extern u_long128 model3_mpg1_view_load[];
 extern void* __model3_mpg1_view_end;
 void Model3LoadMpg1(void) {
-    extern /* static */ int initialized_867; // @ 0x0041AC70
-    extern /* static */ u_long128 packet_buffer_866[4]; // @ 0x0041AC80
+    static int initialized = 0; // @ 0x0041AC70
+    static u_long128 packet_buffer_866[4]; // @ 0x0041AC80
     Q_WORDDATA* qwd; // r2
 
-    if (initialized_867 == 0) {
+    if (initialized == 0) {
         qwd = UNCACHED_POINTER(packet_buffer_866);
         qwd->ui32[0] = DMAcall;
         qwd->ui32[1] = (u_int) model3_mpg1_view_load;
@@ -70,13 +72,10 @@ void Model3LoadMpg1(void) {
         qwd->ui32[4] = DMAend;
         qwd->ui32[5] = 0;
         qwd->ul64[3] = 0;
-        initialized_867 = 1;
+        initialized = 1;
     }
     d1cSend(packet_buffer_866);
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", Model3LoadMpg1);
-#endif
 
 #ifdef NON_MATCHING
 static void InitAllDataOne(AllData* p /* r16 */) {
@@ -244,14 +243,14 @@ static void InitSprData(SprData* p /* r2 */) {
 }
 
 static void InitData1(void) {
-    extern /* static */ int initialized_928; // @ 0x0041AC78
+    static int initialized; // @ 0x0041AC78
     sceDmaChan* toSPR; // r2
 
-    if (initialized_928 == 0) {
+    if (initialized == 0) {
         InitAllDataOne(all_data_db);
         InitAllDataOne(&all_data_db[1]);
         InitSprData(&spr_data_mem);
-        initialized_928 = 1;
+        initialized = 1;
     }
     do {
 
@@ -264,7 +263,154 @@ static void InitData1(void) {
     } while (*D9_CHCR & 0x100);
 }
 
+#ifdef NON_MATCHING
+static void MakeData1(void) {
+    u_int fogcol = model3_junk.fogcol;
+    
+    InitData1();
+
+    
+    all_data = &all_data_db[all_data_page ^= 1];
+
+    /* parallel lights */
+    {
+        int n_parallels = LightNValidParallelMatrices();
+        int i;
+        for (i = 0; i < n_parallels; i++) {
+            PLightData* data =
+                UNCACHED_POINTER(&all_data->plight[i]);
+
+
+            LightGetNthViewNLM(data->nlm, i);
+
+            LightGetNthLCM(data->lcm, i);
+        }
+    }
+
+    /* extra lights */
+    {
+        int n_extras = LightNValidExtras();
+        int i;
+        for (i = 0; i < n_extras; i++) {
+            Light* light = LightNthValidExtra(i);
+            ELightData* eldata =
+                UNCACHED_POINTER(&all_data->elight[i]);
+
+
+            /* position & direction */
+            sceVu0CopyVector(eldata->pos, light->vpos);
+            sceVu0CopyVector(eldata->dir, light->vdir);
+            /* color */
+            sceVu0CopyVector(eldata->col, light->color);
+            eldata->param[0] = light->f_ra;
+            eldata->param[1] = light->f_rb;
+            eldata->param[2] = light->s_a;
+            eldata->param[3] = light->s_b;
+        }
+    }
+
+    /* lambertian */
+    {
+        LambertData* data = UNCACHED_POINTER(&all_data->lambert);
+    
+
+        
+        LightGetNthViewNLM(data->nlm, 0);
+        
+        LightGetNthLCM(data->lcm, 0);
+        
+        
+        
+        sceVu0CopyVector(data->global_ambient, model3_junk.global_ambient);
+    }
+
+
+
+    /* environment map */
+    {
+        extern /* static */ float mag_954[4]; // = {0.125, 0.125, 0.125, 0.125}; // @ 0x002A9760
+        extern /* static */ float offset_955[4]; // = {0.0, 0.5, 0.25, 0.75}; // @ 0x002A9770
+        EMapData* data = UNCACHED_POINTER(&all_data->emap);    
+        sceVu0CopyMatrix(data->vwm, model3_junk.vwm);
+        sceVu0CopyVector(data->mag, mag_954);
+        sceVu0CopyVector(data->offset, offset_955);
+    }
+
+    
+    /* shadow map */
+    {
+        SMapData* smap = UNCACHED_POINTER(&all_data->smap);
+    
+    
+        
+        
+        
+        LightGetNthViewNHM(smap->nhm, 0);
+    }
+
+
+
+    /* setup */
+    {
+        DSetupData* data = UNCACHED_POINTER(&all_data->dsetup);
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        sceVu0CopyVector(data->vsp[0], model_common_work->vsp[0]);
+        sceVu0CopyVector(data->vsp[1], model_common_work->vsp[1]);
+        sceVu0CopyVector(data->vcp[0], model_common_work->vcp_gs[0]);
+        sceVu0CopyVector(data->vcp[1], model_common_work->vcp_gs[1]);
+    }
+
+
+    
+    /* environment draw */
+    {
+        EDrawData* edraw = UNCACHED_POINTER(&all_data->edraw);
+        u_long tex0 = model_common_work->latitude_mapping_tex0;
+    
+        edraw->tex0.u64[0] = tex0;
+        edraw->fogcol.u64[0] = fogcol;
+    }
+
+    
+    /* specular + specular base draw */
+    {
+        SDrawData* sdraw = UNCACHED_POINTER(&all_data->sdraw);
+        SDrawData* bdraw = UNCACHED_POINTER(&all_data->bdraw);
+        u_long tex0 = model_common_work->specular_mapping_tex0;
+        Q c;
+    
+        LightGetReflectionColor(c.fv);
+        sdraw->tex0.u64[0] = tex0;
+        sdraw->reflection_color.u128 = c.u128;
+        bdraw->tex0.u64[0] = tex0;
+        bdraw->reflection_color.u128 = c.u128;
+        bdraw->fogcol.u64[0] = fogcol;
+        
+        
+        
+        
+        spr_data->ndraw[0].fogcol.u64[0] = fogcol;
+        spr_data->ndraw[1].fogcol.u64[0] = fogcol;
+        spr_data->odraw[0].fogcol.u64[0] = fogcol;
+        spr_data->odraw[1].fogcol.u64[0] = fogcol;
+    }
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeData1);
+#endif
+
 
 #define packet4main packet4main_1018
 extern /* static */ Init_Gs_Packet packet4main; // @ 0x002A9780
@@ -280,9 +426,63 @@ static void TiniEnv(sceVif1Packet* pk /* r2 */) {
     sceVif1PkRef(pk, (u_long128*) &packet, sizeof(Packet) / sizeof(Q), 0, SCE_VIF1_SET_DIRECT(3, 0), 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeVu1PartTransferPacket);
+#line 733
+static void MakeVu1PartTransferPacket(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
+    
+    sceVif1PkRef(pk, (u_char*) part + part->packet_offset, part->packet_qwc, 0, 0, 0);
 
-#ifdef NON_MATCHING
+    
+    {
+        int n_cluster_data = part->n_cluster_data; // r18
+        ClusterData* cluster_data_top = (u_char*) part + part->cluster_data_offset; // r19
+        sceVu0FVECTOR* cluster_nodes = model3_junk.cluster_nodes; // r20
+        int i; // r21
+        for (i = 0; i < n_cluster_data; i++) {
+            ClusterData* cluster_data = &cluster_data_top[i]; // r4
+            u_int src = cluster_data->src; // r2
+            u_int dst = cluster_data->dst; // r2
+            u_int n = cluster_data->n; // r2
+            sceVif1PkRef(pk, (u_long128*) cluster_nodes[src], n,
+                         SCE_VIF1_SET_STCYCL(1, 4, 0), 
+                         SCE_VIF1_SET_UNPACK(dst, n, SCE_VIF_UPK_V4_32, 0), 0);
+        }
+    }
+
+    
+    {
+        sceVu0FMATRIX* matrices = model_common_work->skeleton_matrices;
+        int n_skeletons = part->n_skeletons;
+        u_short* skeletons = (u_char*) part + part->skeletons_offset;
+        int dst_top = part->data_skeletons_offset;
+        int i;
+        for (i = 0; i < n_skeletons; i++) {
+            int skeleton_no = skeletons[i];
+            sceVu0FMATRIX* src = matrices[skeleton_no];
+        
+            sceVif1PkRef(pk, src, 4, SCE_VIF1_SET_STCYCL(1, 1, 0), SCE_VIF1_SET_UNPACK((int*) dst_top + i, 4, SCE_VIF_UPK_V4_32, 0), 0);
+        
+        
+        }
+    }
+
+    
+    {
+        sceVu0FMATRIX* envelope_matrices = model_common_work->envelope_matrices;
+        int n_skeleton_pairs = part->n_skeleton_pairs;
+        u_short* pairs = (u_char*) part + part->skeleton_pairs_offset;
+        int dst_top = part->data_skeleton_pairs_offset;
+        int i;
+        for (i = 0; i < n_skeleton_pairs; i++) {
+            int pair_no = pairs[i]; // r2
+            sceVu0FVECTOR* src = envelope_matrices[pair_no]; // r2
+            
+            sceVif1PkRef(pk, src, 4,
+                         SCE_VIF1_SET_STCYCL(1, 1, 0),
+                         SCE_VIF1_SET_UNPACK((int*) dst_top + i, 4, SCE_VIF_UPK_V4_32, 0), 0);
+        }
+    }
+}
+
 static void MakeLambertShadingPacket(Part* part /* r20 */, sceVif1Packet* pk /* r19 */) {
     int n_parallels = LightNValidParallelMatrices(); // r16
     int n_extras = LightNValidExtras(); // r17
@@ -296,7 +496,7 @@ static void MakeLambertShadingPacket(Part* part /* r20 */, sceVif1Packet* pk /* 
         sceVif1PkCnt(pk, 0);
         sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
         sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(8, 0));
-        xitop_0x0041BF08 ^= (1 << 9);
+        xitop ^= (1 << 9);
     }
 
     for (i = 0; i < n_extras; i++) {
@@ -344,19 +544,160 @@ static void MakeLambertShadingPacket(Part* part /* r20 */, sceVif1Packet* pk /* 
 
     xitop ^= (1 << 9);
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeLambertShadingPacket_VU1);
-#endif
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeNormalPacket);
+#line 925
+static void MakeNormalPacket(Part* part /* r2 */, sceVif1Packet* pk /* r22 */) {
+    int n_textures = part->n_textures; // r29+0xA0
+    u_short* text_pos_indices = (u_char*) part + part->text_pos_indices_offset; // r29+0xB0
+    TextPosParam* text_pos_params = model_common_work->text_pos_params; // r30
+    TextureParam* texture_params = (u_char*) part + part->texture_params_offset; // r23
+    int mpg = (u_char) (part->backclip == false ? 22 : 24); // r16
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeEnvironPacket);
+    sceDmaChan* fromSPR = sceDmaGetChan(SCE_DMA_fromSPR); // r17
+    int i; // r18
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeSpecularPacket);
+    for (i = 0; i < n_textures; i++) {
+        int text_pos_index = text_pos_indices[i]; // r2
+        TextPosParam* text_pos = &text_pos_params[text_pos_index]; // r19
+        TextureParam* texture = &texture_params[i]; // r20
+        NDrawData* spr = &spr_data->ndraw[i % 2]; // r21
+        NDrawData* data; // r2
+        sceVif1PkCnt(pk, 0);
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_FLUSH(0));
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_UNPACK(xitop, 8, SCE_VIF_UPK_V4_32, 0));
+        data = sceVif1PkReserve(pk, 32);
+        ASSERT_ON_LINE(((u_int)data & 0x03) == 0, 945);
+        
+        
+        
+        
+        
+        spr->tex0.u64[0] = text_pos->tex0;
+        
+        spr->tex1.u64[0] = texture->tex1;
+        spr->clamp.u64[0] = texture->clamp;
+        
+        fromSPR->sadr = (void*) ((u_int)spr & 0x3FFF);
+        sceDmaSendN(fromSPR, MAIN_RAM_POINTER(data), 8);
+        
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(mpg, 0));
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeBaseSpecularPacket);
+#line 970
+void MakeEnvironPacket(Part* part, sceVif1Packet* pk) {
+    struct Data {
+        // total size: 0x10
+        Q specular; // offset 0x0, size 0x10
+    }* data;
+    
+    int mpg = (u_char) (part->backclip == false ? 26 : 28); // r16
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_FLUSH(0));
+    sceVif1PkRef(pk, (u_long128*) &all_data->edraw, 8, 
+                 SCE_VIF1_SET_STCYCL(1, 1, 0), SCE_VIF1_SET_UNPACK(xitop, 8, SCE_VIF_UPK_V4_32, 0), 0);
+    
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_STCYCL(1, 1, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_UNPACK(xitop + 8, 1, SCE_VIF_UPK_V4_32, 0));
+    data = sceVif1PkReserve(pk, 4);
+    ASSERT_ON_LINE(((u_int)data & 0x03) == 0, 986);
+    data->specular.s32[0] = 128;
+    data->specular.s32[1] = 128;
+    data->specular.s32[2] = 128;
+    data->specular.s32[3] = part->envmap_param;
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(mpg, 0));
+}
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", MakeOverPacket);
+#line 1001
+void MakeSpecularPacket(Part* part, sceVif1Packet* pk) {
+    struct Data {
+        // total size: 0x10
+        Q specular; // offset 0x0, size 0x10
+    }* data;
+    
+    int mpg = (u_char) (part->backclip == false ? 30 : 32); // r16
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_FLUSH(0));
+    sceVif1PkRef(pk, (u_long128*) &all_data->sdraw, 9, 
+                 SCE_VIF1_SET_STCYCL(1, 1, 0), SCE_VIF1_SET_UNPACK(xitop, 9, SCE_VIF_UPK_V4_32, 0), 0);
+    
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_STCYCL(1, 1, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_UNPACK(xitop + 9, 1, SCE_VIF_UPK_V4_32, 0));
+    data = sceVif1PkReserve(pk, 4);
+    ASSERT_ON_LINE(((u_int)data & 0x03) == 0, 1017);
+    
+    
+    sceVu0CopyVector(data->specular.fv, part->specular);
+    
+    data->specular.fv[3] = 128.0f;
+    
+    
+    
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(mpg, 0));
+}
+
+#line 1035
+void MakeBaseSpecularPacket(Part* part, sceVif1Packet* pk) {
+    struct Data {
+        // total size: 0x10
+        Q specular; // offset 0x0, size 0x10
+    }* data;
+    
+    int mpg = (u_char) (part->backclip == false ? 30 : 32); // r16
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_FLUSH(0));
+    sceVif1PkRef(pk, (u_long128*) &all_data->bdraw, 9, 
+                 SCE_VIF1_SET_STCYCL(1, 1, 0), SCE_VIF1_SET_UNPACK(xitop, 9, SCE_VIF_UPK_V4_32, 0), 0);
+    
+    sceVif1PkCnt(pk, 0);
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_STCYCL(1, 1, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_UNPACK(xitop + 9, 1, SCE_VIF_UPK_V4_32, 0));
+    data = sceVif1PkReserve(pk, 4);
+    ASSERT_ON_LINE(((u_int)data & 0x03) == 0, 1051);
+    sceVu0CopyVector(data->specular.fv, part->specular);
+    data->specular.fv[3] = 128.0f;
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
+    sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(mpg, 0));
+}
+
+#line 1063
+static void MakeOverPacket(Part* part /* r2 */, sceVif1Packet* pk /* r22 */) {
+    int n_textures = part->n_textures; // r29+0xA0
+    u_short* text_pos_indices = (u_char*) part + part->text_pos_indices_offset; // r29+0xB0
+    TextPosParam* text_pos_params = model_common_work->text_pos_params; // r30
+    TextureParam* texture_params = (u_char*) part + part->texture_params_offset; // r23
+    int mpg = (u_char) (part->backclip == false ? 22 : 24); // r16
+    sceDmaChan* fromSPR = sceDmaGetChan(SCE_DMA_fromSPR); // r17
+    int i; // r18
+
+    for (i = 0; i < n_textures; i++) {
+        int text_pos_index = text_pos_indices[i]; // r2
+        TextPosParam* text_pos = &text_pos_params[text_pos_index]; // r19
+        TextureParam* texture = &texture_params[i]; // r20
+        NDrawData* spr = &spr_data->odraw[i % 2]; // r21
+        NDrawData* data; // r2
+        sceVif1PkCnt(pk, 0);
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_FLUSH(0));
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_UNPACK(xitop, 8, SCE_VIF_UPK_V4_32, 0));
+        data = sceVif1PkReserve(pk, 32);
+        ASSERT_ON_LINE(((u_int)data & 0x03) == 0, 1082);
+        spr->tex0.u64[0] = text_pos->tex0;
+        
+        spr->tex1.u64[0] = texture->tex1;
+        spr->clamp.u64[0] = texture->clamp;
+        fromSPR->sadr = (void*) ((u_int)spr & 0x3FFF);
+        sceDmaSendN(fromSPR, MAIN_RAM_POINTER(data), 8);
+        
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_ITOP(xitop, 0));
+        sceVif1PkAddCode(pk, SCE_VIF1_SET_MSCAL(mpg, 0));
+    }
+
+}
 
 static void MakeDrawPacket(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
     u_long128* gifad; // r2
@@ -389,7 +730,6 @@ static void MakeDrawPacket(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
     }
 }
 
-#ifdef NON_MATCHING
 static void DrawPart1(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
     Data* data; // r2
 
@@ -430,7 +770,7 @@ static void DrawPart1(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
         case SHADING_TYPE_LAMBERTIAN_2:
         case SHADING_TYPE_LAMBERTIAN_3:
         case SHADING_TYPE_LAMBERTIAN_4:
-            MakeLambertShadingPacket_VU1(part, pk);
+            MakeLambertShadingPacket(part, pk);
             break;
 
         default:
@@ -463,11 +803,7 @@ static void DrawPart1(Part* part /* r17 */, sceVif1Packet* pk /* r16 */) {
 
     MakeDrawPacket(part, pk);
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", DrawPart1);
-#endif
 
-#ifdef NON_MATCHING
 static void DrawParts1(sh_Model* model /* r19 */, ModelWork* work /* r16 */) {
     
     u_long128* packet_buffer = ktVif1PkBufNext(); // r17
@@ -480,7 +816,7 @@ static void DrawParts1(sh_Model* model /* r19 */, ModelWork* work /* r16 */) {
     void* pktop; // r20
     prev_xtop = 1;
     
-    xitop_0x0041BF08 = 496;
+    xitop = 496;
     MakeData1();
     sceVif1PkInit(pk, UNCACHED_POINTER(packet_buffer));
     
@@ -533,39 +869,9 @@ static void DrawParts1(sh_Model* model /* r19 */, ModelWork* work /* r16 */) {
 
 
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", DrawParts1);
-#endif
 
 void Model3DrawVu1Parts(Model* model /* r2 */, ModelWork* work /* r2 */) {
     muga ^= 1;
     DrawParts1((sh_Model*) model, work);
 }
-
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @873_0x0038D9B0);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1102_0x0038D9D0);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1103_0x0038D9F8);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1104_0x0038DA00);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1105_0x0038DA30);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @22);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @23);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @39);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1171_0x0038DAD0);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1190);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1216_0x0038DB30);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1290);
-
-INCLUDE_RODATA("asm/nonmatchings/Chacter_Draw/model3_vu1_n", @1291);
 

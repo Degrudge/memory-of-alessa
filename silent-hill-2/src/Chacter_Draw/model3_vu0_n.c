@@ -1,5 +1,6 @@
 #include "sh2_common.h"
 #include "ee.h"
+#include "gs.h"
 #include "sce/eestruct.h"
 #include "sce/libvu0.h"
 #include "sce/eeregs.h"
@@ -29,10 +30,10 @@ void InitTriangleNormal(TriangleNormal* p) {
         SCE_GIF_PACKED,  qwc - 1
     );
     
-    p->n_giftag.u64[1] = GIF_REG(SCE_GIF_PACKED_AD, 0) | GIF_REG(SCE_GIF_PACKED_AD, 1) | GIF_REG(SCE_GS_ST,         2)  | GIF_REG(SCE_GS_RGBAQ,      3)  | 
-        GIF_REG(SCE_GS_XYZF2,      4)  | GIF_REG(SCE_GS_ST,         5)  | GIF_REG(SCE_GS_RGBAQ,      6)  | GIF_REG(SCE_GS_XYZF2,      7)  |
-        GIF_REG(SCE_GS_ST,         8)  | GIF_REG(SCE_GS_RGBAQ,      9)  | GIF_REG(SCE_GS_XYZF2,      10) | GIF_REG(SCE_GS_PRIM,       11);
-    
+    p->n_giftag.u64[1] = GIF_REGLIST(SCE_GIF_PACKED_AD, SCE_GIF_PACKED_AD,
+                                     SCE_GS_ST, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_ST, SCE_GS_RGBAQ,
+                                     SCE_GS_XYZF2, SCE_GS_ST, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_PRIM);
+
     p->n_tex0.s64[1] = 6;
     p->n_clamp.s64[1] = 8;
 }
@@ -87,9 +88,9 @@ void InitTriangleNormalSpecular(TriangleNormalSpecular* p) {
         GIF_REG(SCE_GIF_PACKED_AD, 12);
 
   p->s_tex0.u64[0] = model_common_work->specular_mapping_tex0;
-  p->s_tex0.u64[1] = 6;
+  p->s_tex0.u64[1] = SCE_GS_TEX0_1;
   p->s_clamp.u64[0] = 5;
-  p->s_clamp.u64[1] = 8;
+  p->s_clamp.u64[1] = SCE_GS_CLAMP_1;
   p->s_alpha.u64[0] = 72;
   p->s_alpha.u64[1] = 66;
 

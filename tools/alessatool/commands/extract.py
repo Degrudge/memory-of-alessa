@@ -10,9 +10,9 @@ alessatool extract \
 run `alessatool extract --help` for more information.
 '''
 
-from mfa import Mfa
 from utils import get_file_size
-from mw_overlay import parse_overlay_header, pretty_print_overlay_header
+from kaitai.mfa import Mfa
+from kaitai.mw_overlay import parse_overlay_header, pretty_print_overlay_header
 
 from pathlib import Path
 from os.path import isdir

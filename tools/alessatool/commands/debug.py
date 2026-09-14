@@ -44,11 +44,12 @@ class ExecutableInfo:
 @dataclass
 class MismatchingFileEntry:
     cmp_output: str
+    cmp_error: str
     base_path: Path
     target_path: Path
     exe_info: ExecutableInfo
 
-def parse_mw_mapfile(mapfile_path: Path, exe_info_by_name: dict[str, ExecutableInfo], debug_args: DebugArgs):
+def parse_mw_mapfile(mapfile_path: Path, exe_info_by_name: dict[str, ExecutableInfo], debug_args: DebugArgs) -> bool:
     with open(mapfile_path) as mapfile_file:
         mapfile_lines = mapfile_file.readlines()
 
@@ -138,6 +139,8 @@ def parse_mw_mapfile(mapfile_path: Path, exe_info_by_name: dict[str, ExecutableI
 
     if len(reason) == 0:
         print("🗺️  no mapfile errors found")
+
+        return True
     else:
         if trace_index >= 0:
             print("surrounding context:")
@@ -150,6 +153,8 @@ def parse_mw_mapfile(mapfile_path: Path, exe_info_by_name: dict[str, ExecutableI
             print("...")
 
         print(f"🗺️  mapfile notes: \n\t{"\n\t".join(reason)}")
+
+        return False
 
 def discover_yamls(debug_info: DebugInfo):
     root = debug_info.root
@@ -190,7 +195,7 @@ def discover_yamls(debug_info: DebugInfo):
 
     return exe_info_by_name
 
-def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name: dict[str, ExecutableInfo]):
+def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name: dict[str, ExecutableInfo]) -> bool:
     serial = debug_info.serial
     mismatching_files: list[MismatchingFileEntry] = []
 
@@ -206,14 +211,17 @@ def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name:
             base_path   = Path(base_path.as_posix() + ".rom")
 
         result = run(["cmp", "-l", target_path, base_path], capture_output=True)
+        output = result.stdout.decode().strip()
+        error = result.stderr.decode().strip()
 
-        if result.returncode:
+        if output or error:
             mismatching_files.append(
                 MismatchingFileEntry(
                     exe_info=exe_info,
                     target_path=target_path,
                     base_path=base_path,
-                    cmp_output=result.stdout.decode().strip()
+                    cmp_output=output,
+                    cmp_error=error
                 )
             )
 
@@ -225,12 +233,15 @@ def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name:
                 print(f"🔴 {len(mismatching_files)} mismatching files")
             else:
                 print(f"🔴 {len(mismatching_files)} mismatching files (run with --all to see more information)")
-                return
+                return False
 
         for mismatching_entry in mismatching_files:
             info = mismatching_entry.exe_info
             cmp_output = mismatching_entry.cmp_output
+            cmp_error = mismatching_entry.cmp_error or "unknown cmp error"
+
             if not cmp_output:
+                print(f"🔴 {info.name} :: {mismatching_entry.base_path.as_posix()} :: {cmp_error}")
                 continue
 
             maybe_offset = findall(r"(\d+)", cmp_output)
@@ -251,8 +262,12 @@ def run_bin_diff(debug_args: DebugArgs, debug_info: DebugInfo, exe_info_by_name:
 
                 preposition = first_mismatching_symbol.addr == vram_addr and "at" or "before"
                 print(f"\tthe symbol {preposition} that address is {first_mismatching_symbol.name} at 0x{first_mismatching_symbol.addr:X}")
+
+        return False
     else:
         print("🟣 no mismatches found")
+
+        return True
 
 def debug_nonmatching(args: DebugArgs):
     project = args.project
@@ -265,7 +280,13 @@ def debug_nonmatching(args: DebugArgs):
     exe_info_by_name = discover_yamls(debug_info)
 
     mapfile_path = Path(BUILD) / serial / f"{serial}.xMAP"
-    if mapfile_path.exists():
-        parse_mw_mapfile(mapfile_path, exe_info_by_name, args)
+    mapfile_status = False
+    bindiff_status = False
 
-    run_bin_diff(args, debug_info, exe_info_by_name)
+    if mapfile_path.exists():
+        mapfile_status = parse_mw_mapfile(mapfile_path, exe_info_by_name, args)
+
+    bindiff_status = run_bin_diff(args, debug_info, exe_info_by_name)
+
+    if not (mapfile_status and bindiff_status):
+        exit(1)
