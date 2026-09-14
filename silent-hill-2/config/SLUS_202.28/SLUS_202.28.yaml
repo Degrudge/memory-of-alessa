@@ -459,7 +459,7 @@ segments:
       - { start: 0x00151530,    type: asm,        name: GFW/sh2_DrawEnvData, ld_align_segment_start: 0x10 }
       - { start: 0x001521e0,    type: asm,        name: LoadBg/loadbg_camdata                            }
       - { start: 0x001522f0,    type: c,          name: LoadBg/loadbg_common                             }
-      - { start: 0x00152850,    type: asm,        name: DBG/dbsw_map                                     }
+      - { start: 0x00152850,    type: c,          name: DBG/dbsw_map                                     }
       - { start: 0x00152c10,    type: c,          name: Chacter/chara_saveinfo                           }
       - { start: 0x00152e70,    type: c,          name: view/vc_newest                                   }
       - { start: 0x00153490,    type: asm,        name: Multi_thr/scf/sh2_scf                            }
@@ -986,7 +986,7 @@ segments:
       - { start: 0x0029a280,    type: rodata,     name: GFW/sh2_DrawEnvData                              }
       - { start: 0x0029a310,    type: rodata,     name: LoadBg/loadbg_camdata                            }
       - { start: 0x0029a360,    type: .rodata,     name: LoadBg/loadbg_common                            }
-      - { start: 0x0029a3a0,    type: rodata,     name: DBG/dbsw_map                                     }
+      - { start: 0x0029a3a0,    type: .rodata,    name: DBG/dbsw_map                                     }
       - { start: 0x0029a640,    type: rodata,     name: view/vc_newest_rodata                            }
       - { start: 0x0029a650,    type: rodata,     name: Multi_thr/scf/sh2_scf                            }
       - { start: 0x0029a6c0,    type: rodata,     name: DBG/dbalocate                                    }
