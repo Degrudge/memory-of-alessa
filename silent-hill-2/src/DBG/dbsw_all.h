@@ -6,14 +6,12 @@
 #include "DBG/dbswitch.h"
 #include "DBG/dbsw_map.h"
 
-void dbSwitchAllInit(signed int enable /* r16 */);
+void dbSwitchAllInit(int enable /* r16 */);
 
-static void dbSwitchHelpPrint();
+static void dbSwitchHelpPrint(void);
 
-int dbSwitchIsVisible();
+int dbSwitchIsVisible(void);
 
-void dbSwitchAllPrint();
-
-
+void dbSwitchAllPrint(void);
 
 #endif // DBSW_ALL_H
