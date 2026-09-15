@@ -1,5 +1,11 @@
 #include "dbsw_map.h"
 
+static int dbSwitchMap(int Y /* r2 */);
+
+static void printR_mapblock(void);
+
+static void init_map(int i /* r2 */);
+
 char* dbSwitchMapHelp(int Y /* r2 */) {
     char* help = NULL;
 
