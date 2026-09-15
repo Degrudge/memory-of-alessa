@@ -4,7 +4,7 @@ char* dbSwitchMapHelp(int Y /* r2 */) {
     char* help = NULL;
 
     switch (Y) {
-        case 1: help = "display map-info."; break;
+        case 0: help = "display map-info."; break;
         case 2: help = "display map-global-id."; break;
         case 3: help = "display ref-pos."; break;
         case 4: help = "display room-name."; break;
@@ -21,7 +21,6 @@ char* dbSwitchMapHelp(int Y /* r2 */) {
         case 15: help = "map 2 clear-flag."; break;
         case 16: help = "init map 3 if no clear-flag."; break;
         case 17: help = "map 3 clear-flag."; break;
-        // default: break;
     }
     return help;
 }
