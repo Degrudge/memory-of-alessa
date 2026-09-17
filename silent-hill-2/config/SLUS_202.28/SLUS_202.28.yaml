@@ -76,7 +76,7 @@ segments:
       - { start: 0x00031ce0,    type: asm,        name: Collision/cl_calc2                               }
       - { start: 0x000327b0,    type: c,          name: Collision/cl_main                                }
       - { start: 0x0003ae80,    type: c,          name: Collision/kari_atari_allinit                     }
-      - { start: 0x0003aed0,    type: asm,        name: DBG/sh2gfw_SyncDBG                               }
+      - { start: 0x0003aed0,    type: c,          name: DBG/sh2gfw_SyncDBG                               }
       - { start: 0x0003aff0,    type: asm,        name: Effect/ef_broken_glass                           }
       - { start: 0x0003c590,    type: c,          name: Effect/ef_common                                 }
       - { start: 0x0003e5f0,    type: c,          name: Effect/ef_malloc                                 }
