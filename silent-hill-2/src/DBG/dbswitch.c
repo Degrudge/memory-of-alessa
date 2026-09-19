@@ -6,7 +6,7 @@ extern /* static */ int dbSwitchY; // size: 0x4, address: 0x11B6E50
 extern /* static */ int dbSwitchDispF; // size: 0x4, address: 0x11B6E58
 
 #line 17
-void dbSwitchDispIndicator(signed int enable /* r2 */, signed int o /* r2 */, signed int x /* r2 */, signed int dx /* r2 */, signed int dy /* r2 */) {
+void dbSwitchDispIndicator(int enable /* r2 */, int o /* r2 */, int x /* r2 */, int dx /* r2 */, int dy /* r2 */) {
     int just, bit, Y; // r2
     char* sym[2][2] = {"-\n", "\x8a-\n", "O\n", "\x8aO\n"}; // r29+0x20
     int *temp;
