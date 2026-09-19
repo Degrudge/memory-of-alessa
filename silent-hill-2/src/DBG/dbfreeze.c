@@ -18,7 +18,7 @@ void dbFreeze(void) {
             loop = true;
             switch (fz_step) {
                 case 0:
-                    loop = 0;
+                    loop = false;
                     if (paddata[22])      fz_step = 1;
                     break;
                 case 1:
