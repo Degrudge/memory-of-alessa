@@ -153,7 +153,7 @@ segments:
       - { start: 0x0009f720,    type: c,          name: view/vw_main                                     }
       - { start: 0x0009f9f0,    type: c,          name: main                                             }
       - { start: 0x0009fe30,    type: asm,        name: sh2gfw_all_sysinit                               }
-      - { start: 0x000a0280,    type: asm,        name: sh2gfw_drawloop_main                             }
+      - { start: 0x000a0280,    type: c,          name: sh2gfw_drawloop_main                             }
       - { start: 0x000a1020,    type: asm,        name: sh2shd/sh2shd_outdoor                            }
       - { start: 0x000a2350,    type: c,          name: sh2shd/sh2shd_shadow_model                       }
       - { start: 0x000a66c0,    type: asm,        name: sh2shd/sh2shd_shadow_vu1_packet                  }
@@ -406,7 +406,7 @@ segments:
       - { start: 0x00109840,    type: asm,        name: MWCC/mwUtils_PS2, ld_align_segment_start: 0x10   }
       - { start: 0x00109850,    type: asm,        name: Item/item_tgs_tmp                                }
       - { start: 0x00109cc0,    type: asm,        name: Multi_thr/intc/th_vbs                            }
-      - { start: 0x00109e90,    type: asm,        name: DBG/shDBG_fontHandle                             }
+      - { start: 0x00109e90,    type: c,          name: DBG/shDBG_fontHandle                             }
       - { start: 0x0010a2b0,    type: asm,        name: Chacter/m3_edb                                   }
       - { start: 0x0010a960,    type: c,          name: sh2_init                                         }
       - { start: 0x0010af50,    type: c,          name: gamemain                                         }
@@ -988,7 +988,7 @@ segments:
       - { start: 0x00296038,    type: .rodata,    name: sdk/lib_002074E0                                 }
       - { start: 0x00296130,    type: .rodata,    name: sdk/lib_00207E90                                 }
       - { start: 0x00296140,    type: .rodata,    name: sdk/lib_002081D8                                 }
-      - { start: 0x002961b0,    type: rodata,     name: DBG/shDBG_fontHandle                             }
+      - { start: 0x002961b0,    type: .rodata,    name: DBG/shDBG_fontHandle                             }
       - { start: 0x00296230,    type: rodata,     name: Chacter/m3_edb                                   }
       - { start: 0x00296360,    type: .rodata,    name: sh2_init                                         }
       - { start: 0x002963c0,    type: .rodata,    name: gamemain                                         }

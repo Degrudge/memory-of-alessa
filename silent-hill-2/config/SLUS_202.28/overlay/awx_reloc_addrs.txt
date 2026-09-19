@@ -590,14 +590,14 @@ rom:0x001D14 reloc:MIPS_26                             symbol:EvDispControlModel
 rom:0x001D38 reloc:MIPS_HI16           addend:+0x24    symbol:Sh2sys
 rom:0x001D3C reloc:MIPS_LO16           addend:+0x24    symbol:Sh2sys
 rom:0x001D50 reloc:MIPS_26                             symbol:DramaDemoNumber
-rom:0x002B9C reloc:MIPS_32             addend:+0x60    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B98 reloc:MIPS_32             addend:+0x60    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B94 reloc:MIPS_32             addend:+0x58    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B90 reloc:MIPS_32             addend:+0x50    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B8C reloc:MIPS_32             addend:+0x48    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B88 reloc:MIPS_32             addend:+0x40    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B84 reloc:MIPS_32             addend:+0x38    symbol:stg_apart_w1f_TrimColorFilter
-rom:0x002B80 reloc:MIPS_32             addend:+0x30    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B9C reloc:MIPS_32             addend:+0x60    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B98 reloc:MIPS_32             addend:+0x60    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B94 reloc:MIPS_32             addend:+0x58    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B90 reloc:MIPS_32             addend:+0x50    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B8C reloc:MIPS_32             addend:+0x48    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B88 reloc:MIPS_32             addend:+0x40    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B84 reloc:MIPS_32             addend:+0x38    symbol:stg_apart_w1f_TrimColorFilter
+// rom:0x002B80 reloc:MIPS_32             addend:+0x30    symbol:stg_apart_w1f_TrimColorFilter
 rom:0x001D90 reloc:MIPS_HI16           addend:+0x76    symbol:playing
 rom:0x001D94 reloc:MIPS_LO16           addend:+0x76    symbol:playing
 // rom:0x001DA4 reloc:MIPS_HI16                           symbol:@1743
