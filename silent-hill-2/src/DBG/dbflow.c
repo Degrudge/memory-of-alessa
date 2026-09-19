@@ -40,7 +40,7 @@ int dbFlowCheck(void) {
 
             if (prv_check_count == warn_check_count) {
                 if (!str) str = "(unknown)";
-                printf("dbflow.c:76> reach at `%s'\n", str);
+                DEBUG_LOG_ON_LINE(76, "reach at `%s'\n", str);
             }
             warn_wait = 0;
         }
