@@ -1223,6 +1223,8 @@ segments:
       - { vram:  0x011b6b00,    type: bss,        name: bss_0x11b6b00                                    }
       - { vram:  0x011b6f00,    type: .bss,       name: Chacter/m3_maria_sub                             }
       - { vram:  0x011b6f40,    type: bss,        name: bss_0x11b6f40                                    }
+      - { vram:  0x011b6f48,    type: .bss,       name: DBG/dbfreeze                                     }
+      - { vram:  0x011b6f50,    type: bss,        name: bss_0x11b6f50                                    }
       - { vram:  0x011d2260,    type: .bss,       name: Effect/ef_flame                                  }
       - { vram:  0x011d2270,    type: bss,        name: bss_0x11d2270                                    }
       - { vram:  0x011e7080,    type: .bss,       name: DS_Pad/ds_sequencer                              }
