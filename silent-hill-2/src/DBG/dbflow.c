@@ -30,7 +30,7 @@ int dbFlowCheck(void) {
                 ++warn_wait;
                 if (warn_wait >= 120) {
                     if (!str) str = "(unknown)";
-                    printf("dbflow.c:54> warning!! flow stopped after `%s'\n", str);
+                    DEBUG_LOG_ON_LINE(54, "warning!! flow stopped after `%s'\n", str);
 
                     warn_check_count = check_count;
                 }
