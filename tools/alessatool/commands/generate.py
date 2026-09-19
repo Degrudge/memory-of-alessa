@@ -36,6 +36,7 @@ SECTION_ALIGNMENT_PAIRS: list[tuple[str, int]] = [
 ]
 
 TRACKED_SEGMENT_TYPES = ["asm", "c", "data", "rodata"]
+VSM_SEGMENT_TYPES = ["o", "vudata", "vutext"]
 
 @dataclass
 class GenerationArgs:
@@ -159,6 +160,7 @@ def generate_lcf(args: GenerationArgs):
         entries_by_section_type[section_type].append(entry)
 
     lcf_blocks: list[str] = []
+    vutext_aligned = False
 
     for section_type, alignment in SECTION_ALIGNMENT_PAIRS:
         objects = entries_by_section_type[section_type]
@@ -177,6 +179,9 @@ def generate_lcf(args: GenerationArgs):
                 "\t\t_gp  = . + 0x7FF0;",
                 "",
             ]
+
+        if section_type == ".rodata":
+            block += ["\t\t.    = ALIGN(0x80);"]
 
         elif section_type == ".sbss":
             block += [
@@ -203,9 +208,14 @@ def generate_lcf(args: GenerationArgs):
             object_type    = section_type
             object_segment = entry.segment
 
-            if object_segment.type == "o" and object_segment.name.startswith(f"{VSM}/"):
+            if object_segment.type in VSM_SEGMENT_TYPES and object_segment.name.startswith(f"{VSM}/"):
                 # ignores .vubss
                 object_type = section_type == ".text" and ".vutext" or ".vudata"
+
+                if object_type == ".vutext" and not vutext_aligned:
+                    vutext_aligned = True
+                    block.append("")
+                    block.append("\t\t. = ALIGN(0x80);")
 
             block.append(f"\t\t{object_name} ({object_type})")
 

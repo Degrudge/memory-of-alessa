@@ -109,7 +109,6 @@ AS_FLAGS := \
 	-I$(INCLUDE) -I$(CONFIG) -I$(COMMON_INCLUDE)
 
 EE_DVP_AS = $(WIBO) $(TOOLS)/ee-dvp-as.exe
-EE_DVP_AS_FLAGS := -I$(VSM)
 
 LD :=
 ifneq ($(NON_MATCHING),1)
@@ -321,19 +320,19 @@ $(TARGET_EXECUTABLE): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
 	$(Q)$(LD)
 	$(CHECK_MATCH_PERCENT)
 
-$(BUILD)/$(VSM)/%.o: $(VSM)/%.dsm
-	@mkdir -p "$(@D)"
-	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
-
-$(BUILD)/$(VSM)/%.o: $(VSM)/%.vsm
-	@mkdir -p "$(@D)"
-	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
-
 $(BUILD)/$(VSM)/%.o: $(PROJECT)/$(VSM)/%.dsm
 	@mkdir -p "$(@D)"
 	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
 
 $(BUILD)/$(VSM)/%.o: $(PROJECT)/$(VSM)/%.vsm
+	@mkdir -p "$(@D)"
+	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
+
+$(BUILD)/$(VSM)/%.o: $(VSM)/%.dsm
+	@mkdir -p "$(@D)"
+	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
+
+$(BUILD)/$(VSM)/%.o: $(VSM)/%.vsm
 	@mkdir -p "$(@D)"
 	$(EE_DVP_AS) $(EE_DVP_AS_FLAGS) -o "$@" "$^"
 

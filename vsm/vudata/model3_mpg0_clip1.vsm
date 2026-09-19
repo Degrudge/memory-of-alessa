@@ -1,3 +1,6 @@
+
+.include "vudebug.h"
+
 .global model3_mpg0_clip1
 .global model3_mpg0_clip1_size
 
@@ -12,7 +15,7 @@
 model3_mpg0_clip1:
   Clip1:
     /* 000340 FD6B2180FF020000 */  NOP                                    /* | */  MFIR.w     vf01, vi13
-    /* 000348 01684A08FF020000 */  NOP                                    /* | */  ILW.z      vi10,   1(vi13)
+    /* 000348 01684A08FF020000 */  BREAKPOINT3                            /* | */  ILW.z      vi10,   1(vi13)
     /* 000350 01682B08FF020000 */  NOP                                    /* | */  ILW.w      vi11,   1(vi13)
     /* 000358 00008212FF020000 */  NOP                                    /* | */  ISUBIU     vi02, vi00, 8192
     /* 000360 00008312FF020000 */  NOP                                    /* | */  ISUBIU     vi03, vi00, 8192
@@ -76,7 +79,7 @@ model3_mpg0_clip1:
     /* 000520 FF572F0AFF020000 */  NOP                                    /* | */  ISW.w      vi15,  -1(vi10)
 
   Clip1_end:
-    /* 000528 3C030080FF020000 */  NOP                                    /* | */  NOP
+    /* 000528 3C030080FF020000 */  BREAKPOINT2                            /* | */  NOP
     /* 000530 3C030080FF020000 */  NOP                                    /* | */  NOP
     /* 000538 FC0B6D80FF020040 */  NOP[E]                                 /* | */  MTIR       vi13, vf01w
     /* 000540 3C030080FF020000 */  NOP                                    /* | */  NOP
