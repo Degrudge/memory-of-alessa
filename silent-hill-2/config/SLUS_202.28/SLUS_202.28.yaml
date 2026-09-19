@@ -416,7 +416,7 @@ segments:
       - { start: 0x0010e600,    type: c,          name: Effect/screen_effect                             }
       - { start: 0x0010e950,    type: asm,        name: GFW/sh2gfw_SemiTrans_FrameWork                   }
       - { start: 0x0010f800,    type: c,          name: jump_menu                                        }
-      - { start: 0x00110cf0,    type: asm,        name: DBG/dbflow                                       }
+      - { start: 0x00110cf0,    type: c,          name: DBG/dbflow                                       }
       - { start: 0x00110fc0,    type: c,          name: Item/otn_option                                  }
       - { start: 0x0011c4c0,    type: c,          name: Chacter/m3_play_common                           }
       - { start: 0x00120870,    type: c,          name: SH2_common/sh2dt                                 }
@@ -997,7 +997,7 @@ segments:
       - { start: 0x00296cb0,    type: rodata,     name: Chacter/m3_nse_rodata                            }
       - { start: 0x00296e00,    type: .rodata,    name: Effect/screen_effect                             }
       - { start: 0x00296e80,    type: rodata,     name: GFW/sh2gfw_SemiTrans_FrameWork                   }
-      - { start: 0x00296ef0,    type: rodata,     name: DBG/dbflow                                       }
+      - { start: 0x00296ef0,    type: .rodata,    name: DBG/dbflow                                       }
       - { start: 0x00296f50,    type: rodata,     name: Item/otn_option_rodata                           }
       - { start: 0x00296f70,    type: .rodata,    name: Item/otn_option                                  }
       - { start: 0x00297020,    type: .rodata,    name: Chacter/m3_play_common                           }
