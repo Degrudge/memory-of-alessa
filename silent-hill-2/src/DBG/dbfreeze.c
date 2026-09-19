@@ -15,7 +15,7 @@ void dbFreeze(void) {
             libShPadRead(1, 0, &paddata);
             shSysKeyNormalize(&paddata);
 
-            loop = 1;
+            loop = true;
             switch (fz_step) {
                 case 0:
                     loop = 0;
@@ -27,13 +27,13 @@ void dbFreeze(void) {
                 case 2:
                     if (paddata[22])      fz_step = 3;
                     else if (paddata[17]) fz_step = 4;
-                    else if (paddata[19]) loop = 0;
+                    else if (paddata[19]) loop = false;
                     break;
                 case 3:
                     if (!paddata[22]) fz_step = 0;
                     break;
                 case 4:
-                    loop = 0;
+                    loop = false;
                     fz_step = 5;
                     break;
                 case 5:
