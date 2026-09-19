@@ -4,9 +4,9 @@
 #include "common.h"
 
 typedef enum DBSW_ID {
-    DBSW_SYS,
-    DBSW_MAP,
-    DB_SWITCH_MAX,
+    DBSW_SYS = 0,
+    DBSW_MAP = 1,
+    DB_SWITCH_MAX = 2,
 } DBSW_ID;
 
 void dbSwitchDispIndicator(int enable /* r2 */, int o /* r2 */, int x /* r2 */, int dx /* r2 */, int dy /* r2 */);
