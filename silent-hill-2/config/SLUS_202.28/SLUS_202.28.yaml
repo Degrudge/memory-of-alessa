@@ -494,7 +494,7 @@ segments:
       - { start: 0x00162ff0,    type: c,          name: Effect2/hh_class_water_13                        }
       - { start: 0x00164240,    type: c,          name: Effect2/hh_class_water_14                        }
       - { start: 0x00165530,    type: c,          name: Effect2/hh_class_water_15                        }
-      - { start: 0x00166b00,    type: asm,        name: Effect2/hh_class_water_20                        }
+      - { start: 0x00166b00,    type: c,          name: Effect2/hh_class_water_20                        }
       - { start: 0x00167360,    type: c,          name: Effect2/hh_class_water_30                        }
       - { start: 0x00168720,    type: c,          name: Effect2/hh_class_water_common                    }
       - { start: 0x001691d0,    type: c,          name: Effect2/hh_class_water_splash_phenomenon_00      }
@@ -773,7 +773,7 @@ segments:
       - { start: 0x00270118,    type: .data,      name: Effect2/hh_class_water_13                        }
       - { start: 0x002702e0,    type: .data,      name: Effect2/hh_class_water_14                        }
       - { start: 0x002704c8,    type: .data,      name: Effect2/hh_class_water_15                        }
-      - { start: 0x00270900,    type: data,       name: Effect2/hh_class_water_20                        }
+      - { start: 0x00270900,    type: .data,       name: Effect2/hh_class_water_20                       }
       - { start: 0x00270a88,    type: .data,      name: Effect2/hh_class_water_30                        }
       - { start: 0x00270c30,    type: .data,      name: Effect2/hh_class_water_splash_phenomenon_00      }
       - { start: 0x00270c50,    type: data,       name: data_0x270c50                                    }
