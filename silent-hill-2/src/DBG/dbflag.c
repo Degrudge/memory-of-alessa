@@ -23,7 +23,7 @@ int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
 
             }
         }
-        return 0;
+        return false;
     }
     for (check = 1, explain = dbflag_explain; check != 0; check<<=1, explain++) {
         if (check & flag) {
@@ -32,7 +32,7 @@ int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
         }
     }
     VERBOSE(4, "reserved debug flag : %08x : %s\n", flag, explain_message);
-    return 1;
+    return true;
 }
 
 
