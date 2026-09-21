@@ -195,10 +195,10 @@ segments:
       - { start: 0x000ce240,    type: c,          name: Item/otn_itemmain                                }
       - { start: 0x000db910,    type: c,          name: FilesList/fileslist_bg                           }
       - { start: 0x000db9a0,    type: asm,        name: Enemy/en_fly                                     }
-      - { start: 0x000dbdc0,    type: asm,        name: unaff_001DB6C0, ld_align_segment_start: 8        }
-      - { start: 0x000dc570,    type: asm,        name: Multi_thr/kernel/wrap_printf                     }
+      - { start: 0x000dbdc0,    type: asm,        name: unaff_001DB6C0                                   }
+      - { start: 0x000dc570,    type: c,          name: Multi_thr/kernel/wrap_printf                     }
       - { start: 0x000dc5b0,    type: asm,        name: MWCC/gcc_wrapper                                 }
-      - { start: 0x000dc6a8,    type: asmtu,      name: sdk/lib_001DBFA8                                 }
+      - { start: 0x000dc6a8,    type: asmtu,      name: sdk/lib_001DBFA8,      ld_align_segment_start: 8 }
       - { start: 0x000dc6c8,    type: asmtu,      name: sdk/lib_001DBFC8                                 }
       - { start: 0x000dc6e0,    type: asmtu,      name: sdk/lib_001DBFE0                                 }
       - { start: 0x000dc718,    type: asmtu,      name: sdk/lib_001DC018                                 }
@@ -427,7 +427,7 @@ segments:
       - { start: 0x00121c30,    type: asm,        name: sound/snd_select                                 }
       - { start: 0x00122340,    type: asm,        name: Chacter/m3_nik                                   }
       - { start: 0x00122560,    type: c,          name: Multi_thr/loadinit/loadinit                      }
-      - { start: 0x00122690,    type: asm,        name: DBG/dbswitch                                     }
+      - { start: 0x00122690,    type: c,          name: DBG/dbswitch                                     }
       - { start: 0x00122b20,    type: c,          name: Effect/ef_cartridge                              }
       - { start: 0x001242d0,    type: c,          name: Chacter/m3_maria_sub                             }
       - { start: 0x00128a00,    type: c,          name: Event/stg_overlay                                }
@@ -1007,7 +1007,7 @@ segments:
       - { start: 0x002975a0,    type: rodata,     name: Chacter/m3_oni_rodata                            }
       - { start: 0x002976e0,    type: rodata,     name: sound/snd_select                                 }
       - { start: 0x00297720,    type: rodata,     name: Chacter/m3_nik                                   }
-      - { start: 0x00297760,    type: rodata,     name: DBG/dbswitch                                     }
+      - { start: 0x00297760,    type: .rodata,    name: DBG/dbswitch                                     }
       - { start: 0x00297790,    type: rodata,     name: Chacter/m3_maria_sub_rodata                      }
       - { start: 0x00298500,    type: .rodata,    name: Chacter/m3_maria_sub                             }
       - { start: 0x002988d0,    type: .rodata,    name: Event/stg_overlay                                }
