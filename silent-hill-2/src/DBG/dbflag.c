@@ -2,7 +2,7 @@
 
 extern /* static */ u_int dbflag_reserved; // size: 0x4, address: 0x116DD40
 extern /* static */ char* dbflag_explain[32]; // size: 0x80, address: 0x33DE50
-// extern int execEnv_debug_flag; // size: 0x4, address: 0x5526A0
+static const char no_msg[] = "(no message: why?)";
 
 #line 38
 int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
@@ -19,7 +19,7 @@ int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
 
         for (check = 1, explain = dbflag_explain; check != 0; check<<=1, explain++) {
             if (check & dbflag_reserved) {
-                VERBOSE(3, "flag report               : %08x : %s\n", check, *explain ? *explain : "(no message: why?)");
+                VERBOSE(3, "flag report               : %08x : %s\n", check, *explain ? *explain : no_msg);
 
             }
         }
