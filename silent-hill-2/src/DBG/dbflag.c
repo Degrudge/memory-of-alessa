@@ -2,7 +2,7 @@
 
 extern /* static */ u_int dbflag_reserved; // size: 0x4, address: 0x116DD40
 extern /* static */ char* dbflag_explain[32]; // size: 0x80, address: 0x33DE50
-static const char no_msg[] = "(no message: why?)";
+static const char no_msg[] = "(no message: why?)"; //@todo: string from dead code?
 
 #line 38
 int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
