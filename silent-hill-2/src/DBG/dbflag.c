@@ -6,7 +6,7 @@ static const char no_msg[] = "(no message: why?)";
 
 #line 38
 int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
-    u_int check; // r16
+    u_int check;    // r16
     char** explain; // r17
     if (dbflag_reserved & flag) {
 
@@ -17,7 +17,7 @@ int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
 
 
 
-        for (check = 1, explain = dbflag_explain; check != 0; check<<=1, explain++) {
+        for (check = 1, explain = dbflag_explain; check; check<<=1, explain++) {
             if (check & dbflag_reserved) {
                 VERBOSE(3, "flag report               : %08x : %s\n", check, *explain ? *explain : no_msg);
 
@@ -25,7 +25,7 @@ int dbFlagReserve(u_int flag /* r2 */, char * explain_message /* r2 */) {
         }
         return false;
     }
-    for (check = 1, explain = dbflag_explain; check != 0; check<<=1, explain++) {
+    for (check = 1, explain = dbflag_explain; check; check<<=1, explain++) {
         if (check & flag) {
             dbflag_reserved |= check;
             *explain = explain_message;
