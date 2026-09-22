@@ -88,12 +88,12 @@ segments:
       - { start: 0x00049bc0,    type: asm,        name: Enemy/en_edb                                     }
       - { start: 0x0004e720,    type: asm,        name: Enemy/en_effect                                  }
       - { start: 0x00051250,    type: asm,        name: Enemy/en_ike                                     }
-      - { start: 0x00053b10,    type: asm,        name: Enemy/en_mkn                                     }
-      - { start: 0x00057eb0,    type: asm,        name: Enemy/en_nse                                     }
-      - { start: 0x0005a760,    type: asm,        name: Enemy/en_pap                                     }
+      - { start: 0x00053b10,    type: c,          name: Enemy/en_mkn                                     }
+      - { start: 0x00057eb0,    type: c,          name: Enemy/en_nse                                     }
+      - { start: 0x0005a760,    type: c,          name: Enemy/en_pap                                     }
       - { start: 0x0005db10,    type: c,          name: Enemy/en_red                                     }
-      - { start: 0x00060ab0,    type: asm,        name: Enemy/en_scu                                     }
-      - { start: 0x00065700,    type: asm,        name: Enemy/en_tyu                                     }
+      - { start: 0x00060ab0,    type: c,          name: Enemy/en_scu                                     }
+      - { start: 0x00065700,    type: c,          name: Enemy/en_tyu                                     }
       - { start: auto,          type: c,          name: Exec_Env/exec_env                                }
       - { start: auto,          type: c,          name: Exec_Env/local_env                               }
       - { start: 0x00068ed0,    type: c,          name: Fog/fog                                          }
@@ -863,10 +863,12 @@ segments:
       - { start: 0x0028e860,    type: .rodata,    name: Enemy/en_bos                                     }
       - { start: 0x0028e8b0,    type: .rodata,    name: Enemy/en_common                                  }
       - { start: 0x0028e8d0,    type: rodata,     name: rodata_0x28e8d0                                  }
-#     - { start: 0x0028e9d0,    type: rodata,     name: rodata_0x28e9d0                                  }
+      - { start: 0x0028ec80,    type: .rodata,    name: Enemy/en_mkn                                     }
+      - { start: 0x0028ed30,    type: .rodata,    name: Enemy/en_nse                                     }
+      - { start: 0x0028eda0,    type: .rodata,    name: Enemy/en_pap                                     }
       - { start: 0x0028ee10,    type: .rodata,    name: Enemy/en_red                                     }
-      - { start: 0x0028eeb0,    type: rodata,     name: Enemy/en_scu                                     }
-      - { start: 0x0028efa0,    type: rodata,     name: Enemy/en_tyu                                     }
+      - { start: 0x0028eeb0,    type: .rodata,    name: Enemy/en_scu                                     }
+      - { start: 0x0028efa0,    type: .rodata,    name: Enemy/en_tyu                                     }
       - { start: 0x0028eff0,    type: .rodata,    name: Exec_Env/exec_env                                }
       - { start: 0x0028eff8,    type: .rodata,    name: Exec_Env/local_env                               }
       - { start: 0x0028f010,    type: .rodata,    name: Fog/fog                                          }
