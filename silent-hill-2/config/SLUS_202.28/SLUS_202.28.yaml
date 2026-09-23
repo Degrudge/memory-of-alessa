@@ -190,7 +190,7 @@ segments:
       - { start: 0x000cb1f0,    type: c,          name: Event/chara_admin                                }
       - { start: 0x000cd7b0,    type: asm,        name: Fog/spkTexMan                                    }
       - { start: 0x000cda60,    type: c,          name: Font/fj_man                                      }
-      - { start: 0x000cdf30,    type: asm,        name: DBG/dbkernel                                     }
+      - { start: 0x000cdf30,    type: c,          name: DBG/dbkernel                                     }
       - { start: 0x000ce0b0,    type: c,          name: DBG/dbflag                                       }
       - { start: 0x000ce240,    type: c,          name: Item/otn_itemmain                                }
       - { start: 0x000db910,    type: c,          name: FilesList/fileslist_bg                           }
@@ -924,7 +924,7 @@ segments:
       - { start: 0x00293250,    type: .rodata,    name: Event/chara_admin                                }
       - { start: 0x002933f0,    type: rodata,     name: Fog/spkTexMan                                    }
       - { start: 0x00293430,    type: .rodata,    name: Font/fj_man                                      }
-      - { start: 0x00293460,    type: rodata,     name: DBG/dbkernel                                     }
+      - { start: 0x00293460,    type: .rodata,    name: DBG/dbkernel                                     }
       - { start: 0x00293470,    type: .rodata,    name: DBG/dbflag                                       }
       - { start: 0x00293570,    type: .rodata,    name: Item/otn_itemmain                                }
       - { start: 0x002937c0,    type: rodata,     name: unaff_001DB6C0                                   }
