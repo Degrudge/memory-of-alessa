@@ -7902,8 +7902,8 @@ rom:0x02C51C reloc:MIPS_HI16                           symbol:model3_mpg1_view_l
 rom:0x02C520 reloc:MIPS_LO16                           symbol:model3_mpg1_view_load
 rom:0x02C534 reloc:MIPS_HI16                           symbol:"@873_0x0038D9B0"
 rom:0x02C538 reloc:MIPS_LO16                           symbol:"@873_0x0038D9B0"
-rom:0x02C53C reloc:MIPS_HI16                           symbol:__model3_mpg1_view_end
-rom:0x02C540 reloc:MIPS_LO16                           symbol:__model3_mpg1_view_end
+rom:0x02C53C reloc:MIPS_HI16                           symbol:model3_mpg1_view_end
+rom:0x02C540 reloc:MIPS_LO16                           symbol:model3_mpg1_view_end
 rom:0x02C544 reloc:MIPS_26                             symbol:printf
 rom:0x02C560 reloc:MIPS_HI16                           symbol:initialized_867
 rom:0x02C564 reloc:MIPS_LO16                           symbol:initialized_867
@@ -40235,8 +40235,6 @@ rom:0x0DC57C reloc:MIPS_26                             symbol:dbAllocatePrintf
 rom:0x0DC590 reloc:MIPS_26                             symbol:printf_init
 rom:0x000734 reloc:MIPS_HI16                           symbol:_args
 rom:0x000748 reloc:MIPS_LO16                           symbol:_args
-// rom:0x000738 reloc:MIPS_HI16                           symbol:_root
-// rom:0x00074C reloc:MIPS_LO16                           symbol:_root
 rom:0x00078C reloc:MIPS_HI16                           symbol:_args
 rom:0x000790 reloc:MIPS_LO16                           symbol:_args
 rom:0x000778 reloc:MIPS_26                             symbol:_InitSys
@@ -40263,9 +40261,9 @@ rom:0x0DC720 reloc:MIPS_26                             symbol:strtod
 rom:0x0DC784 reloc:MIPS_26                             symbol:_malloc_r
 rom:0x0DC810 reloc:MIPS_26                             symbol:memset
 rom:0x0DC84C reloc:MIPS_26                             symbol:close
-// rom:0x0DC840 reloc:MIPS_HI16                           symbol:errno
-// rom:0x0DC850 reloc:MIPS_LO16                           symbol:errno
-// rom:0x0DC864 reloc:MIPS_LO16                           symbol:errno
+rom:0x0DC840 reloc:MIPS_HI16                           symbol:errno
+rom:0x0DC850 reloc:MIPS_LO16                           symbol:errno
+rom:0x0DC864 reloc:MIPS_LO16                           symbol:errno
 rom:0x0DC9B4 reloc:MIPS_26                             symbol:__mcmp
 rom:0x0DCB08 reloc:MIPS_26                             symbol:_Bfree
 rom:0x0DCB88 reloc:MIPS_HI16                           symbol:.rodata
@@ -40476,9 +40474,9 @@ rom:0x0DE5C8 reloc:MIPS_LO16                           symbol:__malloc_current_m
 rom:0x0DE5D0 reloc:MIPS_26                             symbol:__malloc_unlock
 rom:0x0DE5D4 reloc:MIPS_LO16                           symbol:__malloc_current_mallinfo
 rom:0x0DE620 reloc:MIPS_26                             symbol:fstat
-// rom:0x0DE614 reloc:MIPS_HI16                           symbol:errno
-// rom:0x0DE624 reloc:MIPS_LO16                           symbol:errno
-// rom:0x0DE638 reloc:MIPS_LO16                           symbol:errno
+rom:0x0DE614 reloc:MIPS_HI16                           symbol:errno
+rom:0x0DE624 reloc:MIPS_LO16                           symbol:errno
+rom:0x0DE638 reloc:MIPS_LO16                           symbol:errno
 rom:0x0DE6B4 reloc:MIPS_26                             symbol:__swsetup
 rom:0x0DE7B0 reloc:MIPS_26                             symbol:memmove
 rom:0x0DE7F4 reloc:MIPS_26                             symbol:memmove
@@ -40591,10 +40589,10 @@ rom:0x293A78 reloc:MIPS_32             addend:+0x30    symbol:.rodata
 rom:0x293A7C reloc:MIPS_32             addend:+0x30    symbol:.rodata
 rom:0x293A80 reloc:MIPS_32             addend:+0x30    symbol:.rodata
 rom:0x293A84 reloc:MIPS_32             addend:+0x30    symbol:.rodata
-// rom:0x0DEE44 reloc:MIPS_HI16                           symbol:errno
-// rom:0x0DEE50 reloc:MIPS_LO16                           symbol:errno
+rom:0x0DEE44 reloc:MIPS_HI16                           symbol:errno
+rom:0x0DEE50 reloc:MIPS_LO16                           symbol:errno
 rom:0x0DEE54 reloc:MIPS_26                             symbol:lseek
-// rom:0x0DEE6C reloc:MIPS_LO16                           symbol:errno
+rom:0x0DEE6C reloc:MIPS_LO16                           symbol:errno
 rom:0x0DEEDC reloc:MIPS_26                             symbol:_fstat_r
 rom:0x0DEF20 reloc:MIPS_HI16                           symbol:__sseek
 rom:0x0DEF28 reloc:MIPS_LO16                           symbol:__sseek
@@ -40960,10 +40958,10 @@ rom:0x0E1870 reloc:MIPS_HI16                           symbol:_impure_ptr
 rom:0x0E1874 reloc:MIPS_LO16                           symbol:_impure_ptr
 rom:0x0E1880 reloc:MIPS_HI16                           symbol:_impure_ptr
 rom:0x0E1888 reloc:MIPS_LO16                           symbol:_impure_ptr
-// rom:0x0E18C4 reloc:MIPS_HI16                           symbol:errno
-// rom:0x0E18D0 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E18C4 reloc:MIPS_HI16                           symbol:errno
+rom:0x0E18D0 reloc:MIPS_LO16                           symbol:errno
 rom:0x0E18D4 reloc:MIPS_26                             symbol:read
-// rom:0x0E18EC reloc:MIPS_LO16                           symbol:errno
+rom:0x0E18EC reloc:MIPS_LO16                           symbol:errno
 rom:0x0E194C reloc:MIPS_26                             symbol:_malloc_r
 rom:0x0E1960 reloc:MIPS_26                             symbol:__malloc_lock
 rom:0x0E19A8 reloc:MIPS_HI16                           symbol:__malloc_av_
@@ -41006,9 +41004,9 @@ rom:0x0E222C reloc:MIPS_LO16           addend:+0x20    symbol:.rodata
 rom:0x0E2230 reloc:MIPS_26                             symbol:copysign
 rom:0x0E2278 reloc:MIPS_26                             symbol:dpmul
 rom:0x0E22B4 reloc:MIPS_26                             symbol:sbrk
-// rom:0x0E22A4 reloc:MIPS_HI16                           symbol:errno
-// rom:0x0E22B8 reloc:MIPS_LO16                           symbol:errno
-// rom:0x0E22D0 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E22A4 reloc:MIPS_HI16                           symbol:errno
+rom:0x0E22B8 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E22D0 reloc:MIPS_LO16                           symbol:errno
 rom:0x0E248C reloc:MIPS_26                             symbol:copysignf
 rom:0x0E24F4 reloc:MIPS_26                             symbol:_malloc_r
 rom:0x0E2590 reloc:MIPS_26                             symbol:.text
@@ -41029,9 +41027,9 @@ rom:0x0E2804 reloc:MIPS_HI16                           symbol:_impure_ptr
 rom:0x0E280C reloc:MIPS_LO16                           symbol:_impure_ptr
 rom:0x0E2814 reloc:MIPS_26             addend:+0x1F0   symbol:.text
 rom:0x0E2848 reloc:MIPS_26                             symbol:kill
-// rom:0x0E283C reloc:MIPS_HI16                           symbol:errno
-// rom:0x0E284C reloc:MIPS_LO16                           symbol:errno
-// rom:0x0E2860 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E283C reloc:MIPS_HI16                           symbol:errno
+rom:0x0E284C reloc:MIPS_LO16                           symbol:errno
+rom:0x0E2860 reloc:MIPS_LO16                           symbol:errno
 rom:0x0E2890 reloc:MIPS_26                             symbol:getpid
 rom:0x0E28F4 reloc:MIPS_26                             symbol:vfprintf
 rom:0x0E2910 reloc:MIPS_HI16                           symbol:_impure_ptr
@@ -41904,10 +41902,10 @@ rom:0x294548 reloc:MIPS_32             addend:+0x980   symbol:.text
 rom:0x0E7E60 reloc:MIPS_HI16                           symbol:_impure_ptr
 rom:0x0E7E68 reloc:MIPS_LO16                           symbol:_impure_ptr
 rom:0x0E7E98 reloc:MIPS_26                             symbol:vfprintf
-// rom:0x0E7ECC reloc:MIPS_HI16                           symbol:errno
-// rom:0x0E7ED8 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E7ECC reloc:MIPS_HI16                           symbol:errno
+rom:0x0E7ED8 reloc:MIPS_LO16                           symbol:errno
 rom:0x0E7EDC reloc:MIPS_26                             symbol:write
-// rom:0x0E7EF4 reloc:MIPS_LO16                           symbol:errno
+rom:0x0E7EF4 reloc:MIPS_LO16                           symbol:errno
 rom:0x0E7F34 reloc:MIPS_HI16                           symbol:_impure_ptr
 rom:0x0E7F38 reloc:MIPS_LO16                           symbol:_impure_ptr
 rom:0x0E7F50 reloc:MIPS_26                             symbol:__sinit
@@ -49315,8 +49313,10 @@ rom:0x10EAB0 reloc:MIPS_LO16                           symbol:LoadVu0_956
 rom:0x10EAB4 reloc:MIPS_26                             symbol:sh2gfw_Get_NightOrDay
 rom:0x10EAC4 reloc:MIPS_HI16                           symbol:SH2GFW_MF_vu0_Night_load_head
 rom:0x10EAC8 reloc:MIPS_LO16                           symbol:SH2GFW_MF_vu0_Night_load_head
-// rom:0x10EAD8 reloc:MIPS_HI16                           symbol:__vclbasic_CodeEnd
-// rom:0x10EADC reloc:MIPS_LO16                           symbol:__vclbasic_CodeEnd
+// rom:0x10EAD8 reloc:MIPS_HI16                           symbol:__vclbasic_CodeEnd @todo: fix!
+// rom:0x10EADC reloc:MIPS_LO16                           symbol:__vclbasic_CodeEnd @todo: fix!
+rom:0x10EAD8 reloc:MIPS_HI16                           symbol:SH2GFW_MF_vu0_Day_load_head
+rom:0x10EADC reloc:MIPS_LO16                           symbol:SH2GFW_MF_vu0_Day_load_head
 rom:0x10EB00 reloc:MIPS_HI16                           symbol:VU1_PARMS
 rom:0x10EB04 reloc:MIPS_LO16                           symbol:VU1_PARMS
 rom:0x10EB40 reloc:MIPS_HI16           addend:+0x270   symbol:VU1_PARMS

@@ -16,7 +16,9 @@ tools/m2ctx.py
 tools/alessatool/analyze.py
 tools/alessatool/migrate.py
 tools/mwccgap.version
+tools/ps2iso_*
 
+iso
 .DS_Store
 .venv
 **/.vscode/*
