@@ -9,7 +9,7 @@ extern /* static */ int dbSwitchDispF; // size: 0x4, address: 0x11B6E58
 void dbSwitchDispIndicator(int enable /* r2 */, int o /* r2 */, int x /* r2 */, int dx /* r2 */, int dy /* r2 */) {
     int just, bit, Y; // r2
     char* sym[2][2] = {"-\n", "\x8a-\n", "O\n", "\x8aO\n"}; // r29+0x20
-    int *temp;
+
     if (enable) {
 
         dy = -dy;
@@ -23,14 +23,14 @@ void dbSwitchDispIndicator(int enable /* r2 */, int o /* r2 */, int x /* r2 */, 
 
             dbSwitchX += dx;
             dbSwitchY += dy;
-            if (dbSwitchX < 0)                   dbSwitchX = 0;
-            if (dbSwitchX > 1)                   dbSwitchX = 1;
+            if (dbSwitchX < DBSW_SYS)            dbSwitchX = 0;
+            if (dbSwitchX > DBSW_MAP)            dbSwitchX = 1;
             if (dbSwitchY < 0)                   dbSwitchY = 0;
             if (dbSwitchY > sizeof(int) * 8 - 1) dbSwitchY = 31;
             if (o) {
-                temp = &dbSwitchStat[dbSwitchX];
-                FLIP_BIT(*temp, dbSwitchY);
+                FLIP_BIT(dbSwitchStat[dbSwitchX], dbSwitchY);
             }
+
             dbfntprintfR("%1X\n", dbSwitchX);
             for (just = 0; just < sizeof(int) * 8; just++) {
 
@@ -71,7 +71,6 @@ int dbSwitchInit(DBSW_ID _X, u_long bit_pattern) {
 
 int dbSwitchSet(DBSW_ID _X /* r2 */, int Y /* r2 */, int set /* r2 */) {
     int X;
-    int *temp;
 
     X = _X;
 
@@ -81,8 +80,7 @@ int dbSwitchSet(DBSW_ID _X /* r2 */, int Y /* r2 */, int set /* r2 */) {
     if (Y > sizeof(int) * 8 - 1) return 0;
 
     if (set) {
-        temp = &dbSwitchStat[X];
-        SET_BIT(*temp, Y);
+        SET_BIT(dbSwitchStat[X], Y);
     } else {
         UNSET_BIT(dbSwitchStat[X], Y);
     }
