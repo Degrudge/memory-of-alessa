@@ -1,5 +1,17 @@
 #include "dbfntprint.h"
 
+static void _dbfntprint(char* buf);
+
+static int printline(char* cp /* r2 */, char* top /* r2 */);
+
+static int printline(char* cp, char* top);
+
+static void _dbfntprint(char* buf /* r2 */);
+
+static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */);
+
+extern DebugPrintInfo d_0x0033BEC0;
+
 void dbfntlocate(int x, int y) {
     d_0x0033BEC0.x = x;
     d_0x0033BEC0.xofs = x;
@@ -30,7 +42,7 @@ int printline(char* cp, char* top) {
     return l;
 }
 
-#ifdef BROKEN
+//thanks: Lazy Pig (anon)
 int printlineR(char* cp, char* top) {
     char line[128]; // r29+0x20
     int l; // r16
@@ -44,15 +56,12 @@ int printlineR(char* cp, char* top) {
         }
         memcpy(line, top, l);
         line[l] = 0;
-        _shDBG_print_string((char* ) line, d.xofsR - (l * d.w), d.yR);
+        _shDBG_print_string(line, d_0x0033BEC0.xofsR - (l * d_0x0033BEC0.w), d_0x0033BEC0.yR);
     } else {
         l = 0;
     }
     return l;
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", printlineR);
-#endif
 
 void _dbfntprint(char* buf) {
     char * cp; // r16
@@ -89,14 +98,88 @@ void _dbfntprint(char* buf) {
     printline(cp, t);
 }
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", _dbfntprintR);
+static void _dbfntprintR(char* buf /* r2 */) {
+    char* t; // r2
+    char* cp; // r16
+    t = cp = buf;
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", dbfntprint);
+    while(*cp != 0) {
+        switch (*cp) {                              /* irregular */
+            case '\n':
+            case '\t':
+            case '\b':
+                printlineR(cp, t);
+                t = cp + 1;
+                d_0x0033BEC0.yR += d_0x0033BEC0.h;
+                break;
+            case '\r':
+                printlineR(cp, t);
+                t = cp + 1;
+                break;
+            default:
+                break;
+        }
+        cp++;
+    }
+    printlineR(cp, t);
+}
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", dbfntprintR);
+void dbfntprint(char* buf /* r16 */) {
+    if (dbSwitchDispEnable(-1)) _dbfntprint(buf);
+}
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", _dbfntvsnprintf);
+void dbfntprintR(char* buf /* r16 */) {
+    if (dbSwitchDispEnable(-1)) _dbfntprintR(buf);
+}
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", dbfntprintf);
+static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */) {
+    int len; // r16
 
-INCLUDE_ASM("asm/nonmatchings/DBG/dbfntprint", dbfntprintfR);
+    len = vsprintf(buf, fmt, argp);
+    if (!(len < limit)) {
+        printf(DEBUG_TEXT_ON_LINE(247, "_dbfntvsnprintf strbuf overflow!!\n")
+               DEBUG_TEXT_ON_LINE(248, "%s")
+               DEBUG_TEXT_ON_LINE(249, "halted by error\n", buf));
+
+        BLOCK_WHILE(true);
+    }
+
+    dbfntprintfunc(buf);
+    return len;
+}
+
+s32 dbfntprintf(char* fmt, ...) {
+    va_list argp; // r16
+    char buf[512]; // r29+0x20
+
+
+    va_start(argp, fmt);
+
+
+
+
+
+
+    if (dbSwitchDispEnable(-1)) return _dbfntvsnprintf(&dbfntprint, buf, sizeof(buf), fmt, argp);
+    return 0;
+
+
+}
+
+int dbfntprintfR(char * fmt /* r29+0x228 */, ...){
+    va_list argp; // r16
+    char buf[512]; // r29+0x20
+
+
+    va_start(argp, fmt);
+
+
+
+
+
+
+    if (dbSwitchDispEnable(-1)) return _dbfntvsnprintf(&dbfntprintR, buf, sizeof(buf), fmt, argp);
+    return 0;
+
+
+}
