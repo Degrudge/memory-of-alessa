@@ -917,7 +917,7 @@ segments:
       - { start: 0x00292500,    type: rodata,     name: Multi_thr/boot/bootoptitem                       }
       - { start: 0x00292a10,    type: .rodata,    name: Event/title                                      }
       - { start: 0x00292d60,    type: .rodata,    name: SH2_common/pad                                   }
-      - { start: 0x00292d80,    type: rodata,     name: DBG/dbfntprint_rodata                            }
+      - { start: 0x00292d80,    type: .rodata,    name: DBG/dbfntprint                                   }
       - { start: 0x00292df0,    type: rodata,     name: Chacter/sh2_character_manage_rodata              }
       - { start: 0x00292e40,    type: .rodata,    name: DBG/verbose                                      }
       - { start: 0x00292ea0,    type: .rodata,    name: Event/chizu                                      }
