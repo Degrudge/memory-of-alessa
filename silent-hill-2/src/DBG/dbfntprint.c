@@ -1,12 +1,12 @@
 #include "dbfntprint.h"
 
-static void _dbfntprint(char* buf);
-
 static int printline(char* cp /* r2 */, char* top /* r2 */);
 
-static int printline(char* cp, char* top);
+static int printlineR(char* cp /* r2 */, char* top /* r2 */);
 
-static void _dbfntprint(char* buf /* r2 */);
+static void _dbfntprint(char* buf);
+
+static void _dbfntprintR(char* buf /* r2 */);
 
 static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */);
 
