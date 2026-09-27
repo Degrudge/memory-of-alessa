@@ -2,11 +2,14 @@
 #define DB_FNT_PRINT_H
 
 #include "common.h"
+#include "mw/mw_stdarg.h"
+#include "DBG/shDBG_fontHandle.h"
 
-// E:\work\sh2(CVS全取得)\src\DBG\dbfntprint.c
-static void _dbfntprint(char* buf);
-
-static int printline(char* cp /* r2 */, char* top /* r2 */);
+#ifdef DEBUG
+#define shDBG_print_string(...) _shDBG_print_string(...)
+#else
+#define shDBG_print_string(...)
+#endif
 
 typedef struct DebugPrintInfo {
     // total size: 0x28
@@ -22,23 +25,16 @@ typedef struct DebugPrintInfo {
     int yR;    // offset 0x24, size 0x4
 } DebugPrintInfo;
 
-#ifdef DEBUG
-#define shDBG_print_string(...) _shDBG_print_string(...)
-#else
-#define shDBG_print_string(...)
-#endif
-extern void _shDBG_print_string(char* st /* r2 */, int ix /* r2 */, int iy /* r2 */);
+void dbfntlocate(int x /* r2 */, int y /* r2 */);
 
-extern DebugPrintInfo d_0x0033BEC0;
+void dbfntlocateR(int x /* r2 */, int y /* r2 */);
 
-void dbfntlocate(int x, int y);
+void dbfntprint(char* buf /* r16 */);
 
-void dbfntlocateR(int x, int y);
-
-static int printline(char* cp, char* top);
-
-static void _dbfntprint(char* buf /* r2 */);
+void dbfntprintR(char* buf /* r16 */);
 
 int dbfntprintf(char* fmt /* r29+0x228 */, ...);
+
+int dbfntprintfR(char* fmt /* r29+0x228 */, ...);
 
 #endif
