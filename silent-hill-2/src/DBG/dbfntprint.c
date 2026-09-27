@@ -12,20 +12,19 @@ static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf 
 
 extern DebugPrintInfo d_0x0033BEC0;
 
+#line 39
 void dbfntlocate(int x, int y) {
-    d_0x0033BEC0.x = x;
-    d_0x0033BEC0.xofs = x;
-    d_0x0033BEC0.y = y;
-    d_0x0033BEC0.yofs = y;
+    d_0x0033BEC0.x = x; d_0x0033BEC0.xofs = x;
+    d_0x0033BEC0.y = y; d_0x0033BEC0.yofs = y;
 }
 
 void dbfntlocateR(int x, int y) {
     d_0x0033BEC0.xofsR = x;
-    d_0x0033BEC0.yR = y;
-    d_0x0033BEC0.yofsR = y;
+    d_0x0033BEC0.yR = y; d_0x0033BEC0.yofsR = y;
 }
 
 int printline(char* cp, char* top) {
+
     char line[128]; // r29+0x20
     int l; // r16
     l = cp - top;
@@ -38,7 +37,6 @@ int printline(char* cp, char* top) {
     } else {
         l = 0;
     }
-
     return l;
 }
 
