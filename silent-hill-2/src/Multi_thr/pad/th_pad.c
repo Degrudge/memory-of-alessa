@@ -75,7 +75,7 @@ static void ThreadPad(void* arg /* r2 */)  {
 
 
 
-    VERBOSE(2, "finished to init pad.\n\0\0\0\0\0"); //line 102
+    VERBOSE(2, "finished to init pad.\n"); //line 102
 
     SignalSemaMax(finish_sid);
 
