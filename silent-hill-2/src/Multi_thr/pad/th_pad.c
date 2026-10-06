@@ -3,8 +3,8 @@
 static int finish_sid = -1; // size: 0x4, address: 0x33B588
 static int pad_tid = -1; // size: 0x4, address: 0x33B590
 //@note: reported in dwarf but never used.
-// padStruct curPad; // size: 0x20, address: 0x0
-// padStruct prvPad; // size: 0x20, address: 0x0
+thPadStruct curPad; // size: 0x20, address: 0x0
+thPadStruct prvPad; // size: 0x20, address: 0x0
 
 void ThreadPad(void*);
 
