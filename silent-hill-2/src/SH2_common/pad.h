@@ -75,8 +75,6 @@ typedef struct Pad_KeyConfig {
 
 void shPadInit(void);
 
-void libShPadRead(int a, int b, void* c); // NOT SURE ABOUT THIS
-
 void shPadSetGameKeyAssign(void);
 void shQzero(void*, int);
 float shGetDT(void);
