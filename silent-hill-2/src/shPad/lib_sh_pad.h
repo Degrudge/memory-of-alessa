@@ -24,7 +24,7 @@ int libShPadPortTrans(int port);
 //@note: ^ last three functions may be static.
 int libShPadTrans(void);
 
-void libShPadRead(int port, int slot, void* data);
+s_char libShPadRead(int port, int slot, void* data);
 
 int libShPadSend(int port, int slot, u_short pow0, u_short pow1);
 //@note: ^ last two functions are subject to change.
