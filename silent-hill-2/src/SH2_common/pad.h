@@ -2,6 +2,7 @@
 #define PAD_H
 
 #include "sh2_common.h"
+#include "shPad/lib_sh_pad.h"
 
 #define PAD_KEY_SELECT     (1 << 2)
 #define PAD_KEY_START      (1 << 3)

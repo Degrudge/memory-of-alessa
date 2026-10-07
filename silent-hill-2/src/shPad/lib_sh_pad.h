@@ -21,12 +21,12 @@ u_short libShPadSlotTrans(int port, int slot);
 u_short libShPadSlotTransSub(int port, int slot, u_short step);
 
 int libShPadPortTrans(int port);
-//@note: last three functions may be static.
+//@note: ^ last three functions may be static.
 int libShPadTrans(void);
 
-char libShPadRead(int port, int slot, u_char* data);
+void libShPadRead(int port, int slot, void* data);
 
 int libShPadSend(int port, int slot, u_short pow0, u_short pow1);
-//@note: last two functions are subject to change.
+//@note: ^ last two functions are subject to change.
 
 #endif // LIB_SH_PAD_H
