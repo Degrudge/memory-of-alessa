@@ -2,6 +2,7 @@
 #define PAD_H
 
 #include "sh2_common.h"
+#include "shPad/lib_sh_pad.h"
 
 #define PAD_KEY_SELECT     (1 << 2)
 #define PAD_KEY_START      (1 << 3)
@@ -74,8 +75,6 @@ typedef struct Pad_KeyConfig {
 // @todo: clean up
 
 void shPadInit(void);
-
-void libShPadRead(int a, int b, void* c); // NOT SURE ABOUT THIS
 
 void shPadSetGameKeyAssign(void);
 void shQzero(void*, int);
