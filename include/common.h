@@ -48,6 +48,7 @@
 #define INCLUDE_RODATA(FOLDER, NAME)
 
 #define UNMIGRATED(declaration, ...) extern declaration
+#define RODATA_PAD_TO(intended_addr) const char __pad_##intended_addr[] = "\0\0\0\0"
 
 typedef union Q {
     u_long128 u128;  // offset 0x0, size 0x10

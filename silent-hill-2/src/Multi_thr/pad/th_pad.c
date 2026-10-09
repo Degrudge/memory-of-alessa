@@ -189,7 +189,7 @@ static void ThreadPad(void* arg /* r2 */)  {
 
 
 
-
+RODATA_PAD_TO(0x00391AD0);
 
 
 
