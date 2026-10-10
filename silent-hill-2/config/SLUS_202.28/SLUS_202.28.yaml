@@ -177,7 +177,7 @@ segments:
       - { start: 0x000bea60,    type: c,          name: Multi_thr/intc/syncv                             }
       - { start: 0x000bed80,    type: asm,        name: Multi_thr/intc/th_vbe                            }
       - { start: 0x000bef20,    type: asm,        name: Multi_thr/pad/keydata                            }
-      - { start: 0x000bfc40,    type: asm,        name: Multi_thr/pad/th_pad                             }
+      - { start: 0x000bfc40,    type: c,          name: Multi_thr/pad/th_pad                             }
       - { start: 0x000bff00,    type: c,          name: Multi_thr/sys/init_mt_sys                        }
       - { start: 0x000c0820,    type: c,          name: Multi_thr/boot/bootopt                           }
       - { start: 0x000c0a70,    type: c,          name: Multi_thr/boot/bootoptitem                       }
@@ -673,7 +673,7 @@ segments:
       - { start: 0x0023bb08,    type: data,       name: Multi_thr/intc/syncv                             }
       - { start: 0x0023bb28,    type: data,       name: Multi_thr/intc/th_vbe                            }
       - { start: 0x0023bb40,    type: data,       name: Multi_thr/pad/keydata                            }
-      - { start: 0x0023bc88,    type: data,       name: Multi_thr/pad/th_pad                             }
+      - { start: 0x0023bc88,    type: .data,      name: Multi_thr/pad/th_pad                             }
       - { start: 0x0023bca0,    type: data,       name: Multi_thr/sys/init_mt_sys                        }
       - { start: 0x0023bda0,    type: data,       name: Multi_thr/boot/bootopt                           }
       - { start: 0x0023bda0,    type: .data,      name: Multi_thr/boot/bootoptitem                       }
@@ -918,7 +918,7 @@ segments:
       - { start: 0x00291de0,    type: .rodata,    name: Multi_thr/filesys/iopload                        }
       - { start: 0x00291df0,    type: .rodata,    name: Multi_thr/filesys/sh_cdvd                        }
       - { start: 0x00291f80,    type: .rodata,    name: Multi_thr/intc/syncv                             }
-      - { start: 0x002920a0,    type: rodata,     name: Multi_thr/pad/th_pad                             }
+      - { start: 0x002920a0,    type: .rodata,    name: Multi_thr/pad/th_pad                             }
       - { start: 0x00292130,    type: .rodata,    name: Multi_thr/sys/init_mt_sys                        }
       - { start: 0x00292500,    type: .rodata,    name: Multi_thr/boot/bootoptitem                       }
       - { start: 0x00292a10,    type: .rodata,    name: Event/title                                      }
