@@ -2,6 +2,7 @@
 #define DMA2SERV_H
 
 #include "common.h"
+#include "Multi_thr/util/cmd_serv.h"
 
 int d2sInit(int th_prio /* r11 */, void* stack /* r10 */, int stackSize /* r9 */, void* queue /* r16 */, int queueSize /* r2 */);
 
