@@ -130,7 +130,7 @@ segments:
       - { start: 0x00088a60,    type: asm,        name: Multi_thr/dma/dma1cmd                            }
       - { start: 0x00088c70,    type: c,          name: Multi_thr/dma/dma1serv                           }
       - { start: 0x00088e00,    type: asm,        name: Multi_thr/dma/dma1tscmd                          }
-      - { start: 0x00088ed0,    type: asm,        name: Multi_thr/dma/dma2cmd                            }
+      - { start: 0x00088ed0,    type: c,          name: Multi_thr/dma/dma2cmd                            }
       - { start: 0x00089090,    type: c,          name: Multi_thr/dma/dma2serv                           }
       - { start: 0x00089270,    type: asm,        name: Multi_thr/dma/dma2tscmd                          }
       - { start: 0x000893f0,    type: asm,        name: Multi_thr/dma/sh_dma1                            }
@@ -1167,7 +1167,7 @@ segments:
       - { vram:  0x01013750,    type: bss,        name: Lens/lens_flare                                  }
       - { vram:  0x01013890,    type: bss,        name: Multi_thr/dma/dma1cmd                            }
       - { vram:  0x010138a0,    type: bss,        name: Multi_thr/dma/dma1serv                           }
-      - { vram:  0x010138a8,    type: bss,        name: Multi_thr/dma/dma2cmd                            }
+      - { vram:  0x010138a8,    type: .bss,       name: Multi_thr/dma/dma2cmd                            }
       - { vram:  0x010138b8,    type: .bss,       name: Multi_thr/dma/dma2serv                           }
       - { vram:  0x010138c0,    type: bss,        name: Multi_thr/dma/sh_dma1                            }
       - { vram:  0x010138c8,    type: bss,        name: Multi_thr/dma/sh_dma2                            }
