@@ -14,8 +14,8 @@ int d2sCmpCID(int cid0 /* r2 */, int cid1 /* r2 */);
 
 int d2sPutCmd0(signed int (*f0)() /* r2 */);
 
-int d2sPutCmd1(signed int (*f1)() /* r3 */, long a1 /* r2 */);
+int d2sPutCmd1(signed int (*f1)() /* r3 */, u_long128 a1 /* r2 */);
 
-int d2sPutCmd3(signed int (*f3)() /* r10 */, long a1 /* r9 */, long a2 /* r3 */, long a3 /* r2 */);
+int d2sPutCmd3(signed int (*f3)() /* r10 */, u_long128 a1 /* r9 */, u_long128 a2 /* r3 */, u_long128 a3 /* r2 */);
 
 #endif // DMA2SERV_H
