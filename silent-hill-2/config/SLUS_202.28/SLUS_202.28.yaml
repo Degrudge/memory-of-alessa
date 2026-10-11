@@ -132,7 +132,7 @@ segments:
       - { start: 0x00088e00,    type: asm,        name: Multi_thr/dma/dma1tscmd                          }
       - { start: 0x00088ed0,    type: c,          name: Multi_thr/dma/dma2cmd                            }
       - { start: 0x00089090,    type: c,          name: Multi_thr/dma/dma2serv                           }
-      - { start: 0x00089270,    type: asm,        name: Multi_thr/dma/dma2tscmd                          }
+      - { start: 0x00089270,    type: c,          name: Multi_thr/dma/dma2tscmd                          }
       - { start: 0x000893f0,    type: asm,        name: Multi_thr/dma/sh_dma1                            }
       - { start: 0x000897d0,    type: asm,        name: Multi_thr/dma/sh_dma2                            }
       - { start: 0x00089bc0,    type: asm,        name: Multi_thr/dma/texslot                            }
