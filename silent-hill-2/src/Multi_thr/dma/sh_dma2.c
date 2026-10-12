@@ -136,7 +136,7 @@ int shDmaGifSend(void* packet) {
         AA2_check = 2;
 
         DPUT_D2_TADR((u_int)packet);
-        DPUT_D2_QWC(0);
+        DPUT_D2_QWC(D_QWC_QWC_O);
         chcr = DGET_D2_CHCR();
 
 
@@ -160,7 +160,7 @@ int shDmaGifSend(void* packet) {
         }
 
         chcr = DGET_D2_CHCR();
-        if ((chcr & 0x70000000) != 0x70000000) { //smthn to do with DMAtag idk
+        if ((chcr & 0x70000000) != 0x70000000) { //is dma tag id equal to end?
             verbose(3,
                     DEBUG_TEXT("DMA-2 don't normally finished.\n")
                     DEBUG_TEXT("    D2_CHCR: 0x%08x\n")
