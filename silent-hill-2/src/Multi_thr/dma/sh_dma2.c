@@ -167,7 +167,7 @@ int shDmaGifSend(void* packet) {
                     DEBUG_TEXT("    D2_TADR: 0x%08x\n")
                     DEBUG_TEXT("    D2_MADR: 0x%08x\n")
                     DEBUG_TEXT("    D2_QWC : 0x%08x\n"),
-                    chcr, *D2_TADR, *D2_MADR, *D2_QWC); // line 165-169
+                    chcr, DGET_D2_TADR(), DGET_D2_MADR(), DGET_D2_QWC()); // line 165-169
         }
 
 
