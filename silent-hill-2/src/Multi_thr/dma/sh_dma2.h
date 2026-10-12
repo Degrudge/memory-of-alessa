@@ -1,7 +1,6 @@
 #ifndef SH_DMA2_H
 #define SH_DMA2_H
 
-#include "sh2_common.h"
 #include "sce/eeregs.h"
 #include "sce/eekernel.h"
 

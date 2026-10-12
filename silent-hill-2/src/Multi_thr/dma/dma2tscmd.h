@@ -1,7 +1,6 @@
 #ifndef DMA2TSCMD_H
 #define DMA2TSCMD_H
 
-#include "common.h"
 #include "Multi_thr/dma/dma2serv.h"
 #include "Multi_thr/dma/texslot.h"
 

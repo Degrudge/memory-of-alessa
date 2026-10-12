@@ -78,7 +78,7 @@ void d2cSubCmdFlushCache(void) {
 
 
 
-    if (d2cSubSubCmdCheckFlushCache()) FlushCache(0);
+    if (d2cSubSubCmdCheckFlushCache()) FlushCache(WRITEBACK_DCACHE);
 
 
 }
@@ -92,7 +92,7 @@ void d2cSubCmdFlushCache(void) {
 
 
 
-int d2cCmdInit(void) {
+static int d2cCmdInit(void) {
     return shDmaGifInit();
 }
 

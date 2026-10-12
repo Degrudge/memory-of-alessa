@@ -1,7 +1,6 @@
 #ifndef DMA2SERV_H
 #define DMA2SERV_H
 
-#include "common.h"
 #include "Multi_thr/util/cmd_serv.h"
 
 #define DMA2_PUT(_index, ...) (((int (*)(int (*)(void), ...))(&d2sPutCmd##_index))(__VA_ARGS__))
