@@ -1,8 +1,8 @@
 #ifndef DMA2CMD_H
 #define DMA2CMD_H
 
-#include "sce/sif.h"
 #include "Multi_thr/dma/dma2serv.h"
+#include "sce/sif.h"
 
 void d2cSubCmdUpdataLastRegistCid(signed int cid /* r16 */);
 

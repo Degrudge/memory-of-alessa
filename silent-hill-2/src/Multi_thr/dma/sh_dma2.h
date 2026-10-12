@@ -3,6 +3,7 @@
 
 #include "sce/eeregs.h"
 #include "sce/eekernel.h"
+#include "sce/sif.h"
 
 int shDmaGifInit(void);
 

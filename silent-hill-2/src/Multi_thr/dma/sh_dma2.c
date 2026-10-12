@@ -141,7 +141,7 @@ int shDmaGifSend(void* packet) {
 
 
 
-        FlushCache(0);
+        FlushCache(WRITEBACK_DCACHE);
 
         PollSemaAll(wait_sid);
 
