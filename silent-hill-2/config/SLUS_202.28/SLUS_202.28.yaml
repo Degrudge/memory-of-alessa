@@ -134,7 +134,7 @@ segments:
       - { start: 0x00089090,    type: c,          name: Multi_thr/dma/dma2serv                           }
       - { start: 0x00089270,    type: c,          name: Multi_thr/dma/dma2tscmd                          }
       - { start: 0x000893f0,    type: asm,        name: Multi_thr/dma/sh_dma1                            }
-      - { start: 0x000897d0,    type: asm,        name: Multi_thr/dma/sh_dma2                            }
+      - { start: 0x000897d0,    type: c,          name: Multi_thr/dma/sh_dma2                            }
       - { start: 0x00089bc0,    type: asm,        name: Multi_thr/dma/texslot                            }
       - { start: 0x00089e30,    type: c,          name: Multi_thr/util/cmd_serv                          }
       - { start: 0x0008b280,    type: asm,        name: Multi_thr/util/utilexcl                          }
@@ -645,7 +645,7 @@ segments:
       - { start: 0x001b6ac0,    type: .data,      name: Lens/lens_flare                                  }
       - { start: 0x001b6b10,    type: .data,      name: Lens/lens_th_draw                                }
       - { start: 0x001b6b20,    type: data,       name: Multi_thr/dma/sh_dma1                            }
-      - { start: 0x001b6b38,    type: data,       name: Multi_thr/dma/sh_dma2                            }
+      - { start: 0x001b6b38,    type: .data,      name: Multi_thr/dma/sh_dma2                            }
       - { start: 0x001b6b50,    type: data,       name: Multi_thr/dma/texslot                            }
       - { start: 0x001b6ba0,    type: data,       name: Multi_thr/util/utilexcl                          }
       - { start: 0x001b6bb0,    type: data,       name: Multi_thr/pad/lib_sh_pad                         }
@@ -892,7 +892,7 @@ segments:
       - { start: 0x00290080,    type: .rodata,    name: Heap/utilheap                                    }
       - { start: 0x00290100,    type: .rodata,    name: Lens/kari_lf_draw                                }
       - { start: 0x00290160,    type: rodata,     name: Multi_thr/dma/sh_dma1                            }
-      - { start: 0x00290270,    type: rodata,     name: Multi_thr/dma/sh_dma2                            }
+      - { start: 0x00290270,    type: .rodata,    name: Multi_thr/dma/sh_dma2                            }
       - { start: 0x00290370,    type: rodata,     name: Multi_thr/dma/texslot                            }
       - { start: 0x002903a0,    type: rodata,     name: Multi_thr/util/cmd_serv_rodata                   }
       - { start: 0x00290488,    type: rodata,     name: Multi_thr/util/utilstr                           }
@@ -1170,7 +1170,7 @@ segments:
       - { vram:  0x010138a8,    type: .bss,       name: Multi_thr/dma/dma2cmd                            }
       - { vram:  0x010138b8,    type: .bss,       name: Multi_thr/dma/dma2serv                           }
       - { vram:  0x010138c0,    type: bss,        name: Multi_thr/dma/sh_dma1                            }
-      - { vram:  0x010138c8,    type: bss,        name: Multi_thr/dma/sh_dma2                            }
+      - { vram:  0x010138c8,    type: .bss,       name: Multi_thr/dma/sh_dma2                            }
       - { vram:  0x01013900,    type: bss,        name: shPad/lib_sh_pad                                 }
       - { vram:  0x01013b80,    type: bss,        name: sh2shd/sh2shd_char_jms                           }
       - { vram:  0x01013b90,    type: bss,        name: sound/sd0712/ee/sd_call                          }
