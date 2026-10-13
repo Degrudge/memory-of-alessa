@@ -1,6 +1,7 @@
 #ifndef DMA2CMD_H
 #define DMA2CMD_H
 
+#include "Multi_thr/util/utilexcl.h"
 #include "Multi_thr/dma/dma2serv.h"
 #include "sce/sif.h"
 
