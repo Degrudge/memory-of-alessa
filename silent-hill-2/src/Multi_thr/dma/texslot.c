@@ -1,4 +1,4 @@
-#include "texslot.h"
+#include "Multi_thr/dma/texslot.h"
 
 static texSlotCtrlT texSlotCtrl[5] = {}; // size: 0x50, address: 0x2B6450
 
