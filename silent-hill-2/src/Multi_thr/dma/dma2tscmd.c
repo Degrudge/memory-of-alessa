@@ -27,7 +27,7 @@ int d2tscBeginToUseSlot(int slot /* r2 */) {
 int d2tscCmdSend(int slot /* r19 */, int texid /* r18 */, void* tag /* r17 */) {
     int ret = 1; // r16
     int cur_texid; // r2
-    cur_texid = texSlotGetCurTexID(slot, texid);
+    cur_texid = texSlotGetCurTexID(slot);
     if (texid != cur_texid) {
         texSlotSetCurTexID(slot, texid);
         ret = d2cCmdSend(tag);
