@@ -1,6 +1,6 @@
 #include "texslot.h"
 
-static struct texSlotCtrlT texSlotCtrl[5] = {}; // size: 0x50, address: 0x2B6450
+static texSlotCtrlT texSlotCtrl[5] = {}; // size: 0x50, address: 0x2B6450
 
 
 
@@ -29,25 +29,25 @@ int texSlotInit(void) {
             }
         }
     }
-    return 1;
+    return true;
 }
 
 
 int texSlotBeginToUse(int slot) {
     if (0 <= slot && slot < 5) {
         WaitSema(texSlotCtrl[slot].sid);
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 
 int texSlotFinishToUse(int slot) {
     if (0 <= slot && slot < 5) {
         SignalSema(texSlotCtrl[slot].sid);
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 
@@ -72,5 +72,5 @@ int texSlotClearAll(void) {
     for (i = 0; i < 5; i++) {
         texSlotSetCurTexID(i, -1);
     }
-    return 1;
+    return true;
 }
