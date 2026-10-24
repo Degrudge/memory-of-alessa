@@ -1,10 +1,9 @@
-# Dwarf Quirks
+# dwarf quirks
+ 
+The SH2 Prototype this project aims to match contains debugging information which aid in the decompilation of both SH2 and SH3. Unfortunately, said debugging information contains a few quirks as a result of the compiler. This document attempts to record observed quirks in the prototype's debugging information. 
 
-While SH2's DWARF will prove to be very helpful during decompilation, the compiler that generated it has a handful of quirks. This document attempts to record observed quirks in SH2's DWARF. 
-
----
 ## Inversely-ordered local variable declarations
-MWCC will record local variable declarations inversely to their original declaration order in the DWARF. Take for example:
+Local variable declarations are inverted in the DWARF. Take for example:
 
 ```c
 u_int foo(int bar) {
@@ -32,9 +31,8 @@ If you have the SH2 DWARF in hand, try comparing the declarations of `ThreadPad`
 
 > Note: This was fixed in later versions of MWCC.
 
----
 ## Omission of the static qualifier in local variables
-When a local variable is declared as static, the static qualifier will be omitted from the variable and an address will be provided next to it in the DWARF. For example:
+When a local variable is declared as static, the static qualifier will be omitted from the variable and an address will be provided next to it. For example:
 
 ```c
 int foo(int bar) {
@@ -58,9 +56,8 @@ signed int foo(signed int bar /* r16 */) {
 
 See [this scratch](https://decomp.me/scratch/cLsKq) and its fork for a practical example.
 
----
 ## Omission of unused arguments
-MWCC will omit function arguments from the DWARF if they aren't used within the function. For example:
+Function arguments are omitted if they go unused within the function itself. For example:
 
 ```c
 int foo(int x, int y, int z) {
@@ -80,9 +77,8 @@ signed int foo(signed int x /* r16 */, signed int z /* r17 */) {
 
 See `loadBgAll_SetLoadRequestIndoor2x2` in [this scratch](https://decomp.me/scratch/Lzj5X) for a practical example.
 
----
 ## Omission of unused local variables
-If a local variable goes unused, MWCC will omit it from the DWARF. For example:
+If a local variable goes unused, it will be omitted. For example:
 
 ```c
 int foo() {
@@ -103,7 +99,7 @@ signed int foo() {
 }
 ```
 
-Pragmatically speaking, variable omission usually occurs as a result of variables being optimized out. See these two scratches: [[1](https://decomp.me/scratch/DtIz7), [2](https://decomp.me/scratch/jCQz3)] Try copying the code from the first scratch and pasting it to the second. Despite the introduction of an additional variable, the scratch will still match. The DWARF will also remain the same:
+Pragmatically speaking, variable omission usually occurs as a result of variables being optimized out. For example, if one copies the code from [this scratch](https://decomp.me/scratch/DtIz7) to [this scratch,](https://decomp.me/scratch/jCQz3) the compiler will output equivalent assembly despite the introduction of an additional variable. The DWARF also remains equivalent:
 
 ```
 # Scratch's DWARF
@@ -123,7 +119,7 @@ TAG_local_variable - obj, s0
 
 ---
 ## Struct arguments as local variables
-When a function has a struct for an argument, it will be represented in the DWARF as a local variable. For example:
+When a function has a struct for an argument, it will appears as a local variable. For example:
 
 ```c
 typedef struct {
@@ -137,7 +133,7 @@ void set_pos(int x, int y, int z, coord position) {
 }
 ```
 
-This will come out in DWARF as:
+This will come out in the DWARF as:
 
 ```c
 void set_pos(signed int x /* r2 */, signed int y /* r2 */, signed int z /* r2 */) {
@@ -181,10 +177,9 @@ Struct pointers are not affected by this.
 
 See [this scratch](https://decomp.me/scratch/3KRij) and compare it to the DWARF for a practical example.
 
----
 ## Multiply-defined local variables
 
-MWCC will only record the order in which variable declarations occurred in the DWARF without any regards to scopes. This can cause certain functions to have two local variables with the same name. For example:
+Scopes aren't taken into consideration in the debug info. As a result, all local variables will appear at the start of a function. In some cases, this can cause variables to be declared twice. For example:
 
 ```c
 int foo(int bar) {
