@@ -119,7 +119,7 @@ TAG_local_variable - obj, s0
 
 ---
 ## Struct arguments as local variables
-When a function has a struct for an argument, it will appears as a local variable. For example:
+When a function has a struct for an argument, it will appear as a local variable. For example:
 
 ```c
 typedef struct {
