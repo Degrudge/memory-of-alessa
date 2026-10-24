@@ -1,6 +1,6 @@
 # Dwarf Quirks
 
-While SH2's DWARF will prove to be very helpful during decompilation, The compiler that generated it has a handful of quirks. This document attempts to record observed quirks in SH2's DWARF. 
+While SH2's DWARF will prove to be very helpful during decompilation, the compiler that generated it has a handful of quirks. This document attempts to record observed quirks in SH2's DWARF. 
 
 ---
 ## Inversely-ordered local variable declarations
