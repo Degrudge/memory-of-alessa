@@ -735,7 +735,7 @@ segments:
       - { start: 0x0024c990,    type: data,       name: data_0x24c990                                    }
       - { start: 0x0024ca00,    type: .data,      name: Chacter/m3_oni                                   }
       - { start: 0x0024ca40,    type: data,       name: data_0x24ca40                                    }
-      - { start: 0x0024cbb0,    type: .data,      name: DBG/dbswitch                                     }
+      - { start: 0x0024cba8,    type: .data,      name: DBG/dbswitch                                     }
       - { start: 0x0024cbc0,    type: .data,      name: Chacter/m3_maria_sub                             }
       - { start: 0x0024cd90,    type: data,       name: data_0x24cd90                                    }
       - { start: 0x0024cff8,    type: .data,      name: Multi_thr/scf/ps2_scf                            }
@@ -1237,6 +1237,8 @@ segments:
       - { vram:  0x011b6a70,    type: .bss,       name: Item/otn_option                                  }
       - { vram:  0x011b6af0,    type: .bss,       name: Chacter/m3_play_common                           }
       - { vram:  0x011b6b00,    type: bss,        name: bss_0x11b6b00                                    }
+      - { vram:  0x011b6e48,    type: .bss,       name: DBG/dbswitch                                     }
+      - { vram:  0x011b6e60,    type: bss,        name: bss_0x11b6e60                                    }
       - { vram:  0x011b6f00,    type: .bss,       name: Chacter/m3_maria_sub                             }
       - { vram:  0x011b6f40,    type: bss,        name: bss_0x11b6f40                                    }
       - { vram:  0x011b6f48,    type: .bss,       name: DBG/dbfreeze                                     }
