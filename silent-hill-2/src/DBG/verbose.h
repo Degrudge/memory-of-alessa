@@ -6,6 +6,6 @@
 #include "mw/mw_stdarg.h"
 #include "Exec_Env/exec_env.h"
 
-int verbose(int level, char* format, ...);
+int verbose(int level, s_char* format, ...);
 
 #endif // VERBOSE_H
