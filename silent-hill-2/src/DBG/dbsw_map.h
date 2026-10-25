@@ -4,7 +4,7 @@
 #include "DBG/dbsw_sys.h"
 #include "DBG/dbswitch.h"
 
-char* dbSwitchMapHelp(int Y /* r2 */);
+s_char* dbSwitchMapHelp(int Y /* r2 */);
 
 void dbSwitchMapPrint(void);
 

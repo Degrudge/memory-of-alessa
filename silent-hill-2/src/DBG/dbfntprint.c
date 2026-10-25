@@ -1,14 +1,14 @@
 #include "DBG/dbfntprint.h"
 
-static int printline(char* cp /* r2 */, char* top /* r2 */);
+static int printline(s_char* cp /* r2 */, s_char* top /* r2 */);
 
-static int printlineR(char* cp /* r2 */, char* top /* r2 */);
+static int printlineR(s_char* cp /* r2 */, s_char* top /* r2 */);
 
-static void _dbfntprint(char* buf);
+static void _dbfntprint(s_char* buf);
 
-static void _dbfntprintR(char* buf /* r2 */);
+static void _dbfntprintR(s_char* buf /* r2 */);
 
-static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */);
+static int _dbfntvsnprintf(void (* dbfntprintfunc)(s_char *) /* r19 */, s_char* buf /* r18 */, int limit /* r17 */, s_char* fmt /* r2 */, s_char* argp /* r2 */);
 
 static DebugPrintInfo d = {
         /* .xofs = */ 0,
@@ -34,9 +34,9 @@ void dbfntlocateR(int x, int y) {
     d.yR = y; d.yofsR = y;
 }
 
-int printline(char* cp, char* top) {
+int printline(s_char* cp, s_char* top) {
 
-    char line[128]; // r29+0x20
+    s_char line[128]; // r29+0x20
     int l; // r16
     l = cp - top;
     if (l > 0) {
@@ -44,7 +44,7 @@ int printline(char* cp, char* top) {
         if (l >= 0x80u) l = 0x7F;
         memcpy(line, top, l);
         line[l] = 0;
-        _shDBG_print_string((char* ) &line, d.x, d.y);
+        _shDBG_print_string((s_char* ) &line, d.x, d.y);
     } else {
         l = 0;
     }
@@ -52,7 +52,7 @@ int printline(char* cp, char* top) {
 }
 
 //thanks: Lazy Pig (anon)
-int printlineR(char* cp, char* top) {
+int printlineR(s_char* cp, s_char* top) {
     char line[128]; // r29+0x20
     int l; // r16
 
@@ -72,9 +72,9 @@ int printlineR(char* cp, char* top) {
     return l;
 }
 
-void _dbfntprint(char* buf) {
-    char * cp; // r16
-    char * t; // r2
+void _dbfntprint(s_char* buf) {
+    s_char * cp; // r16
+    s_char * t; // r2
     cp = buf, t = buf;
 
     while (*cp != 0) {
@@ -107,9 +107,9 @@ void _dbfntprint(char* buf) {
     printline(cp, t);
 }
 
-static void _dbfntprintR(char* buf /* r2 */) {
-    char* cp; // r16
-    char* t; // r2
+static void _dbfntprintR(s_char* buf /* r2 */) {
+    s_char* cp; // r16
+    s_char* t; // r2
     t = cp = buf;
 
     while(*cp != 0) {
@@ -133,15 +133,15 @@ static void _dbfntprintR(char* buf /* r2 */) {
     printlineR(cp, t);
 }
 
-void dbfntprint(char* buf /* r16 */) {
+void dbfntprint(s_char* buf /* r16 */) {
     if (dbSwitchDispEnable(-1)) _dbfntprint(buf);
 }
 
-void dbfntprintR(char* buf /* r16 */) {
+void dbfntprintR(s_char* buf /* r16 */) {
     if (dbSwitchDispEnable(-1)) _dbfntprintR(buf);
 }
 
-static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */) {
+static int _dbfntvsnprintf(void (* dbfntprintfunc)(s_char *) /* r19 */, s_char* buf /* r18 */, int limit /* r17 */, s_char* fmt /* r2 */, s_char* argp /* r2 */) {
     int len; // r16
 
     len = vsprintf(buf, fmt, argp);
@@ -157,8 +157,8 @@ static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf 
     return len;
 }
 
-s32 dbfntprintf(char* fmt, ...) {
-    char buf[512]; // r29+0x20
+int dbfntprintf(s_char* fmt, ...) {
+    s_char buf[512]; // r29+0x20
     va_list argp; // r16
 
 
@@ -175,8 +175,8 @@ s32 dbfntprintf(char* fmt, ...) {
 
 }
 
-int dbfntprintfR(char * fmt /* r29+0x228 */, ...){
-    char buf[512]; // r29+0x20
+int dbfntprintfR(s_char * fmt /* r29+0x228 */, ...){
+    s_char buf[512]; // r29+0x20
     va_list argp; // r16
 
 
