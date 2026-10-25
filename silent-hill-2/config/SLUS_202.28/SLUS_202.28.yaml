@@ -727,7 +727,8 @@ segments:
       - { start: 0x00248700,    type: .data,      name: Chacter/m3_nse                                   }
       - { start: 0x00248710,    type: data,       name: data_0x248710                                    }
       - { start: 0x0024c8a0,    type: .data,      name: jump_menu                                        }
-      - { start: 0x0024c8d0,    type: data,       name: data_0x24c8d0                                    }
+      - { start: 0x0024c8d0,    type: .data,      name: DBG/dbflow                                       }
+      - { start: 0x0024c8d8,    type: data,       name: data_0x24c8d8                                    }
       - { start: 0x0024c900,    type: .data,      name: Chacter/m3_play_common                           }
       - { start: 0x0024c960,    type: data,       name: Chacter/m3_maria                                 }
       - { start: 0x0024c980,    type: .data,      name: Chacter/m3_tyu                                   }
@@ -1231,7 +1232,8 @@ segments:
       - { vram:  0x011751C0,    type: .bss,       name: sdk/lib_00207E90                                 } # GCC data
       - { vram:  0x01175380,    type: .bss,       name: sdk/lib_002081D8                                 } # GCC data
       - { vram:  0x011b6990,    type: .bss,       name: jump_menu                                        }
-      - { vram:  0x011b69a0,    type: bss,        name: bss_0x11b69a0                                    }
+      - { vram:  0x011b69a0,    type: .bss,       name: DBG/dbflow                                       }
+      - { vram:  0x011b69e8,    type: bss,        name: bss_0x11b69e8                                    }
       - { vram:  0x011b6a70,    type: .bss,       name: Item/otn_option                                  }
       - { vram:  0x011b6af0,    type: .bss,       name: Chacter/m3_play_common                           }
       - { vram:  0x011b6b00,    type: bss,        name: bss_0x11b6b00                                    }
