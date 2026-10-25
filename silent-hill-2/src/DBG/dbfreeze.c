@@ -5,9 +5,9 @@
 
 
 void dbFreeze(void) {
-    int loop; // r5
-    u_char paddata[32]; // r29+0x10
     static int fz_step; // @ 0x011B6F48
+    u_char paddata[32]; // r29+0x10
+    int loop; // r5
     if (shPadGetPort() == 1) {
         do {
 

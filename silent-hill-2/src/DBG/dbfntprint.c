@@ -108,8 +108,8 @@ void _dbfntprint(char* buf) {
 }
 
 static void _dbfntprintR(char* buf /* r2 */) {
-    char* t; // r2
     char* cp; // r16
+    char* t; // r2
     t = cp = buf;
 
     while(*cp != 0) {
@@ -158,8 +158,8 @@ static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf 
 }
 
 s32 dbfntprintf(char* fmt, ...) {
-    va_list argp; // r16
     char buf[512]; // r29+0x20
+    va_list argp; // r16
 
 
     va_start(argp, fmt);
@@ -176,8 +176,8 @@ s32 dbfntprintf(char* fmt, ...) {
 }
 
 int dbfntprintfR(char * fmt /* r29+0x228 */, ...){
-    va_list argp; // r16
     char buf[512]; // r29+0x20
+    va_list argp; // r16
 
 
     va_start(argp, fmt);
