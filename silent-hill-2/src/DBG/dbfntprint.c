@@ -1,4 +1,4 @@
-#include "dbfntprint.h"
+#include "DBG/dbfntprint.h"
 
 static int printline(char* cp /* r2 */, char* top /* r2 */);
 
@@ -10,17 +10,28 @@ static void _dbfntprintR(char* buf /* r2 */);
 
 static int _dbfntvsnprintf(void (* dbfntprintfunc)(char *) /* r19 */, char* buf /* r18 */, int limit /* r17 */, char* fmt /* r2 */, char* argp /* r2 */);
 
-extern DebugPrintInfo d_0x0033BEC0;
+static DebugPrintInfo d = {
+        /* .xofs = */ 0,
+        /* .yofs = */ 0,
+        /* .x = */ 0,
+        /* .y = */ 0,
+        /* .w = */ 8,
+        /* .h = */ 8,
+        /* .tab = */ 4,
+        /* .xofsR = */ 512,
+        /* .yofsR = */ 0,
+        /* .yR = */ 0,
+    };
 
 #line 39
 void dbfntlocate(int x, int y) {
-    d_0x0033BEC0.x = x; d_0x0033BEC0.xofs = x;
-    d_0x0033BEC0.y = y; d_0x0033BEC0.yofs = y;
+    d.x = x; d.xofs = x;
+    d.y = y; d.yofs = y;
 }
 
 void dbfntlocateR(int x, int y) {
-    d_0x0033BEC0.xofsR = x;
-    d_0x0033BEC0.yR = y; d_0x0033BEC0.yofsR = y;
+    d.xofsR = x;
+    d.yR = y; d.yofsR = y;
 }
 
 int printline(char* cp, char* top) {
@@ -33,7 +44,7 @@ int printline(char* cp, char* top) {
         if (l >= 0x80u) l = 0x7F;
         memcpy(line, top, l);
         line[l] = 0;
-        _shDBG_print_string((char* ) &line, d_0x0033BEC0.x, d_0x0033BEC0.y);
+        _shDBG_print_string((char* ) &line, d.x, d.y);
     } else {
         l = 0;
     }
@@ -54,7 +65,7 @@ int printlineR(char* cp, char* top) {
         }
         memcpy(line, top, l);
         line[l] = 0;
-        _shDBG_print_string(line, d_0x0033BEC0.xofsR - (l * d_0x0033BEC0.w), d_0x0033BEC0.yR);
+        _shDBG_print_string(line, d.xofsR - (l * d.w), d.yR);
     } else {
         l = 0;
     }
@@ -71,24 +82,24 @@ void _dbfntprint(char* buf) {
             case '\n':
                 printline(cp, t);
                 t = cp + 1;
-                d_0x0033BEC0.x = d_0x0033BEC0.xofs;
-                d_0x0033BEC0.y += d_0x0033BEC0.h;
+                d.x = d.xofs;
+                d.y += d.h;
             default:
                 break;
             case '\t':
-                d_0x0033BEC0.x += d_0x0033BEC0.w * printline(cp, t);
+                d.x += d.w * printline(cp, t);
                 t = cp + 1;
-                d_0x0033BEC0.x += d_0x0033BEC0.w * d_0x0033BEC0.tab;
+                d.x += d.w * d.tab;
                 break;
             case '\r':
                 printline(cp, t);
                 t = cp + 1;
-                d_0x0033BEC0.x = d_0x0033BEC0.xofs;
+                d.x = d.xofs;
                 break;
             case '\b':
-                d_0x0033BEC0.x += d_0x0033BEC0.w * printline(cp, t);
+                d.x += d.w * printline(cp, t);
                 t = cp + 1;
-                d_0x0033BEC0.x -= d_0x0033BEC0.w;
+                d.x -= d.w;
                 break;
             }
         cp++;
@@ -108,7 +119,7 @@ static void _dbfntprintR(char* buf /* r2 */) {
             case '\b':
                 printlineR(cp, t);
                 t = cp + 1;
-                d_0x0033BEC0.yR += d_0x0033BEC0.h;
+                d.yR += d.h;
                 break;
             case '\r':
                 printlineR(cp, t);

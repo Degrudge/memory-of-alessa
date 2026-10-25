@@ -678,7 +678,7 @@ segments:
       - { start: 0x0023bda0,    type: data,       name: Multi_thr/boot/bootopt                           }
       - { start: 0x0023bda0,    type: .data,      name: Multi_thr/boot/bootoptitem                       }
       - { start: 0x0023bf80,    type: .data,      name: Event/title                                      }
-      - { start: 0x0023c5c0,    type: data,       name: DBG/dbfntprint                                   }
+      - { start: 0x0023c5c0,    type: .data,      name: DBG/dbfntprint                                   }
       - { start: 0x0023c5f0,    type: data,       name: Event/chizu                                      }
       - { start: 0x0023e370,    type: .data,      name: Event/chara_admin                                }
       - { start: 0x0023e3a0,    type: data,       name: data_0x23e3a0                                    }

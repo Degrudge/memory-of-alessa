@@ -1,7 +1,7 @@
 #ifndef DB_FNT_PRINT_H
 #define DB_FNT_PRINT_H
 
-#include "common.h"
+#include "sh2_common.h"
 #include "mw/mw_stdarg.h"
 #include "DBG/shDBG_fontHandle.h"
 
