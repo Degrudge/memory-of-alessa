@@ -129,7 +129,7 @@ static void printR_date(void) {
 static void printR_cmdserv(CmdServStat* stat /* r18 */, char* prefix /* r17 */, int* exec /* r2 */) {
     s_char syms[4] = {'|', '/', '-', '\x81'};
     s_char sym = ' ';
-    if (exec) {
+    if (exec != NULL) {
         if (stat->clen) {
             sym = syms[(*exec)++ % 4];
         } else {
@@ -202,7 +202,7 @@ static void printR_keydata(shGameKeyData* key /* r16 */) {
                  key->f.CANCEL);
     dbfntprintfR("SKIP:%1d  PAUSE:%1d\nACTION:%1d   DASH:%1d\nLSLIDE:%1d RSLIDE:%1d\nREADY:%1d   VIEW:%1d\n",
                  key->f.SKIP,
-                 key->f.CANCEL,
+                 key->f.CANCEL, //@bug
                  key->f.ACTION,
                  key->f.DASH,
                  key->f.LSLIDE,
