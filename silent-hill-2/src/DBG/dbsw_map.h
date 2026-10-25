@@ -1,8 +1,6 @@
 #ifndef DBSW_MAP_H
 #define DBSW_MAP_H
 
-#include "common.h"
-
 #include "DBG/dbsw_sys.h"
 #include "DBG/dbswitch.h"
 
