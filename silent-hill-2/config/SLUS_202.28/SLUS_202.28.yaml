@@ -1138,7 +1138,7 @@ segments:
       - { vram:  0x00489ba0,    type: bss,        name: Collision/cl_main                                }
       - { vram:  0x004917c8,    type: .bss,       name: Collision/kari_atari_allinit                     }
       - { vram:  0x00491820,    type: bss,        name: bss_0x0491820                                    }
-      - { vram:  0x00491820,    type: bss,        name: DBG/sh2gfw_SyncDBG                               }
+      - { vram:  0x00491820,    type: .bss,       name: DBG/sh2gfw_SyncDBG                               }
       - { vram:  0x004918c0,    type: bss,        name: Effect/ef_broken_glass                           }
       - { vram:  0x0049fa20,    type: bss,        name: Effect/ef_common                                 }
       - { vram:  0x00550678,    type: bss,        name: Effect/ef_malloc                                 }
