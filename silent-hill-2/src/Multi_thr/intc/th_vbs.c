@@ -1,14 +1,14 @@
 #include "Multi_thr/intc/th_vbs.h"
 
+static void shMtIncVStartCount(void);
+
+static void ThreadVbs(void* arg);
+
 static u_long vcount_total; // size: 0x4, address: 0x11765B0
 static u_long vcount; // size: 0x4, address: 0x11765A8
 static int finish_sid = -1; // size: 0x4, address: 0x346B90
 static int vbs_tid    = -1; // size: 0x4, address: 0x346B98
 
-
-static void shMtIncVStartCount(void);
-
-static void ThreadVbs(void* arg);
 
 
 
