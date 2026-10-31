@@ -1,9 +1,9 @@
 #include "Multi_thr/intc/th_vbe.h"
 
+static void ThreadVbe(void* arg);
+
 static int finish_sid = -1; // size: 0x4, address: 0x33B428
 static int vbe_tid    = -1; // size: 0x4, address: 0x33B430
-
-static void ThreadVbe(void* arg);
 
 
 
